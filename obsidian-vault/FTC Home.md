@@ -8,6 +8,8 @@ Start here. Everything about the robot, the code and the competition prep links 
 
 **Tasks: [[To-Do]]** (one list, with owners)
 
+**Map:** press **Cmd+G** (Ctrl+G) for the graph. Colors: amber = Home/To-Do, green = Game, orange = Shooter, yellow = Robot, teal = Software, grey = everything else.
+
 ## Competition prep (2026-11-21)
 - [[Shooter Fix List - Night Before Competition]]: the prioritised fix list (do this first)
 - [[Pre-Match Checklist]]: run it before every match

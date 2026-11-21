@@ -1,3 +1,7 @@
 {
-  "showRibbon": false
+  "showRibbon": false,
+  "accentColor": "#3b82f6",
+  "enabledCssSnippets": [
+    "colors"
+  ]
 }
