@@ -30,11 +30,22 @@ Back to [[FTC Home]] · Why: [[Shooter Fix List - Night Before Competition]] · 
 | Setting | Default | Change if… |
 | --- | --- | --- |
 | `AT_SPEED_TOLERANCE` | 0.03 (3%, ~45 ticks/s at 1450) | Shots come too slowly → 0.04. Shots still inconsistent → 0.02. |
-| `FEED_MIN_PUSH_MS` | 300 ms (raised from 120; covers the ~0.2 s grab → exit in [[Second Video Analysis (30 fps)]]) | Ball still stalls in gap → raise. Two balls go in together → lower toward 150. |
+| `FEED_MIN_PUSH_MS` | **0** on PR #3 (team: brake the instant the wheel is off target; was 300, covering the ~0.2 s grab → exit in [[Second Video Analysis (30 fps)]]) | Ball stalls halfway into the hood → raise toward 300. Two balls go in together → lower. |
+| `FEED_ONLY_AT_SPEED` | true (PR #3) | false = RT collects with the shooter off again (balls get pushed into the stopped wheel). |
+| `FEED_TICKS_PER_BALL` | 0 = off (PR #3) | Measure it, see "One ball per shot" below. |
+| `FEED_GAP_MS` | 200 ms (PR #3) | Second shot falls short → raise toward 300 (more recovery). Shots too slow → lower. |
 | `VOLTAGE_COMPENSATE_F` | false | Late-match shots fall short → test true. Every top team runs voltage compensation ([[Top Teams Shooter Reference]]). |
 | `INTAKE_FULL_CURRENT_AMPS` | 0 (off) | Watch *Intake current* while collecting; set between normal amps and amps with 4 balls packed. Then the gamepad buzzes when full. |
 | `TRIM_STEP` / `TRIM_LIMIT` | 25 / 200 ticks/s | gamepad2 d-pad trim during matches. Copy a trim that works into the presets afterwards. |
 | `FLOWER_UP` / `FLOWER_DOWN` | 0.0 / 0.5 (guesses) | Measure the real servo positions. |
+
+## One ball per shot (`FEED_TICKS_PER_BALL`, PR #3)
+The speed-dip brake reacts ~50 ms late (the hub averages velocity), so the next ball is already in the wheel. This setting stops it earlier ([[PR 3 - Intake Brake and One-Ball Feed]]).
+1. Leave `FEED_TICKS_PER_BALL = 0`. Press A, wait for `At speed: YES`, hold RT, shoot all 4.
+2. Read **Intake ticks fed (this RT hold)** on telemetry and divide by 4.
+3. Set `FEED_TICKS_PER_BALL` to ~70% of that, then build. Telemetry shows `BRAKED (gap between balls)` between shots.
+4. Two balls still go out → lower it. A ball stops short of the wheel → raise it.
+5. Stopgap without measuring: `INTAKE_FEED_POWER` 1.0 → ~0.6.
 
 ## What you see → what to change (from [[Sathwik Handoff]])
 Each round: press A and wait for speed to settle, press Back, fire 4 POLLEN fast, look where they landed, change **one** value, then repeat. A shot counts when speed drops below 93% of target; it is recovered at 98%. Leave I and D at 0 unless a small error remains.

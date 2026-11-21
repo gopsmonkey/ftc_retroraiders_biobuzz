@@ -1,16 +1,29 @@
 ---
 tags: [ftc, todo, index]
-updated: 2026-11-20
+updated: 2026-11-21
 ---
 # To-Do
 
 Back to [[FTC Home]]
 
 The one task list for the team. Each task links to the note with the details; don't copy steps here. Tick the box when done, and add your name if you take a task.
-Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code branch), **Shresht** (night-before review, AUTO), **Prajin** (research, vault), **Claude** (only the tasks marked for it).
+Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code branch), **Shresht** (night-before review, AUTO), **Prajin** (research, vault, PR #3 on the robot), **Claude** (only the tasks marked for it).
+
+> [!important] Where things stand (2026-11-21, 01:00)
+> The robot runs **PR #3** (`intake-gate-at-speed`): the intake stays braked until the flywheel is at −1375 ([[PR 3 - Intake Brake and One-Ball Feed]]).
+> The latest build **failed** because OnBot has the new `ShooterController` but the old `ShooterConfig`; fix below.
+> The Control Hub is also missing 3 repo files, including the AUTO ([[OnBot Java Check]], "On the Control Hub").
+
+## Right now (blocks the robot)
+- [ ] **Re-paste `ShooterConfig.java` from commit `7a10048`** (https://raw.githubusercontent.com/gopsmonkey/ftc_retroraiders_biobuzz/7a10048/ShooterConfig.java). Cmd+F must find `FEED_TICKS_PER_BALL`, then Build Everything. `ShooterConfig` and `ShooterController` must always come from the same commit. (Prajin)
+- [ ] **Add the 3 missing files to OnBot**, all from `7a10048`: `PreloadShootLeaveAuto.java` (the AUTO), `ShooterMaxVelocityTest.java` and `ShooterLogger.java`. **Replace** the old `ShooterPIDFTuner.java` and `ShooterVelocityTuner.java` with the branch versions; the old ones don't use the gate or `ShooterConfig`. ([[OnBot Java Check]])
+- [ ] **Robot test** with *BioBuzz TeleOp* ([[Code Check - Night Before]], rows 4–6 updated for PR #3). Confirm the wheel spins the launch way at −1375, otherwise set `SHOOTER_SIGN = 1`.
+- [ ] **Measure `FEED_TICKS_PER_BALL`**, so the 2nd ball isn't shot early ([[Shooter Tuning Guide]], "One ball per shot"). Stopgap: `INTAKE_FEED_POWER` 1.0 → 0.6.
+- [ ] **Send every changed number to Claude** to commit. OnBot edits never reach GitHub. Then squash-merge PR #3 and tag `event-2026-11-21`. (Prajin + Claude)
+
 
 ## Decide tonight (blocks other tasks)
-- [ ] **Which TeleOp runs tomorrow?** `MainTeleOp` has the flower servos but no fixes and has never run. `BioBuzz TeleOp` has all the shooter fixes but no flower servos. Either copy the `// FIX` lines into `MainTeleOp`, or add the flower servos to `BioBuzz TeleOp`. Then commit it. ([[Sathwik Handoff]], [[Shooter Software Implementation Log]])
+- [x] **Which TeleOp runs:** *BioBuzz TeleOp*. It has had the flower servos since `53f96f2` and is the one on the Control Hub now (2026-11-21). `MainTeleOp` is not on the hub.
 - [x] **Loaded into OnBot Java; build succeeded (2026-11-21, with PR #3).**  It compiles cleanly on SDK 9.2–12.0 (re-checked on `391d8ed`). Upload all 8 files with **Upload Files** (don't paste), overwrite the old tuners, then Build Everything. If the build fails, it's an old file such as `PollenAutoNav`. (Sathwik; steps in [[OnBot Java Check]])
 
 ## Tonight: robot (Sathwik, hands-on)
@@ -26,8 +39,7 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 - [ ] Calibrate presets at tape marks, one spot per CELL. ([[Shooter Tuning Guide]])
 - [ ] Power-cycle and confirm `PIDF on hub: OK`. ([[Shooter Tuning Guide]])
 - [ ] Merge PR #1, or decide which branch goes on the hub. ([[Repo and Branches]])
-- [ ] **Stop the 2nd ball being shot early (PR #3, `7a10048`):** leave `FEED_TICKS_PER_BALL = 0`, spin up, hold RT, shoot 4, then read *Intake ticks fed* ÷ 4. Set `FEED_TICKS_PER_BALL` to ~70% of that. Two balls still go → lower it; a ball doesn't reach the wheel → raise it. Gap between balls: `FEED_GAP_MS` (200).
-- [ ] **Review PR #3:** brake `intakeMotor` until the wheel is at -1375. It sets `SHOOTER_SIGN = -1` and `FEED_MIN_PUSH_MS = 0`. Squash-merge it, and on the robot check the wheel spins the launch way. https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/3
+- [ ] **Review PR #3** (Abraar): intake brake + one-ball feed. It changes `SHOOTER_SIGN` to −1, `FEED_MIN_PUSH_MS` 300 → 0 and `INTAKE_HAS_ENCODER` to true. **Squash and merge** (one commit carries stray cache files). https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/3 · [[PR 3 - Intake Brake and One-Ball Feed]]
 
 ## Tonight: AUTO and code freeze (Shresht)
 - [x] Patches A–C (`2e4aaf8`) and D (`4479479`). Night-before notes parts 2–3 uploaded. (Shresht, 2026-11-20)

@@ -10,7 +10,7 @@ The Robot Configuration on the Driver Station must use exactly these names (from
 
 | Name | Device | Direction | Mode | Notes |
 | --- | --- | --- | --- | --- |
-| `shooterMotor` | Flywheel, likely 6000 rpm Yellow Jacket (28 CPR) | FORWARD | RUN_USING_ENCODER, FLOAT | Encoder required |
+| `shooterMotor` | Flywheel, likely 6000 rpm Yellow Jacket (28 CPR) | FORWARD | RUN_USING_ENCODER, FLOAT | Encoder required. Launch velocity **−1375** (`SHOOTER_SIGN = -1`, PR #3) |
 | `intakeMotor` | **One motor, all rollers chained** (big intake + the two mini wheels under the flywheel) | FORWARD | RUN_USING_ENCODER (encoder added 2026-11-20) | BRAKE |
 | `lfMotor` | Drive, left front | REVERSE | RUN_WITHOUT_ENCODER | BRAKE |
 | `lbMotor` | Drive, left back | REVERSE | RUN_WITHOUT_ENCODER | BRAKE |

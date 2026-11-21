@@ -37,6 +37,15 @@ These are problems with the robot's existing OnBot files, not with this code.
 - **Duplicate OpMode names.** If `MainTeleOp` or an old file also uses the name "BioBuzz TeleOp", "Shooter PIDF Tuner" or similar, only one shows up. Rename one.
 - **Config names.** These must match the Driver Station config exactly: `shooterMotor`, `intakeMotor`, `lfMotor`, `lbMotor`, `rfMotor`, `rbMotor` ([[Hardware Config Names]]).
 
+## On the Control Hub (file list from OnBot, 2026-11-21 00:54)
+45 files: `April_Tag`, `ArmServoTest`, `BioBuzzTeleOp`, `ColorFinalTest`, `ColorSamplerOpMode`, `ColorTest`, `DecemberDecodeAuto`, `DecodeAutoB`, `DecodeAutoF`, `DecodeTeleOp`, `DriverTeleOp`, `DrivetrainModuleTest`, `ExampleAuto`, `FinalAuto`, `FinalAutoRefactored`, `FinalAutoSamples`, `FinalAutoV2`, `FinalDecodeTeleOp`, `IMUTest`, `IntakeTest`, `intaketestcode`, `launchTest`, `launchTest2`, `launchTest3`, `MecanumOdometryRobot`, `Meet3auto`, `motortest`, `nishsteleop`, `odometry`, `PollenAutoNav`, `RightModuleTest`, `Robot`, `Robot26`, `RobotConstants`, `RobotNew`, `RRTeleop`, `ShooterConfig`, `ShooterController`, `ShooterPIDFTuner`, `ShooterVelocityTest`, `ShooterVelocityTuner`, `spinTest`, `TeleOpActual`, `TeleOpFinal`, `TeleOpFinalV2ControlsOverhaul`.
+
+- **Missing from the repo branch:** `PreloadShootLeaveAuto` (the AUTO), `ShooterMaxVelocityTest`, `ShooterLogger`.
+- **Old versions:** `ShooterPIDFTuner` and `ShooterVelocityTuner` must be Sathwik's originals. The new tuner needs `ShooterLogger`, which isn't there, yet the build passed.
+- Most of the rest is last season (DECODE) and test code. It builds today, so leave it alone at the event. Delete it after the meet to cut build risk and duplicate OpMode names.
+- **`ShooterConfig` and `ShooterController` must come from the same commit.** Mixing them gave `cannot find symbol FEED_TICKS_PER_BALL` (00:54).
+- To copy files from GitHub for pasting, use raw links **pinned to a commit**, e.g. `https://raw.githubusercontent.com/gopsmonkey/ftc_retroraiders_biobuzz/7a10048/ShooterConfig.java`. Branch links can serve a cached old version.
+
 ## Not compile problems, but worth knowing
 - **Sathwik prefers no comments in code** ([[Sathwik Handoff]]). These files are full of comments. They compile fine; strip them only if he asks.
 - Compiling isn't the same as working on the robot. Nothing on this branch has run on the robot yet ([[Shooter Software Implementation Log]]).

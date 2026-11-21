@@ -1,12 +1,14 @@
 ---
 tags: [ftc, index]
-updated: 2026-11-20
+updated: 2026-11-21
 ---
 # FTC Home: RetroRaiders / BioBuzz
 
 Start here. Everything about the robot, the code and the competition prep links from this page.
 
 **Tasks: [[To-Do]]** (one list, with owners)
+
+**Now (2026-11-21):** the robot runs [[PR 3 - Intake Brake and One-Ball Feed]]. The intake stays braked until the wheel is at −1375. The next build needs `ShooterConfig` re-pasted ([[To-Do]], "Right now").
 
 **Map:** press **Cmd+G** (Ctrl+G) for the graph. Colors: amber = Home/To-Do, green = Game, orange = Shooter, yellow = Robot, teal = Software, grey = everything else.
 
@@ -36,6 +38,7 @@ Start here. Everything about the robot, the code and the competition prep links 
 - [[Shooter Tuning Guide]]: how to measure maxV, set PIDF, and tune P
 
 ## Software
+- [[PR 3 - Intake Brake and One-Ball Feed]]: **what the robot runs now**. Intake brake + one-ball feed: settings, tests, on-robot status
 - [[OnBot Java Check]]: the branch compiles for OnBot Java; how to upload it, and what can still break the build
 - [[Sathwik Handoff]]: Sathwik's old-chat handoff (OnBot Java only, local-only files, odometry, Expansion Hub issue, solved bugs)
 - [[Repo and Branches]]: where the code lives and which branch to run

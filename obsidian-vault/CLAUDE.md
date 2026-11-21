@@ -8,12 +8,18 @@ FTC team Retro Raiders (26603), season BIOBUZZ 2026-27. Start at `FTC Home.md`, 
 - **Don't add AUTO or automation code.** The team has its own AUTO (mostly done by hand, not in the repo yet) and will add it themselves. Shresht's `PreloadShootLeaveAuto` is the only AUTO in the repo.
 - **OnBot Java for the 2026-11-21 competition. Android Studio and Pedro Pathing are ON HOLD until after it.** Don't start either. The plan and a parked Pedro agent are in `Software/Pedro Pathing Plan.md`.
 - **OnBot Java only.** One plain class per file, package `org.firstinspires.ftc.teamcode`, FTC SDK + standard Java only. Re-run `Software/attachments/onbot-compile-check.sh` after code changes.
-- Code lives on branch `shooter-fixes-night-before` (PR #1). The vault lives on `team-obsidian-vault` (PR #2).
+- **The robot runs branch `intake-gate-at-speed` (PR #3, latest `7a10048`)**, built on `shooter-fixes-night-before` (PR #1, `391d8ed`). Make code changes on top of PR #3 unless told otherwise. The vault lives on `team-obsidian-vault` (PR #2).
+- **Hardware is fixed and known.** `intakeMotor` is one motor driving every roller (one chain), and it has an encoder. Launch is −1375. Use only the config names in `Robot/Hardware Config Names.md`; **never invent device names** like `feederMotor`. If a name truly isn't known, ask once, naming the note you checked.
+- **The team pastes code into OnBot by hand.** Hand them raw GitHub links pinned to a commit SHA, and name every file that changed. Always ship `ShooterConfig` and `ShooterController` together. Before handing code over, run `Software/attachments/onbot-compile-check.sh` and `Software/attachments/tests/run-tests.sh`.
+- **Numbers changed in OnBot aren't in git.** Ask for them and commit them. Stage files by name, never `git add -A` (it swept plugin caches into `997a408`).
+- **The team is under time pressure.** When they ask for a change, make it and verify it; don't send them a list of options. Keep answers short and concrete: which file, which setting, which button.
 
 ## Where each fact lives (one fact, one note: link to it, don't copy it)
 | Topic | Note |
 | --- | --- |
 | **All open tasks, with owners** | `To-Do.md` |
+| **What the robot runs now: intake brake + one-ball feed, settings, tests, on-robot status** | `Software/PR 3 - Intake Brake and One-Ball Feed.md` |
+| Laptop tests for the intake gate (mock motors, real SDK classes) | `Software/attachments/tests/run-tests.sh` |
 | OnBot Java compile result, upload steps, build risks (re-run `Software/attachments/onbot-compile-check.sh` after code changes) | `Software/OnBot Java Check.md` |
 | Sathwik's handoff: OnBot Java, local files, odometry, hub issue, how he likes to work | `Software/Sathwik Handoff.md` |
 | Game rules, scoring, TIP threshold, fouls | `Game/BIOBUZZ Rules and Scoring.md` |

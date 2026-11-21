@@ -2,7 +2,7 @@
 tags: [ftc, shooter, software, log]
 branch: shooter-fixes-night-before
 commit: 391d8ed
-updated: 2026-11-20
+updated: 2026-11-21
 ---
 # Shooter software implementation log
 
@@ -57,6 +57,17 @@ All software fixes from the fix list are in branch `shooter-fixes-night-before` 
 
 Checks on `391d8ed`: 25 mock-motor logic checks pass; compiles with 0 errors against the real FTC SDK **12.0.0 and 9.2.0** libraries at Java 8 (`Software/attachments/onbot-compile-check.sh`). Still not run on the robot.
 
+## PR #3 (branch `intake-gate-at-speed`, on top of `391d8ed`)
+The robot runs this now. Full design, settings, tests and on-robot status: [[PR 3 - Intake Brake and One-Ball Feed]].
+
+| Commit | Who | What |
+| --- | --- | --- |
+| `997a408` | Claude (for Prajin) | `intakeMotor` braked until the flywheel is at −1375 (`FEED_ONLY_AT_SPEED`). `SHOOTER_SIGN` −1, `PRESET_MID` 1375, `INTAKE_HAS_ENCODER` true, `FEED_MIN_PUSH_MS` 0. RB can't push into a stopped wheel. |
+| `17504b8`, `6fc84c7` | Claude | Removed plugin cache files committed by mistake; restored Abraar's `.gitignore` line. |
+| `7a10048` | Claude (for Prajin) | One ball per shot: `FEED_TICKS_PER_BALL` + `FEED_GAP_MS`, plus "Intake ticks fed" telemetry. |
+
+Checks on `7a10048`: compiles on SDK 9.2/10.1/11.2/12.0; mock tests 10/10 (gate) and 5/5 (pulse) in `Software/attachments/tests/`.
+
 ## Still to do (people)
 Tracked in [[To-Do]].
 
@@ -69,3 +80,8 @@ Tracked in [[To-Do]].
 - 21:00 Reviewed Shresht's `2e4aaf8`. Added flower servos, trim, rumble, intake-full warning, README. Pushed `53f96f2`.
 - 21:30 Fixed push-hold bug (`4479479`), doc status table and review updated to match.
 - 22:30 Final pass `391d8ed` (Shresht's review items 1–3, write caching). Vault de-duplicated.
+- 2026-11-20 22:00 Prajin: the two small wheels under the flywheel are on `intakeMotor` (one chain); an encoder was added; launch velocity is −1375. PR #3 opened with `997a408`.
+- 2026-11-21 ~00:20 Prajin pasted the PR #3 files into OnBot; **Build succeeded**. The brake works, but the 2nd ball still gets shot (the brake is late).
+- 2026-11-21 00:47 `7a10048`: one-ball pulse using the intake encoder.
+- 2026-11-21 00:54 OnBot build **failed**: `cannot find symbol FEED_TICKS_PER_BALL / FEED_GAP_MS`. The new `ShooterController` was in, but the old `ShooterConfig` was still there. Fix: re-paste `ShooterConfig` from `7a10048`.
+- 2026-11-21 01:00 The Control Hub file list shows `PreloadShootLeaveAuto`, `ShooterMaxVelocityTest` and `ShooterLogger` were never uploaded, and the tuners are Sathwik's old versions ([[OnBot Java Check]]).
