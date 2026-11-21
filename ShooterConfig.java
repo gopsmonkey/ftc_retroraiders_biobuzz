@@ -71,7 +71,7 @@ public final class ShooterConfig {
      * The ball's contact dips the wheel immediately, and cutting the push at that
      * moment would make the "ball stalls in the gap" problem worse. 0 = pure gate.
      */
-    public static final double FEED_MIN_PUSH_MS = 120;
+    public static final double FEED_MIN_PUSH_MS = 300;   // was 120; 30 fps video: ball spends 0.27-0.40 s in the hood
 
     // ---------------- Presets (ticks/s) ----------------
     // TODO(tonight): calibrate at taped floor spots. All must be <= maxTarget() (1960 at maxV 2450).

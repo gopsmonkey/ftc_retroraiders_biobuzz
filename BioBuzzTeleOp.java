@@ -19,6 +19,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *   dpad left / up / right = CLOSE / MID / FAR preset (also changes speed live if spinning)
  *   hold RT = intake: collects when shooter is off, gated feed when shooter is on
  *   hold LB = reverse intake (unjam), hold B = reverse shooter slowly (unjam)
+ *   hold RB + RT = feed even if the flywheel is not at speed (override if "At speed" never turns YES)
  *
  * Match habits: spin up while driving to the taped spot, stop, then hold RT to shoot.
  */
@@ -121,6 +122,9 @@ public class BioBuzzTeleOp extends LinearOpMode {
             } else {
                 shooter.setIntakeRequest(ShooterController.IntakeRequest.OFF);
             }
+
+            // FIX: emergency override. Hold RB (with RT) to feed even if the gate never opens.
+            shooter.setGateEnabled(!gamepad1.right_bumper);
 
             shooter.update();
 

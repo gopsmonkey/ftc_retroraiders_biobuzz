@@ -203,6 +203,7 @@ public class ShooterPIDFTuner extends LinearOpMode {
                 }
             } else {
                 inDip = false;
+                armed = false;   // don't count the next spin-up as a shot
             }
 
             telemetry.addLine("=== PIDF | selected: " + PARAM_NAMES[param]

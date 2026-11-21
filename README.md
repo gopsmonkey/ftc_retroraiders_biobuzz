@@ -10,6 +10,7 @@ Drop these files into `TeamCode/src/main/java/org/firstinspires/ftc/teamcode/` o
 | `ShooterMaxVelocityTest.java` | Step 1: measures maxV and intake ticks/s, prints starting PIDF. |
 | `ShooterPIDFTuner.java` | Step 2: live PIDF tuning under ball load, gated feed, CSV logging (B). |
 | `ShooterVelocityTuner.java` | Drive + shooter velocity + intake power sweep, now gated with precision drive. |
+| `PreloadShootLeaveAuto.java` | Simple AUTO: shoot the 4 preloads, then LEAVE. Tune the `TUNE` numbers first. |
 | `ShooterLogger.java` | CSV logs to `/sdcard/FIRST/shooter_logs/` (`adb pull /sdcard/FIRST/shooter_logs`). |
 
 ## Tuning order (after the mechanical fixes)
