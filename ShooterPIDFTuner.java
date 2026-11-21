@@ -2,23 +2,28 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+/**
+ * Live PIDF tuning under real ball load.
+ *
+ * Starts from the gains in ShooterConfig (NOT whatever the hub happens to hold),
+ * feeds through the same at-speed gate the match code uses, and can log a burst to CSV.
+ * Gains changed here are NOT saved: copy the final P/I/D/F into ShooterConfig.
+ *
+ * gamepad1:
+ *   A = start shooter, X = stop, bumpers = target +/-50 (capped at 80% of maxV)
+ *   dpad left/right = pick F/P/I/D, dpad up/down = change, stick presses = step size
+ *   Back = reset stats, Start = reset PIDF to ShooterConfig
+ *   right trigger = intake IN (gated feed while shooter runs), left trigger = OUT, Y = intake off
+ *   B = start/stop CSV log
+ * gamepad2:
+ *   A = toggle at-speed gate (compare gated vs ungated), B = toggle battery-scaled F
+ */
 @TeleOp(name = "Shooter PIDF Tuner", group = "Diagnostic")
 public class ShooterPIDFTuner extends LinearOpMode {
 
-    private static final String SHOOTER_MOTOR_NAME = "shooterMotor";
-    private static final String INTAKE_MOTOR_NAME = "intakeMotor";
-
-    private static final double SHOOTER_SIGN = 1;
-    private static final double START_TARGET_VELOCITY = 1400;
     private static final double VELOCITY_STEP = 50;
-    private static final double MAX_TARGET_VELOCITY = 6000;
-
-    private static final double INTAKE_POWER = 0.8;
 
     private static final double SHOT_DIP_THRESHOLD = 0.93;
     private static final double RECOVERED_THRESHOLD = 0.98;
@@ -28,10 +33,10 @@ public class ShooterPIDFTuner extends LinearOpMode {
     private static final double[] MULTIPLIERS = {0.1, 1.0, 10.0};
 
     private final double[] pidf = new double[4];
-    private final double[] defaults = new double[4];
+    private final double[] configPidf = {
+            ShooterConfig.SHOOTER_F, ShooterConfig.SHOOTER_P, ShooterConfig.SHOOTER_I, ShooterConfig.SHOOTER_D};
 
-    private double targetVelocity = START_TARGET_VELOCITY;
-    private boolean shooterRunning = false;
+    private double targetVelocity = ShooterConfig.PRESET_MID;
 
     private boolean armed = false;
     private double lowest = Double.MAX_VALUE;
@@ -44,59 +49,45 @@ public class ShooterPIDFTuner extends LinearOpMode {
     private double lastRecoveryMs = 0;
     private double worstRecoveryMs = 0;
 
-    private boolean lastRightBumper = false;
-    private boolean lastLeftBumper = false;
-    private boolean lastUp = false;
-    private boolean lastDown = false;
-    private boolean lastLeft = false;
-    private boolean lastRight = false;
-    private boolean lastStart = false;
-    private boolean lastBack = false;
-    private boolean lastLeftStick = false;
-    private boolean lastRightStick = false;
+    private boolean lastRightBumper, lastLeftBumper, lastUp, lastDown, lastLeft, lastRight;
+    private boolean lastStart, lastBack, lastLeftStick, lastRightStick, lastB, lastG2A, lastG2B;
 
     @Override
     public void runOpMode() {
-        DcMotorEx shooterMotor = hardwareMap.get(DcMotorEx.class, SHOOTER_MOTOR_NAME);
-        DcMotor intakeMotor = hardwareMap.get(DcMotor.class, INTAKE_MOTOR_NAME);
-
-        shooterMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        shooterMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        PIDFCoefficients c = shooterMotor.getPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER);
-        pidf[0] = c.f;
-        pidf[1] = c.p;
-        pidf[2] = c.i;
-        pidf[3] = c.d;
-        System.arraycopy(pidf, 0, defaults, 0, 4);
+        ShooterController.enableBulkCaching(hardwareMap);
+        ShooterController shooter = new ShooterController(hardwareMap);
+        ShooterLogger logger = new ShooterLogger();
+        System.arraycopy(configPidf, 0, pidf, 0, 4);
+        shooter.setTarget(targetVelocity);
 
         ElapsedTime timer = new ElapsedTime();
+        ElapsedTime loopTimer = new ElapsedTime();
         int param = 0;
         int multIndex = 1;
-        double intakeOutput = 0;
+        boolean gateOn = true;
+        boolean voltageComp = ShooterConfig.VOLTAGE_COMPENSATE_F;
+        ShooterController.IntakeRequest intakeRequest = ShooterController.IntakeRequest.OFF;
 
-        telemetry.addLine("Ready.");
+        telemetry.addLine("Ready. PIDF loaded from ShooterConfig.");
         telemetry.addLine("SHOOTER: A = start, X = stop, bumpers = target +/-50");
         telemetry.addLine("PIDF: dpad left/right = pick F/P/I/D, dpad up/down = change");
         telemetry.addLine("Stick presses = step size, Back = reset stats, Start = reset PIDF");
-        telemetry.addLine("INTAKE: right trigger = forward 0.8, left trigger = reverse 0.8, Y = stop");
+        telemetry.addLine("INTAKE: RT = in (gated feed), LT = out, Y = stop | B = CSV log");
+        telemetry.addLine("gamepad2: A = gate on/off, B = battery-scaled F on/off");
         telemetry.update();
         waitForStart();
         timer.reset();
+        loopTimer.reset();
 
         while (opModeIsActive()) {
+            double loopMs = loopTimer.milliseconds();
+            loopTimer.reset();
 
             boolean rb = gamepad1.right_bumper;
             boolean lb = gamepad1.left_bumper;
             boolean targetChanged = false;
             if (rb && !lastRightBumper) {
-                targetVelocity = Math.min(MAX_TARGET_VELOCITY, targetVelocity + VELOCITY_STEP);
+                targetVelocity = Math.min(ShooterConfig.maxTarget(), targetVelocity + VELOCITY_STEP);
                 targetChanged = true;
             }
             if (lb && !lastLeftBumper) {
@@ -105,11 +96,12 @@ public class ShooterPIDFTuner extends LinearOpMode {
             }
             lastRightBumper = rb;
             lastLeftBumper = lb;
+            shooter.setTarget(targetVelocity);
 
             if (gamepad1.a) {
-                shooterRunning = true;
+                shooter.spinUp();
             } else if (gamepad1.x) {
-                shooterRunning = false;
+                shooter.stop();
             }
 
             boolean up = gamepad1.dpad_up;
@@ -127,19 +119,21 @@ public class ShooterPIDFTuner extends LinearOpMode {
             if (leftStick && !lastLeftStick) multIndex = Math.max(0, multIndex - 1);
 
             double delta = BASE_STEPS[param] * MULTIPLIERS[multIndex];
+            boolean pidfChanged = false;
             if (up && !lastUp) {
                 pidf[param] = Math.max(0, pidf[param] + delta);
-                applyPidf(shooterMotor);
-                targetChanged = true;
+                pidfChanged = true;
             }
             if (down && !lastDown) {
                 pidf[param] = Math.max(0, pidf[param] - delta);
-                applyPidf(shooterMotor);
-                targetChanged = true;
+                pidfChanged = true;
             }
             if (start && !lastStart) {
-                System.arraycopy(defaults, 0, pidf, 0, 4);
-                applyPidf(shooterMotor);
+                System.arraycopy(configPidf, 0, pidf, 0, 4);
+                pidfChanged = true;
+            }
+            if (pidfChanged) {
+                shooter.setPidf(pidf[1], pidf[2], pidf[3], pidf[0]);
                 targetChanged = true;
             }
             if ((back && !lastBack) || targetChanged) {
@@ -156,25 +150,37 @@ public class ShooterPIDFTuner extends LinearOpMode {
             lastRightStick = rightStick;
 
             if (gamepad1.right_trigger > 0.5) {
-                intakeOutput = INTAKE_POWER;
+                intakeRequest = ShooterController.IntakeRequest.IN;
             } else if (gamepad1.left_trigger > 0.5) {
-                intakeOutput = -INTAKE_POWER;
+                intakeRequest = ShooterController.IntakeRequest.OUT;
             } else if (gamepad1.y) {
-                intakeOutput = 0;
+                intakeRequest = ShooterController.IntakeRequest.OFF;
             }
-            intakeMotor.setPower(intakeOutput);
+            shooter.setIntakeRequest(intakeRequest);
 
-            double commanded = shooterRunning ? SHOOTER_SIGN * targetVelocity : 0.0;
-            if (shooterRunning) {
-                shooterMotor.setVelocity(commanded);
-            } else {
-                shooterMotor.setPower(0);
+            if (gamepad2.a && !lastG2A) {
+                gateOn = !gateOn;
+                shooter.setGateEnabled(gateOn);
+                resetStats();
             }
+            if (gamepad2.b && !lastG2B) {
+                voltageComp = !voltageComp;
+                shooter.setVoltageCompensation(voltageComp);
+                resetStats();
+            }
+            lastG2A = gamepad2.a;
+            lastG2B = gamepad2.b;
 
-            double actual = shooterMotor.getVelocity();
-            double speed = Math.abs(actual);
+            if (gamepad1.b && !lastB) {
+                if (logger.isOpen()) logger.stop(); else logger.start();
+            }
+            lastB = gamepad1.b;
 
-            if (shooterRunning && targetVelocity > 0) {
+            shooter.update();
+            logger.log(timer.milliseconds(), shooter);
+
+            double speed = shooter.getVelocity();
+            if (shooter.isRunning() && targetVelocity > 0) {
                 if (!armed && speed >= 0.95 * targetVelocity) armed = true;
                 if (armed) {
                     lowest = Math.min(lowest, speed);
@@ -201,16 +207,15 @@ public class ShooterPIDFTuner extends LinearOpMode {
 
             telemetry.addLine("=== PIDF | selected: " + PARAM_NAMES[param]
                     + " | step: " + String.format("%.2f", delta) + " ===");
-            for (int i = 0; i < 4; i++) {
-                String mark = (i == param) ? ">> " : "   ";
-                telemetry.addData(mark + PARAM_NAMES[i], "%.3f (default %.3f)", pidf[i], defaults[i]);
+            for (int k = 0; k < 4; k++) {
+                String mark = (k == param) ? ">> " : "   ";
+                telemetry.addData(mark + PARAM_NAMES[k], "%.3f (config %.3f)", pidf[k], configPidf[k]);
             }
+            telemetry.addLine("NOT SAVED: copy final values into ShooterConfig.java");
+            telemetry.addData("Gate / scaled F", "%s / %s", gateOn ? "ON" : "OFF", voltageComp ? "ON" : "OFF");
+            telemetry.addData("Target cap (80% maxV)", "%.0f", ShooterConfig.maxTarget());
 
-            telemetry.addLine("--- SHOOTER ---");
-            telemetry.addData("State", shooterRunning ? "RUNNING" : "STOPPED");
-            telemetry.addData("Target", "%.0f ticks/sec", commanded);
-            telemetry.addData("Actual", "%.0f ticks/sec", actual);
-            telemetry.addData("Error", "%.0f", commanded - actual);
+            shooter.addTelemetry(telemetry);
 
             telemetry.addLine("--- TEST RESULTS (since reset) ---");
             if (armed) {
@@ -226,14 +231,16 @@ public class ShooterPIDFTuner extends LinearOpMode {
             telemetry.addData("Last recovery", "%.0f ms", lastRecoveryMs);
             telemetry.addData("Worst recovery", "%.0f ms", worstRecoveryMs);
             telemetry.addData("Recovering now", inDip ? "YES" : "no");
+            telemetry.addLine("(hub velocity is ~50 ms averaged: compare runs, don't trust exact ms)");
 
-            telemetry.addLine("--- INTAKE ---");
-            telemetry.addData("Power", "%.2f", intakeOutput);
+            telemetry.addData("Log", logger.isOpen() ? "REC " + logger.getRows() + " rows -> " + logger.getPath()
+                    : (logger.getError().isEmpty() ? "off (B to start)" : "ERROR " + logger.getError()));
+            telemetry.addData("Loop", "%.1f ms", loopMs);
             telemetry.update();
         }
 
-        shooterMotor.setPower(0);
-        intakeMotor.setPower(0);
+        logger.stop();
+        shooter.shutdown();
     }
 
     private void resetStats() {
@@ -247,9 +254,5 @@ public class ShooterPIDFTuner extends LinearOpMode {
         lastDipPercent = 0;
         lastRecoveryMs = 0;
         worstRecoveryMs = 0;
-    }
-
-    private void applyPidf(DcMotorEx motor) {
-        motor.setVelocityPIDFCoefficients(pidf[1], pidf[2], pidf[3], pidf[0]);
     }
 }
