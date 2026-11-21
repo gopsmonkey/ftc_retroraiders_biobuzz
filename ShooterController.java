@@ -75,6 +75,12 @@ public class ShooterController {
     private double voltage = 0;
     private double lastVoltageReadMs = -1e9;
 
+    private int lastIntakePos = 0;
+    private int pulseStartTicks = 0;
+    private double gapUntilMs = -1e9;
+    private int ticksFedThisHold = 0;
+    private boolean wantedFeed = false;
+
     private double intakeCurrent = 0;
     private double lastCurrentReadMs = -1e9;
     private boolean intakeFull = false;
@@ -215,13 +221,35 @@ public class ShooterController {
         boolean wantFeed = intakeRequest == IntakeRequest.IN
                 && (shootingForward || ShooterConfig.FEED_ONLY_AT_SPEED);
 
+        int pos = ShooterConfig.INTAKE_HAS_ENCODER ? intake.getCurrentPosition() : 0;
+        if (wantFeed && !wantedFeed) ticksFedThisHold = 0;
+        if (feeding) ticksFedThisHold += Math.abs(pos - lastIntakePos);
+        lastIntakePos = pos;
+        wantedFeed = wantFeed;
+        boolean inGap = false;
+
         if (wantFeed) {
             // Hold counts from the last moment the wheel was at speed, so EVERY ball's contact
             // dip gets the full push, not just the first one after the gate opens.
             // Holding the RB override counts as "at speed" too, so releasing RB mid-ball still gets the push.
             if (atSpeed || !gateEnabled) lastAtSpeedMs = now;
             boolean inPushWindow = feeding && now - lastAtSpeedMs < ShooterConfig.FEED_MIN_PUSH_MS;
-            feeding = shootingForward && (!gateEnabled || atSpeed || inPushWindow);
+            boolean open = shootingForward && (!gateEnabled || atSpeed || inPushWindow);
+            // One ball per opening: push FEED_TICKS_PER_BALL, then brake FEED_GAP_MS before the next.
+            // Stops the next ball before it reaches the wheel instead of waiting to see the speed dip.
+            if (ShooterConfig.INTAKE_HAS_ENCODER && ShooterConfig.FEED_TICKS_PER_BALL > 0 && gateEnabled) {
+                if (now < gapUntilMs) {
+                    open = false;
+                    inGap = true;
+                } else if (open && !feeding) {
+                    pulseStartTicks = pos;
+                } else if (open && Math.abs(pos - pulseStartTicks) >= ShooterConfig.FEED_TICKS_PER_BALL) {
+                    open = false;
+                    inGap = true;
+                    gapUntilMs = now + ShooterConfig.FEED_GAP_MS;
+                }
+            }
+            feeding = open;
         } else {
             feeding = false;
         }
@@ -241,7 +269,8 @@ public class ShooterController {
             }
         } else if (wantFeed) {
             // Power 0 + BRAKE (+ RUN_USING_ENCODER when the encoder is in) holds every roller still.
-            setIntakePower(0, shootingForward ? "BRAKED (wheel not at speed)" : "BRAKED (press A)");
+            setIntakePower(0, inGap ? "BRAKED (gap between balls)"
+                    : shootingForward ? "BRAKED (wheel not at speed)" : "BRAKED (press A)");
         } else if (intakeRequest == IntakeRequest.IN) {
             setIntakePower(ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_COLLECT_POWER, "collect");
         } else if (intakeRequest == IntakeRequest.OUT) {
@@ -341,5 +370,9 @@ public class ShooterController {
         telemetry.addLine("--- INTAKE ---");
         telemetry.addData("Intake", "%s %.2f", intakeMode, intakeOutput);
         telemetry.addData("Intake current", "%.2f A%s", intakeCurrent, intakeFull ? "  FULL (4 balls?)" : "");
+        if (ShooterConfig.INTAKE_HAS_ENCODER) {
+            telemetry.addData("Intake ticks fed (this RT hold)", "%d  (per ball: %d)",
+                    ticksFedThisHold, ShooterConfig.FEED_TICKS_PER_BALL);
+        }
     }
 }

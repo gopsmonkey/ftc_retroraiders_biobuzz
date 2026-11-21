@@ -89,6 +89,17 @@ public final class ShooterConfig {
      * while the shooter is off (balls get pushed into the stopped wheel).
      */
     public static final boolean FEED_ONLY_AT_SPEED = true;
+    /**
+     * One ball per shot: once the wheel is at speed, the intake moves only this many encoder
+     * ticks, then brakes for FEED_GAP_MS. Stops the next ball BEFORE it reaches the wheel,
+     * instead of waiting for the speed dip (which the hub reports ~50 ms late). 0 = off.
+     * To set it: leave it 0, spin up, hold RT and shoot 4 balls, read "Intake ticks fed" on
+     * telemetry, divide by 4, and start at about 70% of that. Raise it if a ball doesn't reach
+     * the wheel; lower it if two balls still go out together.
+     */
+    public static final int FEED_TICKS_PER_BALL = 0;
+    /** Brake time between balls (ms), so the shot clears and the wheel recovers. Try 150-300. */
+    public static final double FEED_GAP_MS = 200;
     /** Power while collecting balls (shooter off, only when FEED_ONLY_AT_SPEED = false). */
     public static final double INTAKE_COLLECT_POWER = 0.8;
     /**
