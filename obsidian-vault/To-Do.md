@@ -15,10 +15,10 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 > The Control Hub is also missing 3 repo files, including the AUTO ([[OnBot Java Check]], "On the Control Hub").
 
 ## Right now (blocks the robot)
-- [ ] **Re-paste `ShooterConfig.java` from commit `7a10048`** (https://raw.githubusercontent.com/gopsmonkey/ftc_retroraiders_biobuzz/7a10048/ShooterConfig.java). Cmd+F must find `FEED_TICKS_PER_BALL`, then Build Everything. `ShooterConfig` and `ShooterController` must always come from the same commit. (Prajin)
+- [ ] **Re-paste `ShooterConfig.java` from commit `16d2c68`** (https://raw.githubusercontent.com/gopsmonkey/ftc_retroraiders_biobuzz/16d2c68/ShooterConfig.java). It fixes the failed build and slows the feed to 0.5. Cmd+F must find `FEED_TICKS_PER_BALL`, then Build Everything. `ShooterConfig` and `ShooterController` must always come from the same commit. (Prajin)
 - [ ] **Add the 3 missing files to OnBot**, all from `7a10048`: `PreloadShootLeaveAuto.java` (the AUTO), `ShooterMaxVelocityTest.java` and `ShooterLogger.java`. **Replace** the old `ShooterPIDFTuner.java` and `ShooterVelocityTuner.java` with the branch versions; the old ones don't use the gate or `ShooterConfig`. ([[OnBot Java Check]])
 - [ ] **Robot test** with *BioBuzz TeleOp* ([[Code Check - Night Before]], rows 4–6 updated for PR #3). Confirm the wheel spins the launch way at −1375, otherwise set `SHOOTER_SIGN = 1`.
-- [ ] **Measure `FEED_TICKS_PER_BALL`**, so the 2nd ball isn't shot early ([[Shooter Tuning Guide]], "One ball per shot"). Stopgap: `INTAKE_FEED_POWER` 1.0 → 0.6.
+- [ ] **Measure `FEED_TICKS_PER_BALL`**, so the 2nd ball isn't shot early ([[Shooter Tuning Guide]], "One ball per shot"). `INTAKE_FEED_POWER` is now 0.5 (`16d2c68`). Two balls still go together → 0.4; balls stall → 0.6.
 - [ ] **Send every changed number to Claude** to commit. OnBot edits never reach GitHub. Then squash-merge PR #3 and tag `event-2026-11-21`. (Prajin + Claude)
 
 

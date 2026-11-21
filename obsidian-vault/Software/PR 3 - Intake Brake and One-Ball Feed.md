@@ -3,7 +3,7 @@ tags: [ftc, software, shooter, intake, pr]
 branch: intake-gate-at-speed
 pr: https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/3
 base: shooter-fixes-night-before @ 391d8ed
-latest: 7a10048
+latest: 16d2c68
 updated: 2026-11-21
 ---
 # PR #3: intake brake and one-ball feed
@@ -43,6 +43,7 @@ Back to [[FTC Home]] · Tasks: [[To-Do]] · Tuning: [[Shooter Tuning Guide]] · 
 | `FEED_TICKS_PER_BALL` | `0` (off) | (new) | Encoder ticks to push one ball. **Must be measured** ([[Shooter Tuning Guide]]). |
 | `FEED_GAP_MS` | `200` | (new) | Brake time between balls. |
 | `FEED_MIN_PUSH_MS` | `0` | 300 | Team asked to brake the instant the wheel is off target. Raise toward 300 if a ball stalls halfway into the hood. |
+| `INTAKE_FEED_POWER` | `0.5` | 1.0 | Shooting feed speed. At 1.0 two stacked balls went up together and the 2nd fell short (2026-11-21 01:15). 0.4 if it still happens, 0.6 if balls stall. |
 | `INTAKE_HAS_ENCODER` | `true` | false | Encoder cable added. If it comes loose, set `false`. |
 | `SHOOTER_SIGN` | `-1` | 1 | Launch command is −1375. |
 | `PRESET_MID` | `1375` | 1450 | |
@@ -58,6 +59,7 @@ Back to [[FTC Home]] · Tasks: [[To-Do]] · Tuning: [[Shooter Tuning Guide]] · 
 | `997a408` | Brake until at speed, `FEED_ONLY_AT_SPEED`, −1375, encoder on, push 0, RB can't push into a stopped wheel, `BRAKED` telemetry, README + TeleOp header |
 | `17504b8` | Removed plugin cache files that `997a408` accidentally included (`.claude-flow/`, `.swarm/`, `ruvector.db`) |
 | `6fc84c7` | Restored Abraar's `.gitignore` line and kept the cache ignores |
+| `16d2c68` | `INTAKE_FEED_POWER` 1.0 → 0.5, so stacked balls are spaced and the 2nd isn't shot short |
 | `7a10048` | One-ball pulse: `FEED_TICKS_PER_BALL`, `FEED_GAP_MS`, "Intake ticks fed" telemetry |
 
 > [!warning] Merge with **Squash and merge**
@@ -74,7 +76,8 @@ Back to [[FTC Home]] · Tasks: [[To-Do]] · Tuning: [[Shooter Tuning Guide]] · 
 ## On the robot so far (2026-11-21)
 - ~00:30: first PR #3 build (`997a408` files) succeeded in OnBot. The brake works, but the next ball still got shot, which led to `7a10048`.
 - 00:54: the `7a10048` build **failed** with `cannot find symbol FEED_TICKS_PER_BALL / FEED_GAP_MS` in `ShooterController`. Cause: the new `ShooterController.java` was pasted, but OnBot still had the old `ShooterConfig.java`. **Fix: paste `ShooterConfig.java` from `7a10048`**, then check that Cmd+F finds `FEED_TICKS_PER_BALL` (~line 100) before Build Everything.
-- **Rule: `ShooterConfig` and `ShooterController` must always come from the same commit.**
+- ~01:15: still sending two stacked balls; the 2nd falls short. `16d2c68` slows the feed to 0.5. Paste `ShooterConfig` from `16d2c68` (`ShooterController` from `7a10048` is unchanged).
+- **Rule: `ShooterConfig` and `ShooterController` must always come from the same commit.** (`16d2c68` changed only `ShooterConfig`; its `ShooterController` matches `7a10048`.)
 
 ## Open items (owners in [[To-Do]])
 - Re-paste `ShooterConfig.java` (`7a10048`), build, run the robot test.
