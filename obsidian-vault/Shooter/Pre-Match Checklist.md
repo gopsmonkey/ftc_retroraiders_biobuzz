@@ -13,5 +13,8 @@ Back to [[FTC Home]] · Why: [[Shooter Fix List - Night Before Competition]]
 - [ ] Spin up while driving to the shooting spot, then **stop** and shoot. Drive motors pull down the voltage the flywheel needs to recover.
 - [ ] Shoot only from the taped spots that match the presets.
 - [ ] Pack a spare printed bracket and hood.
+- [ ] Never hold more than **4** balls (G407). A 5-ball load is fine in practice, illegal in a match.
+- [ ] After every TIP the up CELL swaps ends: use the taped spot for that CELL, and wait for the HIVE to settle before shooting. See [[BIOBUZZ Rules and Scoring]].
+- [ ] Agree with the partner: both LEAVE in AUTO and both PARK at the end, for the SWARM RP (16 pts).
 
 Match balls come from the field, so you can't pick the good ones. The shooter has to cope with ball-to-ball differences, which is one more reason the squeeze must stay steady.

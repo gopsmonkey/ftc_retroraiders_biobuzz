@@ -27,4 +27,5 @@ Anyone with access to the repo can read and edit it. No paid Obsidian plan neede
 - `Shooter/`: shooter issues, evidence, fixes
 - `Robot/`: hardware and tuning
 - `Software/`: repo, branches, code notes
+- `Game/`: rules, scoring, strategy, other teams
 - New topic? Add a note and link it from [[FTC Home]].

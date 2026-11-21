@@ -13,6 +13,10 @@ Start here. Everything about the robot, the code and the competition prep links 
 - [[Shooter Code Review]]: what's wrong in the repo code, with line refs
 - [[Shooter Software Implementation Log]]: what was changed in code tonight, and why
 
+## Game
+- [[BIOBUZZ Rules and Scoring]]: scoring, how a TIP works (3 then ~8 POLLEN), rules that cost points
+- [[Top Teams Shooter Reference]]: what the best teams in the world do, and how our speeds compare
+
 ## Robot
 - [[Hardware Config Names]]: motor names and directions the code expects
 - [[Shooter Tuning Guide]]: how to measure maxV, set PIDF, and tune P
