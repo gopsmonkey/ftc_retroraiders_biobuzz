@@ -32,6 +32,11 @@ public class GateTest {
         if (!ok) failures++;
     }
     static int failures = 0;
+    static boolean feedingForward() {
+        double cmd = !Double.isNaN(intakeVelCmd) ? intakeVelCmd : intakePower;
+        return !Double.isNaN(cmd) && cmd != 0 && (cmd > 0) == (ShooterConfig.INTAKE_FEED_SIGN > 0)
+                && (ShooterConfig.INTAKE_FEED_VELOCITY <= 0 || intakeVelCmd == ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_FEED_VELOCITY);
+    }
 
     static void step(ShooterController s) { s.update(); intakeMode = s.getIntakeMode(); }
 
@@ -58,7 +63,7 @@ public class GateTest {
         check(intakePower == 0 && intakeMode.startsWith("BRAKED"), "spinning up at -700: intake braked");
 
         shooterVel = -1375; step(s);
-        check(intakePower != 0 && !Double.isNaN(intakePower) && intakePower > 0 == (ShooterConfig.INTAKE_FEED_SIGN > 0), "at -1375: intake feeds");
+        check(feedingForward(), "at -1375: intake feeds (power or velocity)");
 
         shooterVel = -1300; step(s);
         check(intakePower < 0 && intakeMode.startsWith("BACKOFF"), "ball dips wheel to -1300 (5.5% off): intake backs off at once (pulls next ball off the wheel)");
@@ -67,7 +72,7 @@ public class GateTest {
         check(intakePower == 0 && intakeMode.startsWith("BRAKED"), "after FEED_BACKOFF_MS: braked until the wheel recovers");
 
         shooterVel = -1360; step(s);
-        check(intakePower != 0, "back within 3% (-1360): intake feeds again");
+        check(feedingForward(), "back within 3% (-1360): intake feeds again");
 
         shooterVel = 1375; step(s);
         check(intakePower <= 0, "wheel spinning the wrong way (+1375): intake never pushes forward");

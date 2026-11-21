@@ -64,6 +64,7 @@ The robot runs this now. Full design, settings, tests and on-robot status: [[PR 
 | --- | --- | --- |
 | `997a408` | Claude (for Prajin) | `intakeMotor` braked until the flywheel is at −1375 (`FEED_ONLY_AT_SPEED`). `SHOOTER_SIGN` −1, `PRESET_MID` 1375, `INTAKE_HAS_ENCODER` true, `FEED_MIN_PUSH_MS` 0. RB can't push into a stopped wheel. |
 | `17504b8`, `6fc84c7` | Claude | Removed plugin cache files committed by mistake; restored Abraar's `.gitignore` line. |
+| `5f1e0a1` | Claude (for Prajin) | Intake feed by velocity: `INTAKE_FEED_VELOCITY` 600 ticks/s (was power ~2000 ticks/s). |
 | `e140571` | Claude (for Prajin) | Back-off: reverse 0.3 for 120 ms whenever feeding stops mid-shooting. 01:57 OnBot build failed: old `ShooterConfig` (missing the 2 new lines). |
 | `bb88475` | Claude (for Prajin) | `INTAKE_FEED_POWER` 0.5 → 0.3 (team request). |
 | `16d2c68` | Claude (for Prajin) | `INTAKE_FEED_POWER` 1.0 → 0.5: stacked balls went up together and the 2nd fell short. |

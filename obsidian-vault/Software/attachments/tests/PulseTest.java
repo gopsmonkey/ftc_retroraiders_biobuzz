@@ -17,6 +17,7 @@ public class PulseTest {
                     case "getVelocity": return isShooter ? shooterVel : 0.0;
                     case "getCurrentPosition": return intakePos;
                     case "setPower": if (!isShooter) intakePower = (Double) a[0]; return null;
+                    case "setVelocity": if (!isShooter) intakePower = Math.signum((Double) a[0]); return null;
                     case "getPIDFCoefficients": return new PIDFCoefficients(ShooterConfig.SHOOTER_P, ShooterConfig.SHOOTER_I, ShooterConfig.SHOOTER_D, ShooterConfig.SHOOTER_F);
                     case "getCurrent": return 0.0;
                     case "hashCode": return System.identityHashCode(p);

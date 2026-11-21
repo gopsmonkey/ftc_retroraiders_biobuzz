@@ -3,7 +3,7 @@ tags: [ftc, software, shooter, intake, pr]
 branch: intake-gate-at-speed
 pr: https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/3
 base: shooter-fixes-night-before @ 391d8ed
-latest: e140571
+latest: 5f1e0a1
 updated: 2026-11-21
 ---
 # PR #3: intake brake and one-ball feed
@@ -43,7 +43,8 @@ Back to [[FTC Home]] · Tasks: [[To-Do]] · Tuning: [[Shooter Tuning Guide]] · 
 | `FEED_TICKS_PER_BALL` | `0` (off) | (new) | Encoder ticks to push one ball. **Must be measured** ([[Shooter Tuning Guide]]). |
 | `FEED_GAP_MS` | `200` | (new) | Brake time between balls. |
 | `FEED_MIN_PUSH_MS` | `0` | 300 | Team asked to brake the instant the wheel is off target. Raise toward 300 if a ball stalls halfway into the hood. |
-| `INTAKE_FEED_POWER` | `0.3` | 1.0 → 0.5 → 0.3 | Shooting feed speed. At 1.0 two stacked balls went up together and the 2nd fell short (2026-11-21 01:15). 0.4 if it still happens, 0.6 if balls stall. |
+| `INTAKE_FEED_VELOCITY` | `600` ticks/s | 0 (power feed) | Feed speed while shooting, held by the encoder. 2nd ball still early → 400; balls too slow to reach the wheel → 800. Overrides `INTAKE_FEED_POWER` while the encoder is in. |
+| `INTAKE_FEED_POWER` | `0.3` (only used if `INTAKE_FEED_VELOCITY` = 0) | 1.0 → 0.5 → 0.3 | Shooting feed speed. At 1.0 two stacked balls went up together and the 2nd fell short (2026-11-21 01:15). 0.4 if it still happens, 0.6 if balls stall. |
 | `FEED_BACKOFF_MS` / `FEED_BACKOFF_POWER` | `120` / `0.3` | (new, `e140571`) | Reverse after each stop. 2nd ball still early → 180 ms or 0.4; balls pulled back too far → 80 ms. 0 ms = off. |
 | `INTAKE_HAS_ENCODER` | `true` | false | Encoder cable added. If it comes loose, set `false`. |
 | `SHOOTER_SIGN` | `-1` | 1 | Launch command is −1375. |
@@ -60,6 +61,7 @@ Back to [[FTC Home]] · Tasks: [[To-Do]] · Tuning: [[Shooter Tuning Guide]] · 
 | `997a408` | Brake until at speed, `FEED_ONLY_AT_SPEED`, −1375, encoder on, push 0, RB can't push into a stopped wheel, `BRAKED` telemetry, README + TeleOp header |
 | `17504b8` | Removed plugin cache files that `997a408` accidentally included (`.claude-flow/`, `.swarm/`, `ruvector.db`) |
 | `6fc84c7` | Restored Abraar's `.gitignore` line and kept the cache ignores |
+| `5f1e0a1` | **Velocity feed:** `INTAKE_FEED_VELOCITY` 0 → 600 ticks/s (`setVelocity`, like the launcher). The team saw ~2000 ticks/s on power feed and the 2nd ball still went early. |
 | `e140571` | **Back-off:** when feeding stops mid-shooting (shot dip or pulse end), reverse at `FEED_BACKOFF_POWER` 0.3 for `FEED_BACKOFF_MS` 120, then brake until −1375. Pulls the 2nd ball off the wheel so it isn't grabbed and shot short. RB skips it. |
 | `bb88475` | `INTAKE_FEED_POWER` 0.5 → 0.3 (team request; 0.5 still sent two together) |
 | `16d2c68` | `INTAKE_FEED_POWER` 1.0 → 0.5, so stacked balls are spaced and the 2nd isn't shot short |
@@ -82,6 +84,8 @@ Back to [[FTC Home]] · Tasks: [[To-Do]] · Tuning: [[Shooter Tuning Guide]] · 
 - ~01:15: still sending two stacked balls; the 2nd falls short. `16d2c68` slows the feed to 0.5. Then ~01:25 the team asked for 0.3, which is `bb88475`. Paste `ShooterConfig` from `bb88475` (`ShooterController` from `7a10048` is unchanged).
 - ~01:40: 2nd ball still early at 0.3 with the encoder attached → `e140571` back-off.
 - 01:57: build **failed** again (`cannot find symbol FEED_BACKOFF_MS / FEED_BACKOFF_POWER`): new `ShooterController`, old `ShooterConfig`. The team keeps its OnBot `ShooterConfig` (it holds their numbers), so **give new settings as lines to add**, not a whole-file replace.
+- ~02:05: back-off built; 2nd ball still early. Telemetry: intake ~2000 ticks/s vs launcher ~1400. `5f1e0a1` sets `INTAKE_FEED_VELOCITY = 600` (one line in OnBot `ShooterConfig`; `ShooterController` unchanged).
+- Note: intake and launcher ticks aren't directly comparable (different motors and gearing), but a slower feed still spaces the balls.
 - **Rule: `ShooterConfig` and `ShooterController` must always come from the same commit.** (`16d2c68` changed only `ShooterConfig`; its `ShooterController` matches `7a10048`.)
 
 ## Open items (owners in [[To-Do]])
