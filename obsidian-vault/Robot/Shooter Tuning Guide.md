@@ -42,7 +42,7 @@ Back to [[FTC Home]] · Why: [[Shooter Fix List - Night Before Competition]] · 
 ## One ball per shot (`FEED_TICKS_PER_BALL`, PR #3)
 The speed-dip brake reacts ~50 ms late (the hub averages velocity), so the next ball is already in the wheel. This setting stops it earlier ([[PR 3 - Intake Brake and One-Ball Feed]]).
 1. Leave `FEED_TICKS_PER_BALL = 0`. Press A, wait for `At speed: YES`, hold RT, shoot all 4.
-2. Read **Intake ticks fed (this RT hold)** on telemetry and divide by 4.
+2. Read **Intake distance fed (this RT hold)** on telemetry and divide by 4.
 3. Set `FEED_TICKS_PER_BALL` to ~70% of that, then build. Telemetry shows `BRAKED (gap between balls)` between shots.
 4. Two balls still go out → lower it. A ball stops short of the wheel → raise it.
 5. Feed speed: `INTAKE_FEED_POWER` is 0.3 since `bb88475` (1.0 and 0.5 still sent two together). Balls stall → 0.4.

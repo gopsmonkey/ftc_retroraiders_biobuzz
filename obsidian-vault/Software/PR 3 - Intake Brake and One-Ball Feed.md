@@ -3,7 +3,7 @@ tags: [ftc, software, shooter, intake, pr]
 branch: intake-gate-at-speed
 pr: https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/3
 base: shooter-fixes-night-before @ 391d8ed
-latest: 8038bf2
+latest: 3a79aba
 updated: 2026-11-21
 ---
 # PR #3: intake brake and one-ball feed
@@ -61,11 +61,12 @@ Back to [[FTC Home]] · Tasks: [[To-Do]] · Tuning: [[Shooter Tuning Guide]] · 
 | `997a408` | Brake until at speed, `FEED_ONLY_AT_SPEED`, −1375, encoder on, push 0, RB can't push into a stopped wheel, `BRAKED` telemetry, README + TeleOp header |
 | `17504b8` | Removed plugin cache files that `997a408` accidentally included (`.claude-flow/`, `.swarm/`, `ruvector.db`) |
 | `6fc84c7` | Restored Abraar's `.gitignore` line and kept the cache ignores |
+| `3a79aba` | Telemetry: **Intake speed (actual / target)** in ticks/s; "Intake ticks fed" renamed **Intake distance fed** (total ticks during the RT hold, not a speed). The team had read 1,200–1,400 as the speed. |
 | `8038bf2` | **Velocity feed:** `INTAKE_FEED_VELOCITY` 0 → 600 ticks/s (`setVelocity`, like the launcher). The team saw ~2000 ticks/s on power feed and the 2nd ball still went early. |
 | `e140571` | **Back-off:** when feeding stops mid-shooting (shot dip or pulse end), reverse at `FEED_BACKOFF_POWER` 0.3 for `FEED_BACKOFF_MS` 120, then brake until −1375. Pulls the 2nd ball off the wheel so it isn't grabbed and shot short. RB skips it. |
 | `bb88475` | `INTAKE_FEED_POWER` 0.5 → 0.3 (team request; 0.5 still sent two together) |
 | `16d2c68` | `INTAKE_FEED_POWER` 1.0 → 0.5, so stacked balls are spaced and the 2nd isn't shot short |
-| `7a10048` | One-ball pulse: `FEED_TICKS_PER_BALL`, `FEED_GAP_MS`, "Intake ticks fed" telemetry |
+| `7a10048` | One-ball pulse: `FEED_TICKS_PER_BALL`, `FEED_GAP_MS`, "Intake distance fed" telemetry |
 
 > [!warning] Merge with **Squash and merge**
 > `997a408` still holds the plugin cache files in its history (the repo is public). A squash merge keeps them out of `shooter-fixes-night-before`. Scrubbing them from GitHub completely needs a force-push, and nobody has approved that.

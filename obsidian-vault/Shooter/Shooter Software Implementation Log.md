@@ -68,7 +68,7 @@ The robot runs this now. Full design, settings, tests and on-robot status: [[PR 
 | `e140571` | Claude (for Prajin) | Back-off: reverse 0.3 for 120 ms whenever feeding stops mid-shooting. 01:57 OnBot build failed: old `ShooterConfig` (missing the 2 new lines). |
 | `bb88475` | Claude (for Prajin) | `INTAKE_FEED_POWER` 0.5 → 0.3 (team request). |
 | `16d2c68` | Claude (for Prajin) | `INTAKE_FEED_POWER` 1.0 → 0.5: stacked balls went up together and the 2nd fell short. |
-| `7a10048` | Claude (for Prajin) | One ball per shot: `FEED_TICKS_PER_BALL` + `FEED_GAP_MS`, plus "Intake ticks fed" telemetry. |
+| `7a10048` | Claude (for Prajin) | One ball per shot: `FEED_TICKS_PER_BALL` + `FEED_GAP_MS`, plus "Intake distance fed" telemetry. |
 
 Checks on `7a10048`: compiles on SDK 9.2/10.1/11.2/12.0; mock tests 10/10 (gate) and 5/5 (pulse) in `Software/attachments/tests/`.
 
