@@ -11,7 +11,7 @@ The Robot Configuration on the Driver Station must use exactly these names (from
 | Name | Device | Direction | Mode | Notes |
 | --- | --- | --- | --- | --- |
 | `shooterMotor` | Flywheel, likely 6000 rpm Yellow Jacket (28 CPR) | FORWARD | RUN_USING_ENCODER, FLOAT | Encoder required |
-| `intakeMotor` | Intake + transfer (no separate feeder) | FORWARD | RUN_WITHOUT_ENCODER (or USING if encoder plugged in) | BRAKE |
+| `intakeMotor` | **One motor, all rollers chained** (big intake + the two mini wheels under the flywheel) | FORWARD | RUN_USING_ENCODER (encoder added 2026-11-20) | BRAKE |
 | `lfMotor` | Drive, left front | REVERSE | RUN_WITHOUT_ENCODER | BRAKE |
 | `lbMotor` | Drive, left back | REVERSE | RUN_WITHOUT_ENCODER | BRAKE |
 | `rfMotor` | Drive, right front | FORWARD | RUN_WITHOUT_ENCODER | BRAKE |
@@ -24,5 +24,5 @@ The Robot Configuration on the Driver Station must use exactly these names (from
 - Shooter wheel is a single **gecko wheel**, no turret.
 - If the Driver Station config literally uses names like "RB motor", change the name constants at the top of each file.
 
-- **Answered (handoff): the intake motor has no encoder.** Leave `INTAKE_HAS_ENCODER = false`.
+- **Encoder cable added to `intakeMotor` (2026-11-20).** `INTAKE_HAS_ENCODER = true` on branch `intake-gate-at-speed` (PR #3), which keeps `intakeMotor` braked until the flywheel is at launch speed (-1375).
 - Open question: is there a feeder motor or servo gate outside the repo? The handoff lists none; the flower servos only drop and lift the intake.

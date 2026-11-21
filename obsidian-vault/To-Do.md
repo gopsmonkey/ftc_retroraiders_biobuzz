@@ -26,6 +26,7 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 - [ ] Calibrate presets at tape marks, one spot per CELL. ([[Shooter Tuning Guide]])
 - [ ] Power-cycle and confirm `PIDF on hub: OK`. ([[Shooter Tuning Guide]])
 - [ ] Merge PR #1, or decide which branch goes on the hub. ([[Repo and Branches]])
+- [ ] **Review PR #3:** brake `intakeMotor` until the wheel is at -1375. It sets `SHOOTER_SIGN = -1` and `FEED_MIN_PUSH_MS = 0`. Squash-merge it, and on the robot check the wheel spins the launch way. https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/3
 
 ## Tonight: AUTO and code freeze (Shresht)
 - [x] Patches A–C (`2e4aaf8`) and D (`4479479`). Night-before notes parts 2–3 uploaded. (Shresht, 2026-11-20)
