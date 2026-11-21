@@ -1,7 +1,7 @@
 ---
 tags: [ftc, shooter, software, log]
 branch: shooter-fixes-night-before
-commit: 4479479
+commit: 391d8ed
 updated: 2026-11-20
 ---
 # Shooter software implementation log
@@ -30,11 +30,7 @@ All software fixes from the fix list are in branch `shooter-fixes-night-before` 
 | No match TeleOp in repo | `BioBuzz TeleOp` (group "Match") | Reference TeleOp with all fixes. If the real match TeleOp is elsewhere, copy the `// FIX` lines into it **and commit it**. |
 
 ## OpMode controls
-**BioBuzz TeleOp (match)**
-- Left stick drive/strafe, right stick turn, hold LT = precision
-- A = spin up at preset, X = stop shooter, d-pad L/U/R = CLOSE/MID/FAR
-- Hold RT = intake (collects when shooter off, gated feed when on)
-- Hold LB = reverse intake, hold B = reverse shooter (releasing B stops it)
+**BioBuzz TeleOp (match):** the controls table is in the repo `README.md` on `shooter-fixes-night-before` (one place, kept up to date).
 
 **Shooter PIDF Tuner**: same as before, plus RT/LT now *in/out* (in = gated feed), B = CSV log, gamepad2 A = gate on/off, gamepad2 B = scaled F on/off. Starts from `ShooterConfig` gains, Start resets to them.
 
@@ -56,9 +52,10 @@ All software fixes from the fix list are in branch `shooter-fixes-night-before` 
 | `53f96f2` | Claude | gamepad2 d-pad speed trim ±25 (7759's idea), X resets | Fixes all-short/all-long at the event without a rebuild. |
 | `53f96f2` | Claude | Rumble: blip at speed, buzz when intake current says "full" (23849's idea) | Full warning is off until `INTAKE_FULL_CURRENT_AMPS` is measured. Current is read every 100 ms, only while collecting. |
 | `53f96f2` | Claude | README: OnBot Java upload + controls table | Replaces the Android Studio instructions. |
+| `391d8ed` | Claude | Final pass: releasing RB mid-ball keeps the push; motor commands written only when they change (forced re-send every 500 ms in case a hub resets); flower servos written only on press; stray `workspace.json` removed | Fewer hub round trips per loop. 25 mock checks pass; compiles on SDK 12.0/9.2. |
 | `4479479` | Claude | **Push-hold bug fix**: the hold now counts from the last moment the wheel was at speed, so every ball gets the push, not just the first after the gate opens. Same fix in the Velocity Tuner. | Bug found by the code review in the [fix-list doc](https://claude.ai/artifact/2TijvqY1ftJomPvE1RqhEn). The original 18 tests missed it; there are now 21 checks, including a second-ball regression. |
 
-Checks on `4479479`: 21 mock-motor logic checks pass; compiles with 0 errors against the real FTC SDK **12.0.0 and 9.2.0** libraries at Java 8 (`Software/attachments/onbot-compile-check.sh`). Still not run on the robot.
+Checks on `391d8ed`: 25 mock-motor logic checks pass; compiles with 0 errors against the real FTC SDK **12.0.0 and 9.2.0** libraries at Java 8 (`Software/attachments/onbot-compile-check.sh`). Still not run on the robot.
 
 ## Still to do (people)
 Tracked in [[To-Do]].
@@ -71,3 +68,4 @@ Tracked in [[To-Do]].
 - 19:10 Pushed branch, opened PR #1: https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/1
 - 21:00 Reviewed Shresht's `2e4aaf8`. Added flower servos, trim, rumble, intake-full warning, README. Pushed `53f96f2`.
 - 21:30 Fixed push-hold bug (`4479479`), doc status table and review updated to match.
+- 22:30 Final pass `391d8ed` (Shresht's review items 1–3, write caching). Vault de-duplicated.

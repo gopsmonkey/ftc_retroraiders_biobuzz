@@ -1,14 +1,14 @@
 ---
 tags: [ftc, software, testing, competition-prep]
 branch: shooter-fixes-night-before
-commit: 4479479
+commit: 391d8ed
 updated: 2026-11-20
 ---
 # Code check: night before
 
 Back to [[FTC Home]] · Changes: [[Shooter Software Implementation Log]] · Upload + build: [[OnBot Java Check]] · AUTO: [[Preload Shoot + Leave Auto]] · Tasks: [[To-Do]]
 
-## Status (commit `4479479`)
+## Status (commit `391d8ed`)
 - **Compiles:** all 8 `.java` files, 0 errors against the real FTC SDK 11.0.0 libraries (Prajin also checked SDK 9.2–12.0, see [[OnBot Java Check]]).
 - **OnBot-safe:** one public class per file, no lambdas or streams.
 - **Logic:** 13 fake-motor checks pass (PIDF in init, 80% cap, collect vs gated feed, RB override, push hold after every ball, reverse never gated).
@@ -24,10 +24,10 @@ Back to [[FTC Home]] · Changes: [[Shooter Software Implementation Log]] · Uplo
 
 Shresht's review found D independently. The version on GitHub is the team's (Abraar's); nothing else was changed.
 
-## Could be better (not changed, for Abraar to decide)
-1. **Releasing RB mid-ball stops the push instantly.** During the override the wheel isn't "at speed", so the hold timer never starts, and letting go of RB cuts the intake mid-grab. Possible fix: in `ShooterController.updateIntake`, change `if (atSpeed)` to `if (atSpeed || !gateEnabled)`. Low priority: RB is an emergency button.
-2. **Stale comment:** `ShooterConfig.FEED_MIN_PUSH_MS` still says "once the gate opens". The code now counts from the last at-speed moment.
-3. **Stray file on the code branch:** `obsidian-vault/.obsidian/workspace.json` (a personal Obsidian layout file) was committed in `53f96f2`. Harmless; delete it before merging PR #1.
+## Could be better (items 1–3 done in `391d8ed`, 2026-11-20)
+1. ~~**Releasing RB mid-ball stops the push instantly.**~~ **Done:** holding RB now counts as at speed for the hold. During the override the wheel isn't "at speed", so the hold timer never starts, and letting go of RB cuts the intake mid-grab. Possible fix: in `ShooterController.updateIntake`, change `if (atSpeed)` to `if (atSpeed || !gateEnabled)`. Low priority: RB is an emergency button.
+2. ~~**Stale comment.**~~ **Done.** It used to say "once the gate opens". The code now counts from the last at-speed moment.
+3. ~~**Stray file on the code branch.**~~ **Done:** removed, and `.gitignore` keeps it out. It was `obsidian-vault/.obsidian/workspace.json` (a personal Obsidian layout file) was committed in `53f96f2`. Harmless; delete it before merging PR #1.
 4. **The 300 ms hold can't fix the creep.** The video shows the ball waits 0.5–1.1 s *before* touching the wheel ([[Second Video Analysis (30 fps)]]). That's a feed-geometry problem: fix it mechanically first ([[Small Fixes Without Reprinting]]).
 
 ## Biggest risk: the robot never shoots
@@ -48,7 +48,7 @@ Fix the Expansion Hub blinking blue first, or the drive won't work ([[Sathwik Ha
 | 5 | Press A | Wheel spins the shooting way; rumble blip and `At speed: YES` within ~2 s | Wrong way → `SHOOTER_SIGN = -1`. Never YES → see the risk above. |
 | 6 | Hold RT with shooter on, 4 balls | `GATED`, then `feed pwr`; each ball goes through | Two at once → `FEED_MIN_PUSH_MS` 150–200. Ball still waits in the hood → mechanical fix. |
 | 7 | Hold LB, then B | Intake reverses; wheel reverses slowly, stops when released | — |
-| 8 | *Shooter MaxV Test*, hold A (no ball, fresh battery) | Peak ≈ 2,400–2,500 | Very different → copy its numbers into `ShooterConfig`, re-upload, rebuild. |
+| 8 | *Shooter MaxV Test*, hold A (no ball, fresh battery) | Peak ≈ 2,400–2,520 | Very different → copy its numbers into `ShooterConfig`, re-upload, rebuild. |
 | 9 | *Preload Shoot + Leave* from the real start tile | Shoots 4, drives off the wall, stops on our side | [[Preload Shoot + Leave Auto]] |
 
 Then commit the changed `ShooterConfig` numbers and tag the commit (`event-2026-11-21`), see [[Repo and Branches]].

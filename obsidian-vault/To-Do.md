@@ -11,7 +11,7 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 
 ## Decide tonight (blocks other tasks)
 - [ ] **Which TeleOp runs tomorrow?** `MainTeleOp` has the flower servos but no fixes and has never run. `BioBuzz TeleOp` has all the shooter fixes but no flower servos. Either copy the `// FIX` lines into `MainTeleOp`, or add the flower servos to `BioBuzz TeleOp`. Then commit it. ([[Sathwik Handoff]], [[Shooter Software Implementation Log]])
-- [ ] **Load the branch into OnBot Java.** It compiles cleanly on SDK 9.2–12.0 (re-checked on `4479479`). Upload all 8 files with **Upload Files** (don't paste), overwrite the old tuners, then Build Everything. If the build fails, it's an old file such as `PollenAutoNav`. (Sathwik; steps in [[OnBot Java Check]])
+- [ ] **Load the branch into OnBot Java.** It compiles cleanly on SDK 9.2–12.0 (re-checked on `391d8ed`). Upload all 8 files with **Upload Files** (don't paste), overwrite the old tuners, then Build Everything. If the build fails, it's an old file such as `PollenAutoNav`. (Sathwik; steps in [[OnBot Java Check]])
 
 ## Tonight: robot (Sathwik, hands-on)
 - [ ] **Fix the Expansion Hub blinking blue.** All 4 drive motors depend on it, so do this first. ([[Sathwik Handoff]], Expansion Hub section)
@@ -21,7 +21,7 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 - [ ] Charge and label every battery. ([[Competition Day Tips]])
 
 ## Tonight: shooter software (Abraar)
-- [ ] Optional code polish from the review: RB release mid-ball, stale `FEED_MIN_PUSH_MS` comment, stray `workspace.json` on the code branch. ([[Code Check - Night Before]], "Could be better")
+- [x] Code polish from the review: RB release mid-ball, stale comment, stray `workspace.json`. Done in `391d8ed`, plus write caching for a faster loop.
 - [ ] Run MaxV Test → PIDF Tuner, put real numbers in `ShooterConfig`, commit. ([[Shooter Tuning Guide]])
 - [ ] Calibrate presets at tape marks, one spot per CELL. ([[Shooter Tuning Guide]])
 - [ ] Power-cycle and confirm `PIDF on hub: OK`. ([[Shooter Tuning Guide]])

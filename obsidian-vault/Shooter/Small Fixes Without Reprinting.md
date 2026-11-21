@@ -33,4 +33,4 @@ No time to reprint big parts, so use hardware from the kit box. In the video, th
 Push the flywheel toward the hood by hand. If you see anything move, add another brace. Then shoot 5 balls and check that the paint marks haven't moved.
 
 ## Spares to bring
-Spare printed bracket and hood, nylock nuts, washers, standoffs, a hex key set, tape, paint pen, VHB tape.
+In the pack list: [[Competition Day Tips]].

@@ -32,20 +32,16 @@ Controls are in the repo `README.md`.
 | AUTO misbehaves | `SHOOT_FIRST = false` (LEAVE only), see [[Preload Shoot + Leave Auto]]. |
 
 ## Pack list
-Charged batteries + charger, extension cord, laptop with a browser for OnBot Java (http://192.168.43.1:8080 on the Control Hub's Wi-Fi), the repo files downloaded offline, a USB-C cable, Driver Station phone/controller, spare gamepad, hex keys and screwdrivers, spare screws and nylock nuts, spare small printed parts, CA glue, packing tape, paint pen, zip ties (wires only), measuring tape, floor tape.
+Charged batteries + charger, extension cord, laptop with a browser for OnBot Java (http://192.168.43.1:8080 on the Control Hub's Wi-Fi), the repo files downloaded offline, a USB-C cable, Driver Station phone/controller, spare gamepad, hex keys and screwdrivers, spare screws and nylock nuts, spare printed flywheel bracket and hood, spare small printed parts, washers, aluminium standoffs, VHB tape, CA glue, packing tape, paint pen, zip ties (wires only), measuring tape, floor tape.
 
 ## At the event
 - **Inspection first.** The robot must fit the 18 in. sizing box at the start. Battery and wires secure. Robot Controller and Driver Station apps up to date and matching.
 - **Practice field:** check each preset from the taped spots on the real HIVE, for **both** CELL ends (the up CELL swaps after every TIP). Adjust `PRESET_CLOSE/MID/FAR` if needed, or use the gamepad2 d-pad speed trim (±25 per press) during matches. See [[BIOBUZZ Rules and Scoring]].
-- **Talk to every alliance partner:** both LEAVE in AUTO and both PARK at the end (SWARM RP), who shoots when, and stay out of each other's lane at the HIVE.
-- **In matches:**
-    - Shoot only while stopped. Wait for the HIVE to settle after a TIP.
-    - Never hold more than 4 balls (G407).
-    - Head back to PARK with about 10 s left (5 points).
-- **Between matches:**
-    - Check the paint marks (flywheel hub, hood) and bracket bolts, and look for cracks.
-    - Swap the battery.
-    - Write one line per match here or in a new note: shots taken, shots in, what broke.
+- **Every match:** run the [[Pre-Match Checklist]] (partner talk, battery, paint marks, 4-ball limit, PARK timing).
+
+## Match log
+One line per match: shots taken, shots in, what broke.
+
 
 ## Judging
 The shooter story is a strong engineering story. You found the problem with frame-by-frame video (stall time, mount movement) and tuner data (speed dip and recovery). Then you fixed it with mechanical changes plus an at-speed gate. Show the video frames and the fix list, and make sure everyone can explain one part.
