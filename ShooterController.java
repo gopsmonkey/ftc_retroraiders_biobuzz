@@ -58,7 +58,8 @@ public class ShooterController {
     private double velocity = 0;
     private boolean atSpeed = false;
     private boolean feeding = false;
-    private double feedStartMs = -1;
+    /** Last time the wheel was inside the at-speed band; the push hold counts from here. */
+    private double lastAtSpeedMs = -1e9;
     private double intakeOutput = 0;
     private String intakeMode = "power";
 
@@ -189,10 +190,11 @@ public class ShooterController {
         boolean wantFeed = intakeRequest == IntakeRequest.IN && running && target > 0;
 
         if (wantFeed) {
-            boolean inPushWindow = feeding && now - feedStartMs < ShooterConfig.FEED_MIN_PUSH_MS;
-            boolean open = !gateEnabled || atSpeed || inPushWindow;
-            if (open && !feeding) feedStartMs = now;
-            feeding = open;
+            // Hold counts from the last moment the wheel was at speed, so EVERY ball's contact
+            // dip gets the full push, not just the first one after the gate opens.
+            if (atSpeed) lastAtSpeedMs = now;
+            boolean inPushWindow = feeding && now - lastAtSpeedMs < ShooterConfig.FEED_MIN_PUSH_MS;
+            feeding = !gateEnabled || atSpeed || inPushWindow;
         } else {
             feeding = false;
         }

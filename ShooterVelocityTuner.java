@@ -72,7 +72,7 @@ public class ShooterVelocityTuner extends LinearOpMode {
         ElapsedTime loopTimer = new ElapsedTime();
         ElapsedTime runTimer = new ElapsedTime();
         boolean feedOpen = false;
-        double feedOpenSinceMs = 0;
+        double lastAtSpeedMs = -1e9;
 
         telemetry.addLine("Ready. PIDF loaded from ShooterConfig.");
         telemetry.addLine("DRIVE: left stick = drive + strafe, right stick = turn, hold LT = precision");
@@ -157,11 +157,11 @@ public class ShooterVelocityTuner extends LinearOpMode {
 
             // At-speed gate: don't push a ball into a wheel that hasn't recovered.
             boolean shootingForward = shooter.isRunning() && shooterTarget > 0;
-            // Same push-through hold as ShooterController: once open, keep pushing FEED_MIN_PUSH_MS.
+            // Same push-through hold as ShooterController: keep pushing FEED_MIN_PUSH_MS after the last at-speed moment.
             boolean wantFeed = intakeRunning && intakeDirection > 0 && shootingForward;
             double nowMs = runTimer.milliseconds();
-            boolean open = shooter.isAtSpeed() || (feedOpen && nowMs - feedOpenSinceMs < ShooterConfig.FEED_MIN_PUSH_MS);
-            if (wantFeed && open && !feedOpen) feedOpenSinceMs = nowMs;
+            if (shooter.isAtSpeed()) lastAtSpeedMs = nowMs;
+            boolean open = shooter.isAtSpeed() || (feedOpen && nowMs - lastAtSpeedMs < ShooterConfig.FEED_MIN_PUSH_MS);
             feedOpen = wantFeed && open;
             boolean gated = wantFeed && !open;
             double intakeCommanded = intakeRunning && !gated ? intakeDirection * intakePower : 0.0;
