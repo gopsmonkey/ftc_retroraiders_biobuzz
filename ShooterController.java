@@ -382,7 +382,11 @@ public class ShooterController {
         telemetry.addData("Intake", "%s %.2f", intakeMode, intakeOutput);
         telemetry.addData("Intake current", "%.2f A%s", intakeCurrent, intakeFull ? "  FULL (4 balls?)" : "");
         if (ShooterConfig.INTAKE_HAS_ENCODER) {
-            telemetry.addData("Intake ticks fed (this RT hold)", "%d  (per ball: %d)",
+            boolean velFeed = "feed vel".equals(intakeMode);
+            telemetry.addData("Intake speed (actual / target)", "%.0f / %s ticks/s",
+                    Math.abs(intake.getVelocity()),
+                    velFeed ? String.format("%.0f", ShooterConfig.INTAKE_FEED_VELOCITY) : "- (not feeding by velocity)");
+            telemetry.addData("Intake distance fed (this RT hold)", "%d ticks  (per ball: %d)",
                     ticksFedThisHold, ShooterConfig.FEED_TICKS_PER_BALL);
         }
     }
