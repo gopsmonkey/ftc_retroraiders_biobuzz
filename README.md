@@ -25,7 +25,7 @@ PIDF set in a tuner is lost on power cycle. Only `ShooterConfig` sticks.
 | Input | Action |
 | --- | --- |
 | gamepad1 left stick / right stick | Drive + strafe / turn |
-| hold LT | Precision drive (0.35) |
+| hold LT | Run the intake at collect power, ignoring the flywheel (no at-speed gate) |
 | A / X | Spin up at preset / stop shooter |
 | d-pad left / up / right | CLOSE / MID / FAR preset |
 | hold RT | Intake runs only while the flywheel is at speed; otherwise `intakeMotor` is braked (press A first). `FEED_ONLY_AT_SPEED = false` in `ShooterConfig` restores collecting with the shooter off. |

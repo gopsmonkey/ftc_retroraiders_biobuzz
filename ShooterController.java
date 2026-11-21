@@ -32,7 +32,9 @@ public class ShooterController {
         /** Shooter off: collect at INTAKE_COLLECT_POWER. Shooter on: gated feed into the flywheel. */
         IN,
         /** Reverse at collect power (clearing jams). Never gated. */
-        OUT
+        OUT,
+        /** Forward at collect power, ignoring the flywheel speed entirely (driver's LT). Never gated. */
+        COLLECT
     }
 
     private final DcMotorEx shooter;
@@ -283,6 +285,8 @@ public class ShooterController {
             setIntakePower(0, inGap ? "BRAKED (gap between balls)"
                     : shootingForward ? "BRAKED (wheel not at speed)" : "BRAKED (press A)");
         } else if (intakeRequest == IntakeRequest.IN) {
+            setIntakePower(ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_COLLECT_POWER, "collect");
+        } else if (intakeRequest == IntakeRequest.COLLECT) {
             setIntakePower(ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_COLLECT_POWER, "collect");
         } else if (intakeRequest == IntakeRequest.OUT) {
             setIntakePower(-ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_COLLECT_POWER, "reverse");

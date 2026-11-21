@@ -15,7 +15,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * the tuners.
  *
  * gamepad1:
- *   left stick = drive + strafe, right stick = turn, hold LT = precision drive (0.35)
+ *   left stick = drive + strafe, right stick = turn
+ *   hold LT = run the intake at collect power, ignoring the flywheel (no at-speed gate)
  *   A = spin up at the selected preset, X = stop shooter
  *   dpad left / up / right = CLOSE / MID / FAR preset (also changes speed live if spinning)
  *   hold RT = intake feeds only while the flywheel is at speed; otherwise intakeMotor is braked (press A first)
@@ -103,9 +104,8 @@ public class BioBuzzTeleOp extends LinearOpMode {
                 java.util.Arrays.fill(lastDrive, Double.NaN);
             }
 
-            // ---- Drive (FIX: precision mode for lining up shots) ----
-            boolean precision = gamepad1.left_trigger > 0.5;
-            double speedScale = precision ? ShooterConfig.PRECISION_DRIVE_SPEED : ShooterConfig.DRIVE_SPEED;
+            // ---- Drive ----
+            double speedScale = ShooterConfig.DRIVE_SPEED;
             double drive = -gamepad1.left_stick_y;
             double strafe = STRAFE_SIGN * -gamepad1.left_stick_x;
             double turn = TURN_SIGN * -gamepad1.right_stick_x;
@@ -160,6 +160,8 @@ public class BioBuzzTeleOp extends LinearOpMode {
                 shooter.setIntakeRequest(ShooterController.IntakeRequest.OUT);
             } else if (gamepad1.right_trigger > 0.5) {
                 shooter.setIntakeRequest(ShooterController.IntakeRequest.IN);
+            } else if (gamepad1.left_trigger > 0.5) {
+                shooter.setIntakeRequest(ShooterController.IntakeRequest.COLLECT);   // LT: no gate
             } else {
                 shooter.setIntakeRequest(ShooterController.IntakeRequest.OFF);
             }
@@ -179,7 +181,6 @@ public class BioBuzzTeleOp extends LinearOpMode {
 
             telemetry.addData("Preset", "%s (%.0f ticks/s, trim %+.0f)", PRESET_NAMES[preset], PRESETS[preset], trim);
             telemetry.addData("Flower", !flowerCommanded ? "not moved yet (Y)" : flowerDown ? "DOWN" : "UP");
-            telemetry.addData("Drive", precision ? "PRECISION" : "normal");
             shooter.addTelemetry(telemetry);
             telemetry.addData("Loop", "%.1f ms", loopMs);
             telemetry.update();
