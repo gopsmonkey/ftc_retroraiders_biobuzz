@@ -3,7 +3,7 @@ tags: [ftc, software, shooter, intake, pr]
 branch: intake-gate-at-speed
 pr: https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/3
 base: shooter-fixes-night-before @ 391d8ed
-latest: 3a79aba
+latest: cbb8a8a
 updated: 2026-11-21
 ---
 # PR #3: intake brake and one-ball feed
@@ -61,6 +61,7 @@ Back to [[FTC Home]] · Tasks: [[To-Do]] · Tuning: [[Shooter Tuning Guide]] · 
 | `997a408` | Brake until at speed, `FEED_ONLY_AT_SPEED`, −1375, encoder on, push 0, RB can't push into a stopped wheel, `BRAKED` telemetry, README + TeleOp header |
 | `17504b8` | Removed plugin cache files that `997a408` accidentally included (`.claude-flow/`, `.swarm/`, `ruvector.db`) |
 | `6fc84c7` | Restored Abraar's `.gitignore` line and kept the cache ignores |
+| `cbb8a8a` | TeleOp: **tap B** toggles shooter reverse at 900 ticks/s (`UNJAM_VELOCITY` −900 × `SHOOTER_SIGN` −1 = +900, opposite the launch). Was hold-B. A or X also ends it. Only `BioBuzzTeleOp.java` changed. |
 | `3a79aba` | Telemetry: **Intake speed (actual / target)** in ticks/s; "Intake ticks fed" renamed **Intake distance fed** (total ticks during the RT hold, not a speed). The team had read 1,200–1,400 as the speed. |
 | `8038bf2` | **Velocity feed:** `INTAKE_FEED_VELOCITY` 0 → 600 ticks/s (`setVelocity`, like the launcher). The team saw ~2000 ticks/s on power feed and the 2nd ball still went early. |
 | `e140571` | **Back-off:** when feeding stops mid-shooting (shot dip or pulse end), reverse at `FEED_BACKOFF_POWER` 0.3 for `FEED_BACKOFF_MS` 120, then brake until −1375. Pulls the 2nd ball off the wheel so it isn't grabbed and shot short. RB skips it. |

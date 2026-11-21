@@ -47,7 +47,7 @@ Fix the Expansion Hub blinking blue first, or the drive won't work ([[Sathwik Ha
 | 4 | RT with shooter **off** | Intake stays still, telemetry `BRAKED (press A)` (PR #3) | Rollers move → `FEED_ONLY_AT_SPEED` isn't `true`, so the old file is still loaded. |
 | 5 | Press A | Wheel spins the shooting way at −1375; rumble blip and `At speed: YES` within ~2 s | Wrong way → flip `SHOOTER_SIGN` (PR #3 set it to −1). Never YES → see the risk above. |
 | 6 | Hold RT with shooter on, 4 balls | `BRAKED (wheel not at speed)`, then `feed pwr`; intake pulls **in** and each ball goes through | Pushes out → `INTAKE_FEED_SIGN = -1`. Ball stops halfway into the hood → raise `FEED_MIN_PUSH_MS` (0 now) toward 300. Two at once → lower it. |
-| 7 | Hold LB, then B | Intake reverses; wheel reverses slowly, stops when released | — |
+| 7 | Hold LB; then tap B, tap B again | Intake reverses; wheel reverses at 900 ticks/s on the first tap and stops on the second (A or X also ends it) | — |
 | 8 | *Shooter MaxV Test*, hold A (no ball, fresh battery) | Peak ≈ 2,400–2,520 | Very different → copy its numbers into `ShooterConfig`, re-upload, rebuild. |
 | 9 | *Preload Shoot + Leave* from the real start tile | Shoots 4, drives off the wall, stops on our side | [[Preload Shoot + Leave Auto]] |
 
