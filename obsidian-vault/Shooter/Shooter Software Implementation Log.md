@@ -46,12 +46,7 @@ All software fixes from the fix list are in branch `shooter-fixes-night-before` 
 - **Not tested on the robot.** Gamepad mapping and motor directions are copied from the existing tuners.
 
 ## Still to do (people)
-- [ ] Mechanical fixes first (mount, hood, feed guide).
-- [ ] Run MaxV Test, PIDF Tuner → put real numbers in `ShooterConfig`, commit.
-- [ ] Calibrate presets at tape marks.
-- [ ] Commit the real match TeleOp + Autonomous (or switch to BioBuzz TeleOp).
-- [ ] Autonomous: before feeding, use `shooter.spinUp(...)` then wait for `shooter.isAtSpeed()`.
-- [ ] Power-cycle, confirm `PIDF on hub: OK`.
+Tracked in [[To-Do]].
 
 ## Log
 - 18:25 Read fix list + repo (commit 1af7759). Branch `shooter-fixes-night-before`.

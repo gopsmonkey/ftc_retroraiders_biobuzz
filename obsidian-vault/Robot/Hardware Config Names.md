@@ -16,6 +16,13 @@ The Robot Configuration on the Driver Station must use exactly these names (from
 | `lbMotor` | Drive, left back | REVERSE | RUN_WITHOUT_ENCODER | BRAKE |
 | `rfMotor` | Drive, right front | FORWARD | RUN_WITHOUT_ENCODER | BRAKE |
 | `rbMotor` | Drive, right back | FORWARD | RUN_WITHOUT_ENCODER | BRAKE |
+| `flowerServo1`, `flowerServo2` | Flower intake drop/lift (in `MainTeleOp`) | servo 2 REVERSED | Servo | Up 0.0 / down 0.5 are guesses, measure |
+| `viperMotor` | goBILDA 4-stage viper slide (older `DriverTeleOp`) | – | DC motor | Presets LOW 0 / MID 900 / HIGH 2100 / max 2200 are placeholders |
+| `y_pod`, `x_pod` | goBILDA 4-bar odometry pods (forward / strafe) | see `INVERT_*_ODOMETRY` | encoder | Constants in [[Sathwik Handoff]] |
 
-- Open question: is the intake motor's encoder cable plugged in? *Shooter MaxV Test* (hold B) answers it.
-- Open question: is there a feeder motor or servo gate outside the repo? If so, the gate belongs on it.
+- All 4 drive motors are on the **Expansion Hub**. If they aren't detected, see the blinking-blue section of [[Sathwik Handoff]].
+- Shooter wheel is a single **gecko wheel**, no turret.
+- If the Driver Station config literally uses names like "RB motor", change the name constants at the top of each file.
+
+- **Answered (handoff): the intake motor has no encoder.** Leave `INTAKE_HAS_ENCODER = false`.
+- Open question: is there a feeder motor or servo gate outside the repo? The handoff lists none; the flower servos only drop and lift the intake.

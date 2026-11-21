@@ -5,6 +5,8 @@ FTC team Retro Raiders (26603), season BIOBUZZ 2026-27. Start at `FTC Home.md`, 
 ## Where each fact lives (one fact, one note: link to it, don't copy it)
 | Topic | Note |
 | --- | --- |
+| **All open tasks, with owners** | `To-Do.md` |
+| Sathwik's handoff: OnBot Java, local files, odometry, hub issue, how he likes to work | `Software/Sathwik Handoff.md` |
 | Game rules, scoring, TIP threshold, fouls | `Game/BIOBUZZ Rules and Scoring.md` |
 | Other teams: rankings, speeds, gains, lessons | `Game/Top Teams Shooter Reference.md` |
 | Other teams: code details | `Game/Research/Top Teams Code Deep Dive.md` |

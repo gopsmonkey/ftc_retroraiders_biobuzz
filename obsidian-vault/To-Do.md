@@ -1,0 +1,57 @@
+---
+tags: [ftc, todo, index]
+updated: 2026-11-20
+---
+# To-Do
+
+Back to [[FTC Home]]
+
+The one task list for the team. Each task links to the note with the details; don't copy steps here. Tick the box when done, and add your name if you take a task.
+Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code branch), **Shresht** (night-before review, AUTO), **Prajin** (research, vault), **Claude** (only the tasks marked for it).
+
+## Decide tonight (blocks other tasks)
+- [ ] **Which TeleOp runs tomorrow?** `MainTeleOp` has the flower servos but no fixes and has never run. `BioBuzz TeleOp` has all the shooter fixes but no flower servos. Either copy the `// FIX` lines into `MainTeleOp`, or add the flower servos to `BioBuzz TeleOp`. Then commit it. ([[Sathwik Handoff]], [[Shooter Software Implementation Log]])
+- [ ] **How does code get onto the Control Hub?** The team uses OnBot Java only, so the branch files must be pasted into OnBot Java and compile there. ([[Sathwik Handoff]], [[Code Check - Night Before]])
+
+## Tonight: robot (Sathwik, hands-on)
+- [ ] **Fix the Expansion Hub blinking blue.** All 4 drive motors depend on it, so do this first. ([[Sathwik Handoff]], Expansion Hub section)
+- [ ] Mechanical fixes: mount, hood, feed guide. ([[Shooter Fix List - Night Before Competition]], [[Small Fixes Without Reprinting]])
+- [ ] Measure the flower-servo up/down positions and check intake direction. ([[Hardware Config Names]])
+- [ ] Charge and label every battery. ([[Competition Day Tips]])
+
+## Tonight: shooter software (Abraar)
+- [ ] Run MaxV Test → PIDF Tuner, put real numbers in `ShooterConfig`, commit. ([[Shooter Tuning Guide]])
+- [ ] Calibrate presets at tape marks, one spot per CELL. ([[Shooter Tuning Guide]])
+- [ ] Power-cycle and confirm `PIDF on hub: OK`. ([[Shooter Tuning Guide]])
+- [ ] Merge PR #1, or decide which branch goes on the hub. ([[Repo and Branches]])
+
+## Tonight: AUTO and code freeze (Shresht)
+- [ ] Patches A–C and the test run. ([[Code Check - Night Before]])
+- [ ] Tune and test the [[Preload Shoot + Leave Auto]]. The 4 preloads TIP the HIVE, about 28 pts.
+- [ ] Code freeze: deploy one branch, commit it, tag it `event-2026-11-21`. ([[Competition Day Tips]])
+
+## Tonight: everyone
+- [ ] Driver practice: 10 full cycles, and practice the AUTO start placement. ([[Competition Day Tips]])
+- [ ] Answer the rest of the [[Open Questions]].
+
+## What Claude can do now without touching anyone's files
+Not started. Pick one and tell Claude to go.
+- [ ] **Check that every file on `shooter-fixes-night-before` will compile in OnBot Java.** Read-only; reports problems without editing. Ready now.
+- [ ] **Add the handoff answers under [[Open Questions]] #1, #2, #6 and #7**, and fix the pack list ("laptop with Android Studio" → browser). Wait until Shresht's upload (parts 2–3) is pushed, to avoid a merge conflict.
+- [ ] **Port the shooter fixes into `MainTeleOp`.** Needs: Sathwik pushes `MainTeleOp.java`, and Abraar agrees.
+- [ ] **Push Sathwik's local files to the repo** (library, autos, `MainTeleOp`). Needs: the files, attached or pushed.
+- [ ] **Convert POLLEN HSV to `PollenAutoNav`'s ColorRange scale**, and add fill-ratio and pile filters. The measured values are hue 43.1–48.5, sat 0.65–0.95, val 0.604–0.620 (standard HSV). The math can be done now; applying it needs `PollenAutoNav.java`.
+- [ ] **Hold-to-aim TeleOp button using odometry.** Needs: `MecanumOdometryRobot.java`, which side the launcher faces, and a button. CELL coordinates exist in [[Top Teams Code Deep Dive]].
+- [ ] **Add `driveDiagonal(forwardIn, leftIn, power, holdTime)` to the library.** Needs: the library file and Sathwik's OK.
+- [ ] **Repo README** (controls and tuning steps). Coordinate with Shresht, who already edited `README.md` on the branch.
+- [ ] **Belt and pulley calculator.** Needs: vendor, pitch, ratio and shaft distance.
+- [x] Verify the NECTAR size and the rules against the manual. NECTAR is ~3.6 in, and crossing over is a foul only in AUTO. ([[Sathwik Handoff]], Corrections section)
+
+## After the meet
+- [ ] Re-measure odometry pod offsets for the new drivetrain, spin-test, and check both invert flags. (Sathwik, [[Sathwik Handoff]])
+- [ ] Measure the shooter distance → speed table; add AprilTag or odometry distance. ([[Top Teams Shooter Reference]])
+- [ ] Measure viper slide presets. ([[Hardware Config Names]])
+- [ ] Fusion chassis CAD in "Admin Project", once the Fusion connector is reachable. ([[Sathwik Handoff]])
+- [ ] Bigger shooter redesigns. ([[Post-Competition Redesigns]])
+- [ ] Turret, only if added later: needs ticks/rev, gear ratio and zero angle. ([[Sathwik Handoff]])
+- [ ] Merge the `team-obsidian-vault` branch into `main`, so the vault is on the default branch. (Prajin)

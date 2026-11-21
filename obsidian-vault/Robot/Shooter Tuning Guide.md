@@ -31,3 +31,19 @@ Back to [[FTC Home]] · Why: [[Shooter Fix List - Night Before Competition]] · 
 | `AT_SPEED_TOLERANCE` | 0.03 (3%, ~45 ticks/s at 1450) | Shots come too slowly → 0.04. Shots still inconsistent → 0.02. |
 | `FEED_MIN_PUSH_MS` | 120 ms | Ball still stalls in gap → raise to 150–200. Two balls go in together → lower. |
 | `VOLTAGE_COMPENSATE_F` | false | Late-match shots fall short → test true. |
+
+## What you see → what to change (from [[Sathwik Handoff]])
+Each round: press A and wait for speed to settle, press Back, fire 4 POLLEN fast, look where they landed, change **one** value, then repeat. A shot counts when speed drops below 93% of target; it is recovered at 98%. Leave I and D at 0 unless a small error remains.
+
+| What you see | Meaning | Change |
+| --- | --- | --- |
+| First goes in, the rest fall short | Wheel doesn't recover in time | P up 1–2 steps, and/or target +50 |
+| 4 shots scattered long and short | Speed bounces around target | P down 1 step |
+| First too long, rest fine | Overshoot while recovering | P down 1 step, or target −50 |
+| All 4 short, even the first | Wheel doesn't reach target | Error > ~30 before firing → F up 1–2 steps; error ≈ 0 → raise target |
+| All 4 too long | Target too high | Lower target (left bumper) |
+| Fine at first, worse later | Battery draining or motor warm | Fresh battery, let it cool |
+| Surging/buzzing, numbers jumping | P too strong | P down 2 steps |
+| All 4 land together | Done | Write down F, P, I, D and the target |
+
+Over time: repeat the 4-shot burst 5–10 times (Back between runs). If *Worst recovery* climbs, suspect the battery or motor heat. Never feed faster than *Last recovery*.

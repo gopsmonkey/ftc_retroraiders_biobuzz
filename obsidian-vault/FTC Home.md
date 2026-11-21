@@ -6,6 +6,8 @@ updated: 2026-11-20
 
 Start here. Everything about the robot, the code and the competition prep links from this page.
 
+**Tasks: [[To-Do]]** (one list, with owners)
+
 ## Competition prep (2026-11-21)
 - [[Shooter Fix List - Night Before Competition]]: the prioritised fix list (do this first)
 - [[Pre-Match Checklist]]: run it before every match
@@ -31,6 +33,7 @@ Start here. Everything about the robot, the code and the competition prep links 
 - [[Shooter Tuning Guide]]: how to measure maxV, set PIDF, and tune P
 
 ## Software
+- [[Sathwik Handoff]]: Sathwik's old-chat handoff (OnBot Java only, local-only files, odometry, Expansion Hub issue, solved bugs)
 - [[Repo and Branches]]: where the code lives and which branch to run
 
 ## Team
