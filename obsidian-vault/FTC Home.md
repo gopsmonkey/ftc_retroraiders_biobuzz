@@ -16,10 +16,10 @@ Start here. Everything about the robot, the code and the competition prep links 
 - [[Shooter Software Implementation Log]]: what was changed in code tonight, and why
 
 ## Night-before review (added 2026-11-20, 7:30 pm)
-- [[Small Fixes Without Reprinting]]: mechanical fixes with kit metal, washers and tape, no big prints *(not pushed yet: Shresht's upload parts 2–3)*
-- [[Code Check - Night Before]]: compile check against the FTC SDK, risks, 3 small patches (incl. gate override), test steps, backup plan *(not pushed yet: Shresht's upload parts 2–3)*
-- [[Preload Shoot + Leave Auto]]: Shresht's simple AUTO (`PreloadShootLeaveAuto.java` is on the code branch; note(not pushed yet: Shresht's upload parts 2–3))
-- [[Second Video Analysis (30 fps)]]: the 30 fps clip, ball spends 0.27–0.40 s in the hood *(not pushed yet: Shresht's upload parts 2–3)*
+- [[Small Fixes Without Reprinting]]: mechanical fixes with kit metal, washers and tape, no big prints
+- [[Code Check - Night Before]]: patches A–D, what could still be better in the code, 20-minute robot test, backup plan
+- [[Preload Shoot + Leave Auto]]: Shresht's simple AUTO (`PreloadShootLeaveAuto.java`): what it does and the numbers to tune
+- [[Second Video Analysis (30 fps)]]: the 30 fps clip, frame by frame: the ball waits 0.5–0.67 s in the hood (0.9–1.1 s after the hand adjustment), and the mount moves ~2 mm per shot
 - [[Competition Day Tips]]: tonight, pack list, at the event, judging
 - [[Open Questions]]: what we still need answered
 

@@ -10,11 +10,26 @@ Back to [[FTC Home]] · Every match: [[Pre-Match Checklist]] · Questions to ans
 
 ## Tonight
 - [ ] Small mechanical fixes: [[Small Fixes Without Reprinting]].
-- [ ] Code: patches A–C and the test run in [[Code Check - Night Before]]. Add the [[Preload Shoot + Leave Auto]].
+- [ ] Code: patches A–D are in; do the test run in [[Code Check - Night Before]]. Add the [[Preload Shoot + Leave Auto]].
 - [ ] **Code freeze.** Deploy one branch, commit it, tag it (`git tag event-2026-11-21`). Tomorrow, change only `ShooterConfig` numbers.
 - [ ] Charge every battery and label them. Use the freshest one for each match.
 - [ ] Driver practice: 10 full cycles with the match TeleOp. Y drops the flower → collect 4 with the shooter **off** → press A while driving → stop on the tape → wait for the rumble blip (at speed) → hold RT → X. Controls: repo `README.md`.
 - [ ] Practice the AUTO start placement until anyone on the team can do it the same way.
+
+## If something goes wrong in a match
+Controls are in the repo `README.md`.
+
+| Problem | Do this |
+| --- | --- |
+| `GATED`, nothing feeds | Hold RB + RT. Between matches: [[Code Check - Night Before]]. |
+| Ball jams in the hood | LB (reverse intake), then B briefly. |
+| All shots short or long | gamepad2 d-pad trim ±25; next match, change the preset. |
+| Shots fall short late in the match | Next preset up; fresh battery next match. |
+| Two balls go in at once | Pit: `FEED_MIN_PUSH_MS` → 150–200. |
+| Shooter or mount looks loose | Pit: [[Small Fixes Without Reprinting]]. |
+| Init says MISMATCH | Stop and init again. Never start a match on MISMATCH. |
+| Drive dead / Expansion Hub blinking blue | XT30 plug and hub-to-hub cable first ([[Sathwik Handoff]]). |
+| AUTO misbehaves | `SHOOT_FIRST = false` (LEAVE only), see [[Preload Shoot + Leave Auto]]. |
 
 ## Pack list
 Charged batteries + charger, extension cord, laptop with a browser for OnBot Java (http://192.168.43.1:8080 on the Control Hub's Wi-Fi), the repo files downloaded offline, a USB-C cable, Driver Station phone/controller, spare gamepad, hex keys and screwdrivers, spare screws and nylock nuts, spare small printed parts, CA glue, packing tape, paint pen, zip ties (wires only), measuring tape, floor tape.

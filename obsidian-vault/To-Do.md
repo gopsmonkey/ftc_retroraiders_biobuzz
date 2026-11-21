@@ -21,13 +21,16 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 - [ ] Charge and label every battery. ([[Competition Day Tips]])
 
 ## Tonight: shooter software (Abraar)
+- [ ] Optional code polish from the review: RB release mid-ball, stale `FEED_MIN_PUSH_MS` comment, stray `workspace.json` on the code branch. ([[Code Check - Night Before]], "Could be better")
 - [ ] Run MaxV Test → PIDF Tuner, put real numbers in `ShooterConfig`, commit. ([[Shooter Tuning Guide]])
 - [ ] Calibrate presets at tape marks, one spot per CELL. ([[Shooter Tuning Guide]])
 - [ ] Power-cycle and confirm `PIDF on hub: OK`. ([[Shooter Tuning Guide]])
 - [ ] Merge PR #1, or decide which branch goes on the hub. ([[Repo and Branches]])
 
 ## Tonight: AUTO and code freeze (Shresht)
-- [ ] Patches A–C and the test run. ([[Code Check - Night Before]])
+- [x] Patches A–C (`2e4aaf8`) and D (`4479479`). Night-before notes parts 2–3 uploaded. (Shresht, 2026-11-20)
+- [ ] The 20-minute robot test. ([[Code Check - Night Before]])
+- [ ] **Put back the hand adjustment from the 30 fps video**, or reset the squeeze: the ball waited twice as long afterwards. ([[Second Video Analysis (30 fps)]])
 - [ ] Tune and test the [[Preload Shoot + Leave Auto]]. The 4 preloads TIP the HIVE, about 28 pts.
 - [ ] Code freeze: deploy one branch, commit it, tag it `event-2026-11-21`. ([[Competition Day Tips]])
 

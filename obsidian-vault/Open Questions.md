@@ -31,8 +31,14 @@ Answer these tonight if you can. Write the answer under each one.
 
 ## Video
 10. The 240 fps clip ([[Shooter Video Evidence]]) and the 30 fps clip ([[Second Video Analysis (30 fps)]]): same shooter speed (1450 ticks/s) and same hood setting? Was anything changed between them? Someone adjusts the shooter by hand at 1:38 in the 30 fps clip.
+    - **Partly answered (frame-by-frame, 2026-11-20):** after the adjustment (1:36–1:57) the ball waited 0.93–1.13 s in the hood instead of 0.50–0.67 s, so the adjustment made it worse. What exactly was changed is still unknown. Whoever did it: write it here ([[Second Video Analysis (30 fps)]]).
 
 ## Match plan
 11. Where does the robot start in AUTO, and can it hit the up CELL from there?
 12. How many charged batteries do we have?
 13. Who drives, and who is coach / human player?
+
+## Added 2026-11-20 (Shresht's review)
+16. Which way does the AUTO LEAVE (forward or back), and does the partner know? ([[Preload Shoot + Leave Auto]])
+17. Which taped floor spots match CLOSE / MID / FAR for **both** ends of the HIVE?
+18. Has the driver practiced RB + RT (feed override) and the unjam buttons? ([[Code Check - Night Before]])

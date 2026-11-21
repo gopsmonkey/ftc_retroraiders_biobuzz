@@ -31,10 +31,10 @@ FTC team Retro Raiders (26603), season BIOBUZZ 2026-27. Start at `FTC Home.md`, 
 | Future work | `Shooter/Post-Competition Redesigns.md` |
 | Branches and commits | `Software/Repo and Branches.md` |
 | Pedro Pathing: OnBot blocker, our localizer constants, coordinates, AUTO ideas | `Software/Pedro Pathing Plan.md` |
-| Night-before code check: compile result, risks, patches, backup plan | `Software/Code Check - Night Before.md` (not pushed yet) |
-| Simple AUTO (shoot preloads + LEAVE) | `Software/Preload Shoot + Leave Auto.md` (not pushed yet) |
-| 30 fps video measurements | `Shooter/Second Video Analysis (30 fps).md` (not pushed yet) |
-| Mechanical fixes that need no big prints | `Shooter/Small Fixes Without Reprinting.md` (not pushed yet) |
+| Night-before code check: compile result, risks, patches, backup plan | `Software/Code Check - Night Before.md` |
+| Simple AUTO (shoot preloads + LEAVE) | `Software/Preload Shoot + Leave Auto.md` |
+| 30 fps video measurements | `Shooter/Second Video Analysis (30 fps).md` |
+| Mechanical fixes that need no big prints | `Shooter/Small Fixes Without Reprinting.md` |
 | Competition-day plan, pack list, judging | `Competition Day Tips.md` |
 | Unanswered questions | `Open Questions.md` |
 
