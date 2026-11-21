@@ -98,6 +98,27 @@ public final class ShooterConfig {
     /** Feed power when there is no encoder (or no measured velocity): full power so it's as consistent as possible. */
     public static final double INTAKE_FEED_POWER = 1.0;
 
+    /**
+     * Intake current (amps) that means "intake stalled = full", so the driver gets a rumble
+     * before picking up a 5th ball (G407: max 4). 0 = off. To set it: watch "Intake current"
+     * on BioBuzz TeleOp telemetry while collecting, note the normal amps and the amps when
+     * 4 balls are packed, and put a value between them. Idea from team 23849.
+     */
+    public static final double INTAKE_FULL_CURRENT_AMPS = 0;
+
+    // ---------------- Flower intake servos (BioBuzz TeleOp) ----------------
+    /** Optional: if these names aren't in the Robot Configuration, the TeleOp just skips the servos. */
+    public static final String FLOWER_SERVO_1_NAME = "flowerServo1";
+    public static final String FLOWER_SERVO_2_NAME = "flowerServo2";
+    /** TODO(tonight): measure. 0.0 / 0.5 are the guesses from MainTeleOp. Servo 2 is mirrored (reversed). */
+    public static final double FLOWER_UP = 0.0;
+    public static final double FLOWER_DOWN = 0.5;
+
+    // ---------------- Live speed trim (BioBuzz TeleOp) ----------------
+    /** gamepad2 d-pad up/down adds/removes this much from every preset during a match. Idea from team 7759. */
+    public static final double TRIM_STEP = 25;
+    public static final double TRIM_LIMIT = 200;
+
     // ---------------- Driving ----------------
     public static final double DRIVE_SPEED = 1.0;
     /** Drive speed while the precision trigger is held, for lining up a shot. */

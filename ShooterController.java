@@ -8,6 +8,8 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
+
 /**
  * Shooter + intake logic shared by every OpMode (TeleOp and Autonomous).
  *
@@ -62,6 +64,10 @@ public class ShooterController {
 
     private double voltage = 0;
     private double lastVoltageReadMs = -1e9;
+
+    private double intakeCurrent = 0;
+    private double lastCurrentReadMs = -1e9;
+    private boolean intakeFull = false;
 
     public ShooterController(HardwareMap hardwareMap) {
         shooter = hardwareMap.get(DcMotorEx.class, ShooterConfig.SHOOTER_MOTOR_NAME);
@@ -152,6 +158,24 @@ public class ShooterController {
                 && Math.abs(goal - velocity) < ShooterConfig.AT_SPEED_TOLERANCE * goal;
 
         updateIntake(now);
+        updateIntakeCurrent(now);
+    }
+
+    /**
+     * Current isn't part of the bulk read (it costs its own hub call), so read it at most
+     * every 100 ms, and only while collecting, which is when "full" matters.
+     */
+    private void updateIntakeCurrent(double now) {
+        boolean collecting = intakeManaged && "collect".equals(intakeMode);
+        if (!collecting) {
+            intakeFull = false;
+            return;
+        }
+        if (now - lastCurrentReadMs < 100) return;
+        lastCurrentReadMs = now;
+        intakeCurrent = intake.getCurrent(CurrentUnit.AMPS);
+        intakeFull = ShooterConfig.INTAKE_FULL_CURRENT_AMPS > 0
+                && intakeCurrent >= ShooterConfig.INTAKE_FULL_CURRENT_AMPS;
     }
 
     /**
@@ -238,6 +262,10 @@ public class ShooterController {
     public double getVelocity() { return velocity; }
     public double getVoltage() { return voltage; }
     public double getIntakeOutput() { return intakeOutput; }
+    /** Amps, refreshed every 100 ms while collecting (0 otherwise until the next read). */
+    public double getIntakeCurrent() { return intakeCurrent; }
+    /** True while collecting and the current is over INTAKE_FULL_CURRENT_AMPS (off when that is 0). */
+    public boolean isIntakeFull() { return intakeFull; }
     public String getIntakeMode() { return intakeMode; }
     public double getP() { return p; }
     public double getI() { return i; }
@@ -269,5 +297,6 @@ public class ShooterController {
         }
         telemetry.addLine("--- INTAKE ---");
         telemetry.addData("Intake", "%s %.2f", intakeMode, intakeOutput);
+        telemetry.addData("Intake current", "%.2f A%s", intakeCurrent, intakeFull ? "  FULL (4 balls?)" : "");
     }
 }

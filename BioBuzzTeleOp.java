@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -20,6 +21,11 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *   hold RT = intake: collects when shooter is off, gated feed when shooter is on
  *   hold LB = reverse intake (unjam), hold B = reverse shooter slowly (unjam)
  *   hold RB + RT = feed even if the flywheel is not at speed (override if "At speed" never turns YES)
+ *   Y = flower intake down / up (toggle; only if flowerServo1/2 are in the config)
+ *   Rumble: one blip when the shooter reaches speed, a long buzz when the intake looks full (4 balls)
+ *
+ * gamepad2 (optional):
+ *   d-pad up / down = speed trim +/-25 on every preset, X = trim back to 0
  *
  * Match habits: spin up while driving to the taped spot, stop, then hold RT to shoot.
  */
@@ -58,8 +64,18 @@ public class BioBuzzTeleOp extends LinearOpMode {
             m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
+        Servo flower1 = hardwareMap.tryGet(Servo.class, ShooterConfig.FLOWER_SERVO_1_NAME);
+        Servo flower2 = hardwareMap.tryGet(Servo.class, ShooterConfig.FLOWER_SERVO_2_NAME);
+        if (flower2 != null) flower2.setDirection(Servo.Direction.REVERSE);
+        // No setPosition() here: nothing may move during INIT / the AUTO-to-TELEOP transition (G403).
+
         int preset = 1;
         boolean wasUnjamming = false;
+        double trim = 0;
+        boolean flowerDown = false;
+        boolean flowerCommanded = false;
+        boolean lastY = false, lastTrimUp = false, lastTrimDown = false;
+        boolean wasAtSpeed = false, wasFull = false;
         ElapsedTime loopTimer = new ElapsedTime();
 
         // Pre-match check: these lines must say OK before you queue.
@@ -70,6 +86,7 @@ public class BioBuzzTeleOp extends LinearOpMode {
                     shooter.getVoltage() < 12.5 ? "<- swap to a fresh battery" : "OK");
             telemetry.addData("Presets", "%.0f / %.0f / %.0f (cap %.0f)",
                     PRESETS[0], PRESETS[1], PRESETS[2], ShooterConfig.maxTarget());
+            telemetry.addData("Flower servos", flower1 != null || flower2 != null ? "found" : "not in config (Y does nothing)");
             telemetry.update();
             idle();
         }
@@ -104,15 +121,34 @@ public class BioBuzzTeleOp extends LinearOpMode {
             if (gamepad1.a) shooter.spinUp();
             else if (gamepad1.x) shooter.stop();
 
+            // Live trim (gamepad2): fix "all shots short/long" at the event without editing code.
+            if (gamepad2.dpad_up && !lastTrimUp) trim = Math.min(ShooterConfig.TRIM_LIMIT, trim + ShooterConfig.TRIM_STEP);
+            if (gamepad2.dpad_down && !lastTrimDown) trim = Math.max(-ShooterConfig.TRIM_LIMIT, trim - ShooterConfig.TRIM_STEP);
+            if (gamepad2.x) trim = 0;
+            lastTrimUp = gamepad2.dpad_up;
+            lastTrimDown = gamepad2.dpad_down;
+
             boolean unjam = gamepad1.b;
             if (unjam) {
                 shooter.setTarget(ShooterConfig.UNJAM_VELOCITY);
                 shooter.spinUp();
             } else {
                 if (wasUnjamming) shooter.stop();   // releasing B stops; press A to spin up again
-                shooter.setTarget(PRESETS[preset]);
+                shooter.setTarget(PRESETS[preset] + trim);
             }
             wasUnjamming = unjam;
+
+            // ---- Flower intake servos ----
+            if (gamepad1.y && !lastY) {
+                flowerDown = !flowerDown;
+                flowerCommanded = true;
+            }
+            lastY = gamepad1.y;
+            if (flowerCommanded) {
+                double pos = flowerDown ? ShooterConfig.FLOWER_DOWN : ShooterConfig.FLOWER_UP;
+                if (flower1 != null) flower1.setPosition(pos);
+                if (flower2 != null) flower2.setPosition(pos);
+            }
 
             // ---- Intake (FIX: at-speed gate + full-power / velocity feed) ----
             if (gamepad1.left_bumper) {
@@ -128,7 +164,16 @@ public class BioBuzzTeleOp extends LinearOpMode {
 
             shooter.update();
 
-            telemetry.addData("Preset", "%s (%.0f ticks/s)", PRESET_NAMES[preset], PRESETS[preset]);
+            // Driver feedback without looking at telemetry.
+            boolean atSpeed = shooter.isAtSpeed();
+            boolean full = shooter.isIntakeFull();
+            if (atSpeed && !wasAtSpeed) gamepad1.rumbleBlips(1);
+            if (full && !wasFull) gamepad1.rumble(600);
+            wasAtSpeed = atSpeed;
+            wasFull = full;
+
+            telemetry.addData("Preset", "%s (%.0f ticks/s, trim %+.0f)", PRESET_NAMES[preset], PRESETS[preset], trim);
+            telemetry.addData("Flower", !flowerCommanded ? "not moved yet (Y)" : flowerDown ? "DOWN" : "UP");
             telemetry.addData("Drive", precision ? "PRECISION" : "normal");
             shooter.addTelemetry(telemetry);
             telemetry.addData("Loop", "%.1f ms", loopMs);

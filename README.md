@@ -1,12 +1,12 @@
 # RetroRaiders / BioBuzz FTC code
 
-Drop these files into `TeamCode/src/main/java/org/firstinspires/ftc/teamcode/` of the FTC SDK project.
+The team uses **OnBot Java** (no Android Studio). Upload every `.java` file with OnBot Java's **Upload Files** button (don't paste), overwrite old copies with the same name, then **Build Everything**. Details and build risks: `obsidian-vault/Software/OnBot Java Check.md`.
 
 | File | What it is |
 | --- | --- |
 | `ShooterConfig.java` | **Every tuned number.** PIDF, maxV, presets, gate tolerance, intake feed. Edit this, nothing else. |
 | `ShooterController.java` | Shared shooter + intake logic: PIDF in init, 80% cap, at-speed gate, feed control, battery-scaled F. |
-| `BioBuzzTeleOp.java` | Reference match TeleOp ("Match" group) using the controller. |
+| `BioBuzzTeleOp.java` | Match TeleOp ("Match" group): drive, presets, gated feed, flower servos, live trim, rumble. |
 | `ShooterMaxVelocityTest.java` | Step 1: measures maxV and intake ticks/s, prints starting PIDF. |
 | `ShooterPIDFTuner.java` | Step 2: live PIDF tuning under ball load, gated feed, CSV logging (B). |
 | `ShooterVelocityTuner.java` | Drive + shooter velocity + intake power sweep, now gated with precision drive. |
@@ -20,3 +20,18 @@ Drop these files into `TeamCode/src/main/java/org/firstinspires/ftc/teamcode/` o
 4. **Power-cycle the hub**, run **BioBuzz TeleOp**, and check init telemetry says `PIDF on hub: OK`.
 
 PIDF set in a tuner is lost on power cycle. Only `ShooterConfig` sticks.
+
+## BioBuzz TeleOp controls
+| Input | Action |
+| --- | --- |
+| gamepad1 left stick / right stick | Drive + strafe / turn |
+| hold LT | Precision drive (0.35) |
+| A / X | Spin up at preset / stop shooter |
+| d-pad left / up / right | CLOSE / MID / FAR preset |
+| hold RT | Intake: collects when shooter is off, gated feed when it's on |
+| hold RB + RT | Feed even if not at speed (override) |
+| hold LB | Reverse intake (unjam) |
+| hold B | Reverse shooter (unjam); releasing stops it |
+| Y | Flower intake down / up (if `flowerServo1/2` are in the config) |
+| gamepad2 d-pad up / down, X | Speed trim ±25 on every preset / reset trim |
+| Rumble | 1 blip = shooter at speed; long buzz = intake looks full (needs `INTAKE_FULL_CURRENT_AMPS`) |
