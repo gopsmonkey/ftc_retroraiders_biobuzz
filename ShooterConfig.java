@@ -26,7 +26,7 @@ public final class ShooterConfig {
     public static final String RB_MOTOR_NAME = "rbMotor";
 
     /** +1 if a positive velocity shoots the ball out. Flip to -1 if the wheel spins backward. */
-    public static final double SHOOTER_SIGN = 1;
+    public static final double SHOOTER_SIGN = -1;   // team: launch velocity is -1375
     /** +1 if positive intake power moves balls toward the flywheel. */
     public static final double INTAKE_FEED_SIGN = 1;
 
@@ -71,24 +71,31 @@ public final class ShooterConfig {
      * so a ball's own contact dip doesn't cut the push mid-grab. Covers the ~0.2 s grab-to-exit
      * seen in the 30 fps video. Was 120; Shresht raised it to 300. 0 = pure gate.
      */
-    public static final double FEED_MIN_PUSH_MS = 300;
+    public static final double FEED_MIN_PUSH_MS = 0;   // team: brake the intake the moment the wheel is off target (was 300)
 
     // ---------------- Presets (ticks/s) ----------------
     // TODO(tonight): calibrate at taped floor spots. All must be <= maxTarget() (1960 at maxV 2450).
     public static final double PRESET_CLOSE = 1300;
-    public static final double PRESET_MID = 1450;   // the speed used in the video
+    public static final double PRESET_MID = 1375;   // commanded as -1375 (SHOOTER_SIGN = -1)
     public static final double PRESET_FAR = 1600;
     /** Reverse speed for clearing a jam (Velocity Tuner "A"). */
     public static final double UNJAM_VELOCITY = -900;
 
     // ---------------- Intake / feed ----------------
-    /** Power while collecting balls (shooter off). */
+    /**
+     * true = the intake (which also drives the two mini wheels under the flywheel) never pushes
+     * balls up until the flywheel is at launch speed, even with the shooter off. So RT does nothing
+     * until A has spun the wheel up. false = old behavior: RT collects at INTAKE_COLLECT_POWER
+     * while the shooter is off (balls get pushed into the stopped wheel).
+     */
+    public static final boolean FEED_ONLY_AT_SPEED = true;
+    /** Power while collecting balls (shooter off, only when FEED_ONLY_AT_SPEED = false). */
     public static final double INTAKE_COLLECT_POWER = 0.8;
     /**
      * True only if the intake motor's encoder cable is plugged into the hub.
      * Then feeding uses closed-loop velocity, so feed speed doesn't sag with the battery.
      */
-    public static final boolean INTAKE_HAS_ENCODER = false;
+    public static final boolean INTAKE_HAS_ENCODER = true;   // encoder cable added to intakeMotor
     /**
      * Feed velocity in ticks/s when INTAKE_HAS_ENCODER. Set to ~1.2x the intake ticks/s
      * that "Shooter MaxV Test" measures at power 0.8 on a fresh battery.

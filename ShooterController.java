@@ -211,7 +211,9 @@ public class ShooterController {
 
     private void updateIntake(double now) {
         if (!intakeManaged) return;
-        boolean wantFeed = intakeRequest == IntakeRequest.IN && running && target > 0;
+        boolean shootingForward = running && target > 0;
+        boolean wantFeed = intakeRequest == IntakeRequest.IN
+                && (shootingForward || ShooterConfig.FEED_ONLY_AT_SPEED);
 
         if (wantFeed) {
             // Hold counts from the last moment the wheel was at speed, so EVERY ball's contact
@@ -219,7 +221,7 @@ public class ShooterController {
             // Holding the RB override counts as "at speed" too, so releasing RB mid-ball still gets the push.
             if (atSpeed || !gateEnabled) lastAtSpeedMs = now;
             boolean inPushWindow = feeding && now - lastAtSpeedMs < ShooterConfig.FEED_MIN_PUSH_MS;
-            feeding = !gateEnabled || atSpeed || inPushWindow;
+            feeding = shootingForward && (!gateEnabled || atSpeed || inPushWindow);
         } else {
             feeding = false;
         }
@@ -238,7 +240,8 @@ public class ShooterController {
                 setIntakePower(ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_FEED_POWER, "feed pwr");
             }
         } else if (wantFeed) {
-            setIntakePower(0, "GATED");
+            // Power 0 + BRAKE (+ RUN_USING_ENCODER when the encoder is in) holds every roller still.
+            setIntakePower(0, shootingForward ? "BRAKED (wheel not at speed)" : "BRAKED (press A)");
         } else if (intakeRequest == IntakeRequest.IN) {
             setIntakePower(ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_COLLECT_POWER, "collect");
         } else if (intakeRequest == IntakeRequest.OUT) {

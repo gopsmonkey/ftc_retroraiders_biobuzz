@@ -18,7 +18,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *   left stick = drive + strafe, right stick = turn, hold LT = precision drive (0.35)
  *   A = spin up at the selected preset, X = stop shooter
  *   dpad left / up / right = CLOSE / MID / FAR preset (also changes speed live if spinning)
- *   hold RT = intake: collects when shooter is off, gated feed when shooter is on
+ *   hold RT = intake feeds only while the flywheel is at speed; otherwise intakeMotor is braked (press A first)
  *   hold LB = reverse intake (unjam), hold B = reverse shooter slowly (unjam)
  *   hold RB + RT = feed even if the flywheel is not at speed (override if "At speed" never turns YES)
  *   Y = flower intake down / up (toggle; only if flowerServo1/2 are in the config)
