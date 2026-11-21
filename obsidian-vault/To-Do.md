@@ -26,6 +26,7 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 - [ ] Calibrate presets at tape marks, one spot per CELL. ([[Shooter Tuning Guide]])
 - [ ] Power-cycle and confirm `PIDF on hub: OK`. ([[Shooter Tuning Guide]])
 - [ ] Merge PR #1, or decide which branch goes on the hub. ([[Repo and Branches]])
+- [ ] **Stop the 2nd ball being shot early (PR #3, `7a10048`):** leave `FEED_TICKS_PER_BALL = 0`, spin up, hold RT, shoot 4, then read *Intake ticks fed* ÷ 4. Set `FEED_TICKS_PER_BALL` to ~70% of that. Two balls still go → lower it; a ball doesn't reach the wheel → raise it. Gap between balls: `FEED_GAP_MS` (200).
 - [ ] **Review PR #3:** brake `intakeMotor` until the wheel is at -1375. It sets `SHOOTER_SIGN = -1` and `FEED_MIN_PUSH_MS = 0`. Squash-merge it, and on the robot check the wheel spins the launch way. https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/3
 
 ## Tonight: AUTO and code freeze (Shresht)
