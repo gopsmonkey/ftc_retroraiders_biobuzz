@@ -3,18 +3,22 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+/**
+ * Drive + shooter velocity + intake power sweep.
+ *
+ * Changes vs. the original (night-before fix list):
+ *  - Hardcoded PIDF from ShooterConfig is applied in init (no more "whatever the hub held").
+ *  - Shooter targets are capped at 80% of measured maxV (was 6000).
+ *  - Positive (feed-direction) intake is GATED: it pauses while the shooter runs
+ *    forward and is not at speed. Reverse is never gated.
+ *  - Left trigger held = precision drive (0.35) for lining up shots.
+ *  - Bulk caching, battery voltage and loop time on telemetry.
+ */
 @TeleOp(name = "Shooter Velocity Tuner", group = "Diagnostic")
 public class ShooterVelocityTuner extends LinearOpMode {
-
-    private static final String LF_MOTOR_NAME = "lfMotor";
-    private static final String LB_MOTOR_NAME = "lbMotor";
-    private static final String RF_MOTOR_NAME = "rfMotor";
-    private static final String RB_MOTOR_NAME = "rbMotor";
-    private static final String SHOOTER_MOTOR_NAME = "shooterMotor";
-    private static final String INTAKE_MOTOR_NAME = "intakeMotor";
 
     private static final DcMotorSimple.Direction LF_DIRECTION = DcMotorSimple.Direction.REVERSE;
     private static final DcMotorSimple.Direction LB_DIRECTION = DcMotorSimple.Direction.REVERSE;
@@ -23,16 +27,11 @@ public class ShooterVelocityTuner extends LinearOpMode {
 
     private static final double STRAFE_SIGN = 1;
     private static final double TURN_SIGN = 1;
-    private static final double SPEED_SCALE = 1.0;
 
-    private static final double B_VELOCITY = 1450;
-    private static final double A_VELOCITY = -900;
     private static final double VELOCITY_STEP = 100;
-    private static final double MAX_TARGET_VELOCITY = 6000;
     private static final double INTAKE_POWER_STEP = 0.05;
 
     private double shooterTarget = 0;
-    private boolean shooterRunning = false;
 
     private double intakePower = 0;
     private int intakeDirection = 1;
@@ -45,12 +44,15 @@ public class ShooterVelocityTuner extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        DcMotor lf = hardwareMap.get(DcMotor.class, LF_MOTOR_NAME);
-        DcMotor lb = hardwareMap.get(DcMotor.class, LB_MOTOR_NAME);
-        DcMotor rf = hardwareMap.get(DcMotor.class, RF_MOTOR_NAME);
-        DcMotor rb = hardwareMap.get(DcMotor.class, RB_MOTOR_NAME);
-        DcMotorEx shooterMotor = hardwareMap.get(DcMotorEx.class, SHOOTER_MOTOR_NAME);
-        DcMotor intakeMotor = hardwareMap.get(DcMotor.class, INTAKE_MOTOR_NAME);
+        ShooterController.enableBulkCaching(hardwareMap);
+        ShooterController shooter = new ShooterController(hardwareMap);
+        shooter.setIntakeManaged(false);
+        DcMotor intakeMotor = hardwareMap.get(DcMotor.class, ShooterConfig.INTAKE_MOTOR_NAME);
+
+        DcMotor lf = hardwareMap.get(DcMotor.class, ShooterConfig.LF_MOTOR_NAME);
+        DcMotor lb = hardwareMap.get(DcMotor.class, ShooterConfig.LB_MOTOR_NAME);
+        DcMotor rf = hardwareMap.get(DcMotor.class, ShooterConfig.RF_MOTOR_NAME);
+        DcMotor rb = hardwareMap.get(DcMotor.class, ShooterConfig.RB_MOTOR_NAME);
 
         lf.setDirection(LF_DIRECTION);
         lb.setDirection(LB_DIRECTION);
@@ -64,23 +66,29 @@ public class ShooterVelocityTuner extends LinearOpMode {
             m.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
-        shooterMotor.setDirection(DcMotorEx.Direction.FORWARD);
-        shooterMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        shooterMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        shooterMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        intakeMotor.setDirection(DcMotor.Direction.FORWARD);
-        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        // The tuner sweeps raw power, so the intake runs open loop here regardless of ShooterConfig.
         intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        telemetry.addLine("Ready.");
-        telemetry.addLine("DRIVE: left stick = drive + strafe, right stick = turn");
-        telemetry.addLine("SHOOTER (velocity): B = +1450, A = -900, X = stop, bumpers = +/-100 live");
-        telemetry.addLine("INTAKE (power): dpad up/down +/-0.05, left = positive, right = negative, Y = stop");
+        ElapsedTime loopTimer = new ElapsedTime();
+        ElapsedTime runTimer = new ElapsedTime();
+        boolean feedOpen = false;
+        double lastAtSpeedMs = -1e9;
+
+        telemetry.addLine("Ready. PIDF loaded from ShooterConfig.");
+        telemetry.addLine("DRIVE: left stick = drive + strafe, right stick = turn, hold LT = precision");
+        telemetry.addLine(String.format("SHOOTER (velocity): B = +%.0f, A = %.0f, X = stop, bumpers = +/-100 live",
+                ShooterConfig.PRESET_MID, ShooterConfig.UNJAM_VELOCITY));
+        telemetry.addLine("INTAKE (power): dpad up/down +/-0.05, left = positive (gated), right = negative, Y = stop");
         telemetry.update();
         waitForStart();
+        loopTimer.reset();
 
         while (opModeIsActive()) {
+            double loopMs = loopTimer.milliseconds();
+            loopTimer.reset();
+
+            boolean precision = gamepad1.left_trigger > 0.5;
+            double speedScale = precision ? ShooterConfig.PRECISION_DRIVE_SPEED : ShooterConfig.DRIVE_SPEED;
 
             double drive = -gamepad1.left_stick_y;
             double strafe = STRAFE_SIGN * -gamepad1.left_stick_x;
@@ -93,28 +101,28 @@ public class ShooterVelocityTuner extends LinearOpMode {
 
             double max = Math.max(1.0, Math.max(Math.max(Math.abs(lfP), Math.abs(rfP)),
                     Math.max(Math.abs(lbP), Math.abs(rbP))));
-            lf.setPower(lfP / max * SPEED_SCALE);
-            rf.setPower(rfP / max * SPEED_SCALE);
-            lb.setPower(lbP / max * SPEED_SCALE);
-            rb.setPower(rbP / max * SPEED_SCALE);
+            lf.setPower(lfP / max * speedScale);
+            rf.setPower(rfP / max * speedScale);
+            lb.setPower(lbP / max * speedScale);
+            rb.setPower(rbP / max * speedScale);
 
             if (gamepad1.b) {
-                shooterTarget = B_VELOCITY;
-                shooterRunning = true;
+                shooterTarget = ShooterConfig.PRESET_MID;
+                shooter.spinUp();
             } else if (gamepad1.a) {
-                shooterTarget = A_VELOCITY;
-                shooterRunning = true;
+                shooterTarget = ShooterConfig.UNJAM_VELOCITY;
+                shooter.spinUp();
             } else if (gamepad1.x) {
-                shooterRunning = false;
+                shooter.stop();
             }
 
             boolean rbBumper = gamepad1.right_bumper;
             boolean lbBumper = gamepad1.left_bumper;
-            if (shooterRunning && shooterTarget != 0) {
+            if (shooter.isRunning() && shooterTarget != 0) {
                 double sign = Math.signum(shooterTarget);
                 double magnitude = Math.abs(shooterTarget);
                 if (rbBumper && !lastRightBumper) {
-                    magnitude = Math.min(MAX_TARGET_VELOCITY, magnitude + VELOCITY_STEP);
+                    magnitude = Math.min(ShooterConfig.maxTarget(), magnitude + VELOCITY_STEP);
                 }
                 if (lbBumper && !lastLeftBumper) {
                     magnitude = Math.max(0, magnitude - VELOCITY_STEP);
@@ -123,6 +131,8 @@ public class ShooterVelocityTuner extends LinearOpMode {
             }
             lastRightBumper = rbBumper;
             lastLeftBumper = lbBumper;
+            shooter.setTarget(shooterTarget);
+            shooter.update();
 
             boolean up = gamepad1.dpad_up;
             boolean down = gamepad1.dpad_down;
@@ -145,37 +155,36 @@ public class ShooterVelocityTuner extends LinearOpMode {
                 intakeRunning = false;
             }
 
-            double shooterCommanded = shooterRunning ? shooterTarget : 0.0;
-            if (shooterRunning) {
-                shooterMotor.setVelocity(shooterCommanded);
-            } else {
-                shooterMotor.setPower(0);
-            }
+            // At-speed gate: don't push a ball into a wheel that hasn't recovered.
+            boolean shootingForward = shooter.isRunning() && shooterTarget > 0;
+            // Same push-through hold as ShooterController: keep pushing FEED_MIN_PUSH_MS after the last at-speed moment.
+            boolean wantFeed = intakeRunning && intakeDirection > 0 && shootingForward;
+            double nowMs = runTimer.milliseconds();
+            if (shooter.isAtSpeed()) lastAtSpeedMs = nowMs;
+            boolean open = shooter.isAtSpeed() || (feedOpen && nowMs - lastAtSpeedMs < ShooterConfig.FEED_MIN_PUSH_MS);
+            feedOpen = wantFeed && open;
+            boolean gated = wantFeed && !open;
+            double intakeCommanded = intakeRunning && !gated ? intakeDirection * intakePower : 0.0;
+            intakeMotor.setPower(ShooterConfig.INTAKE_FEED_SIGN * intakeCommanded);
 
-            double intakeCommanded = intakeRunning ? intakeDirection * intakePower : 0.0;
-            intakeMotor.setPower(intakeCommanded);
-
-            double actual = shooterMotor.getVelocity();
             telemetry.addData("Drive / Strafe / Turn", "%.2f / %.2f / %.2f", drive, strafe, turn);
+            telemetry.addData("Drive speed", "%.2f %s", speedScale, precision ? "(PRECISION)" : "");
 
-            telemetry.addLine("--- SHOOTER (velocity) ---");
-            telemetry.addData("State", shooterRunning
+            telemetry.addData("Shooter mode", shooter.isRunning()
                     ? (shooterTarget > 0 ? "POSITIVE (B)" : "NEGATIVE (A)") : "STOPPED");
-            telemetry.addData("Target velocity", "%.0f ticks/sec", shooterCommanded);
-            telemetry.addData("Actual velocity", "%.0f ticks/sec", actual);
-            telemetry.addData("Error", "%.0f", shooterCommanded - actual);
-            telemetry.addData("Encoder position", shooterMotor.getCurrentPosition());
+            telemetry.addData("Target cap (80% maxV)", "%.0f", ShooterConfig.maxTarget());
+            shooter.addTelemetry(telemetry);
 
-            telemetry.addLine("--- INTAKE (power) ---");
-            telemetry.addData("State", intakeRunning
-                    ? (intakeDirection > 0 ? "POSITIVE (LEFT)" : "NEGATIVE (RIGHT)") : "STOPPED");
+            telemetry.addLine("--- INTAKE (power sweep) ---");
+            telemetry.addData("State", !intakeRunning ? "STOPPED" : gated ? "GATED (waiting for shooter)"
+                    : (intakeDirection > 0 ? "POSITIVE (LEFT)" : "NEGATIVE (RIGHT)"));
             telemetry.addData("Power setting", "%.2f", intakePower);
             telemetry.addData("Power output", "%.2f", intakeCommanded);
+            telemetry.addData("Loop", "%.1f ms", loopMs);
             telemetry.update();
         }
 
         for (DcMotor m : driveMotors) m.setPower(0);
-        shooterMotor.setPower(0);
-        intakeMotor.setPower(0);
+        shooter.shutdown();
     }
 }
