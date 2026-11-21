@@ -37,6 +37,8 @@ Full top-193 list: `Game/Research/ftcscout-top-opr-2026-11-20.tsv`. Per-team cod
   - 16095: within 6% for 50 ms
 - **Distance → speed table** (and usually hood angle), live-editable from the dashboard.
 - Stack: Pedro Pathing, goBILDA Pinpoint odometry, Limelight 3A, Panels/FTC Dashboard.
+    - **We have no camera** ([[Robot Overview]]), so Limelight/AprilTag ideas don't apply. We already have odometry pods.
+- Camera-free ideas we copied into `BioBuzz TeleOp` (2026-11-20): 7759's live speed trim buttons, and 23849's "intake full" check from intake motor current.
 
 ## Their speeds vs. ours (good sanity check)
 Our MID preset is 1450 ticks/s (~3,100 rpm). That sits right in their range:

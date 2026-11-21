@@ -29,8 +29,11 @@ Back to [[FTC Home]] · Why: [[Shooter Fix List - Night Before Competition]] · 
 | Setting | Default | Change if… |
 | --- | --- | --- |
 | `AT_SPEED_TOLERANCE` | 0.03 (3%, ~45 ticks/s at 1450) | Shots come too slowly → 0.04. Shots still inconsistent → 0.02. |
-| `FEED_MIN_PUSH_MS` | 120 ms | Ball still stalls in gap → raise to 150–200. Two balls go in together → lower. |
-| `VOLTAGE_COMPENSATE_F` | false | Late-match shots fall short → test true. |
+| `FEED_MIN_PUSH_MS` | 300 ms (Shresht raised it from 120: the 30 fps clip shows 0.27–0.40 s in the hood) | Ball still stalls in gap → raise. Two balls go in together → lower toward 150. |
+| `VOLTAGE_COMPENSATE_F` | false | Late-match shots fall short → test true. Every top team runs voltage compensation ([[Top Teams Shooter Reference]]). |
+| `INTAKE_FULL_CURRENT_AMPS` | 0 (off) | Watch *Intake current* while collecting; set between normal amps and amps with 4 balls packed. Then the gamepad buzzes when full. |
+| `TRIM_STEP` / `TRIM_LIMIT` | 25 / 200 ticks/s | gamepad2 d-pad trim during matches. Copy a trim that works into the presets afterwards. |
+| `FLOWER_UP` / `FLOWER_DOWN` | 0.0 / 0.5 (guesses) | Measure the real servo positions. |
 
 ## What you see → what to change (from [[Sathwik Handoff]])
 Each round: press A and wait for speed to settle, press Back, fire 4 POLLEN fast, look where they landed, change **one** value, then repeat. A shot counts when speed drops below 93% of target; it is recovered at 98%. Leave I and D at 0 unless a small error remains.

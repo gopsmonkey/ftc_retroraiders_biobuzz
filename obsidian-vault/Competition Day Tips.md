@@ -13,15 +13,15 @@ Back to [[FTC Home]] · Every match: [[Pre-Match Checklist]] · Questions to ans
 - [ ] Code: patches A–C and the test run in [[Code Check - Night Before]]. Add the [[Preload Shoot + Leave Auto]].
 - [ ] **Code freeze.** Deploy one branch, commit it, tag it (`git tag event-2026-11-21`). Tomorrow, change only `ShooterConfig` numbers.
 - [ ] Charge every battery and label them. Use the freshest one for each match.
-- [ ] Driver practice: 10 full cycles with the match TeleOp. Collect 4 with the shooter **off** → press A while driving → stop on the tape → hold RT → X.
+- [ ] Driver practice: 10 full cycles with the match TeleOp. Y drops the flower → collect 4 with the shooter **off** → press A while driving → stop on the tape → wait for the rumble blip (at speed) → hold RT → X. Controls: repo `README.md`.
 - [ ] Practice the AUTO start placement until anyone on the team can do it the same way.
 
 ## Pack list
-Charged batteries + charger, extension cord, laptop with Android Studio, the repo and a USB-C cable, Driver Station phone/controller, spare gamepad, hex keys and screwdrivers, spare screws and nylock nuts, spare small printed parts, CA glue, packing tape, paint pen, zip ties (wires only), measuring tape, floor tape.
+Charged batteries + charger, extension cord, laptop with a browser for OnBot Java (http://192.168.43.1:8080 on the Control Hub's Wi-Fi), the repo files downloaded offline, a USB-C cable, Driver Station phone/controller, spare gamepad, hex keys and screwdrivers, spare screws and nylock nuts, spare small printed parts, CA glue, packing tape, paint pen, zip ties (wires only), measuring tape, floor tape.
 
 ## At the event
 - **Inspection first.** The robot must fit the 18 in. sizing box at the start. Battery and wires secure. Robot Controller and Driver Station apps up to date and matching.
-- **Practice field:** check each preset from the taped spots on the real HIVE, for **both** CELL ends (the up CELL swaps after every TIP). Adjust `PRESET_CLOSE/MID/FAR` if needed. See [[BIOBUZZ Rules and Scoring]].
+- **Practice field:** check each preset from the taped spots on the real HIVE, for **both** CELL ends (the up CELL swaps after every TIP). Adjust `PRESET_CLOSE/MID/FAR` if needed, or use the gamepad2 d-pad speed trim (±25 per press) during matches. See [[BIOBUZZ Rules and Scoring]].
 - **Talk to every alliance partner:** both LEAVE in AUTO and both PARK at the end (SWARM RP), who shoots when, and stay out of each other's lane at the HIVE.
 - **In matches:**
     - Shoot only while stopped. Wait for the HIVE to settle after a TIP.

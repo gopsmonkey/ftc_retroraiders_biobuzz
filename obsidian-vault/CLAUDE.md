@@ -2,6 +2,13 @@
 
 FTC team Retro Raiders (26603), season BIOBUZZ 2026-27. Start at `FTC Home.md`, which links every note.
 
+## Before writing or running anything (robot constraints)
+- **Read `Robot/Robot Overview.md` first.** It lists what the robot has and doesn't.
+- **No camera.** Don't suggest or write vision, AprilTag, Limelight or color-blob code.
+- **Don't add AUTO or automation code.** The team writes AUTO themselves. Only Shresht's `PreloadShootLeaveAuto` exists.
+- **OnBot Java only.** One plain class per file, package `org.firstinspires.ftc.teamcode`, FTC SDK + standard Java only. Re-run `Software/attachments/onbot-compile-check.sh` after code changes.
+- Code lives on branch `shooter-fixes-night-before` (PR #1). The vault lives on `team-obsidian-vault` (PR #2).
+
 ## Where each fact lives (one fact, one note: link to it, don't copy it)
 | Topic | Note |
 | --- | --- |
@@ -17,14 +24,15 @@ FTC team Retro Raiders (26603), season BIOBUZZ 2026-27. Start at `FTC Home.md`, 
 | Code problems found (with line refs) | `Shooter/Shooter Code Review.md` |
 | What changed in code and how the OpModes work | `Shooter/Shooter Software Implementation Log.md` |
 | Tuning steps and numbers (maxV, PIDF, presets) | `Robot/Shooter Tuning Guide.md` |
+| **What the robot is built from, CAD, what it lacks (no camera)** | `Robot/Robot Overview.md` |
 | Motor names and directions | `Robot/Hardware Config Names.md` |
 | Match-day checklist | `Shooter/Pre-Match Checklist.md` |
 | Future work | `Shooter/Post-Competition Redesigns.md` |
 | Branches and commits | `Software/Repo and Branches.md` |
-| Night-before code check: compile result, risks, patches, backup plan | `Software/Code Check - Night Before.md` |
-| Simple AUTO (shoot preloads + LEAVE) | `Software/Preload Shoot + Leave Auto.md` |
-| 30 fps video measurements | `Shooter/Second Video Analysis (30 fps).md` |
-| Mechanical fixes that need no big prints | `Shooter/Small Fixes Without Reprinting.md` |
+| Night-before code check: compile result, risks, patches, backup plan | `Software/Code Check - Night Before.md` (not pushed yet) |
+| Simple AUTO (shoot preloads + LEAVE) | `Software/Preload Shoot + Leave Auto.md` (not pushed yet) |
+| 30 fps video measurements | `Shooter/Second Video Analysis (30 fps).md` (not pushed yet) |
+| Mechanical fixes that need no big prints | `Shooter/Small Fixes Without Reprinting.md` (not pushed yet) |
 | Competition-day plan, pack list, judging | `Competition Day Tips.md` |
 | Unanswered questions | `Open Questions.md` |
 

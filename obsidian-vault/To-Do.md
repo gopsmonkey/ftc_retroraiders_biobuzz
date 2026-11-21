@@ -11,12 +11,13 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 
 ## Decide tonight (blocks other tasks)
 - [ ] **Which TeleOp runs tomorrow?** `MainTeleOp` has the flower servos but no fixes and has never run. `BioBuzz TeleOp` has all the shooter fixes but no flower servos. Either copy the `// FIX` lines into `MainTeleOp`, or add the flower servos to `BioBuzz TeleOp`. Then commit it. ([[Sathwik Handoff]], [[Shooter Software Implementation Log]])
-- [ ] **Load the branch into OnBot Java.** It compiles cleanly on SDK 9.2–12.0. Upload all 8 files with **Upload Files** (don't paste), overwrite the old tuners, then Build Everything. If the build fails, it's an old file such as `PollenAutoNav`. (Sathwik; steps in [[OnBot Java Check]])
+- [ ] **Load the branch into OnBot Java.** It compiles cleanly on SDK 9.2–12.0 (re-checked on `53f96f2`). Upload all 8 files with **Upload Files** (don't paste), overwrite the old tuners, then Build Everything. If the build fails, it's an old file such as `PollenAutoNav`. (Sathwik; steps in [[OnBot Java Check]])
 
 ## Tonight: robot (Sathwik, hands-on)
 - [ ] **Fix the Expansion Hub blinking blue.** All 4 drive motors depend on it, so do this first. ([[Sathwik Handoff]], Expansion Hub section)
 - [ ] Mechanical fixes: mount, hood, feed guide. ([[Shooter Fix List - Night Before Competition]], [[Small Fixes Without Reprinting]])
-- [ ] Measure the flower-servo up/down positions and check intake direction. ([[Hardware Config Names]])
+- [ ] Measure the flower-servo up/down positions and check intake direction. Put them in `FLOWER_UP/DOWN` in `ShooterConfig`. ([[Hardware Config Names]])
+- [ ] While collecting in `BioBuzz TeleOp`, read *Intake current* with 0 and with 4 balls; set `INTAKE_FULL_CURRENT_AMPS` between them. ([[Shooter Tuning Guide]])
 - [ ] Charge and label every battery. ([[Competition Day Tips]])
 
 ## Tonight: shooter software (Abraar)
@@ -37,19 +38,18 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 ## What Claude can do now without touching anyone's files
 Not started. Pick one and tell Claude to go.
 - [x] **Check that every file on `shooter-fixes-night-before` will compile in OnBot Java.** Done 2026-11-20 on commit `2e4aaf8`: 0 errors on SDK 9.2–12.0. ([[OnBot Java Check]])
-- [ ] **Add the handoff answers under [[Open Questions]] #1, #2, #6 and #7**, and fix the pack list ("laptop with Android Studio" → browser). Wait until Shresht's upload (parts 2–3) is pushed, to avoid a merge conflict.
+- [x] **Add the handoff answers under [[Open Questions]] #1, #2, #4, #6, #7, #9**, and fix the pack list (Android Studio → browser for OnBot Java). Done 2026-11-20.
 - [ ] **Port the shooter fixes into `MainTeleOp`.** Needs: Sathwik pushes `MainTeleOp.java`, and Abraar agrees.
 - [ ] **Push Sathwik's local files to the repo** (library, autos, `MainTeleOp`). Needs: the files, attached or pushed.
-- [ ] **Convert POLLEN HSV to `PollenAutoNav`'s ColorRange scale**, and add fill-ratio and pile filters. The measured values are hue 43.1–48.5, sat 0.65–0.95, val 0.604–0.620 (standard HSV). The math can be done now; applying it needs `PollenAutoNav.java`.
-- [ ] **Hold-to-aim TeleOp button using odometry.** Needs: `MecanumOdometryRobot.java`, which side the launcher faces, and a button. CELL coordinates exist in [[Top Teams Code Deep Dive]].
-- [ ] **Add `driveDiagonal(forwardIn, leftIn, power, holdTime)` to the library.** Needs: the library file and Sathwik's OK.
-- [ ] **Repo README** (controls and tuning steps). Coordinate with Shresht, who already edited `README.md` on the branch.
+- ~~Convert POLLEN HSV to `PollenAutoNav`~~ **Dropped: the robot has no camera** ([[Robot Overview]], [[Open Questions]] #14). Measured values kept for reference: hue 43.1–48.5, sat 0.65–0.95, val 0.604–0.620.
+- Hold-to-aim with odometry and `driveDiagonal` in the library: **the team will write AUTO/automation code themselves, so Claude doesn't take these.**
+- [x] **Repo README** (OnBot Java upload, controls table, tuning steps). Done 2026-11-20 on `53f96f2`.
 - [ ] **Belt and pulley calculator.** Needs: vendor, pitch, ratio and shaft distance.
 - [x] Verify the NECTAR size and the rules against the manual. NECTAR is ~3.6 in, and crossing over is a foul only in AUTO. ([[Sathwik Handoff]], Corrections section)
 
 ## After the meet
 - [ ] Re-measure odometry pod offsets for the new drivetrain, spin-test, and check both invert flags. (Sathwik, [[Sathwik Handoff]])
-- [ ] Measure the shooter distance → speed table; add AprilTag or odometry distance. ([[Top Teams Shooter Reference]])
+- [ ] Measure the shooter distance → speed table, using odometry for distance (no camera, so no AprilTags). ([[Top Teams Shooter Reference]])
 - [ ] Measure viper slide presets. ([[Hardware Config Names]])
 - [ ] Fusion chassis CAD in "Admin Project", once the Fusion connector is reachable. ([[Sathwik Handoff]])
 - [ ] Bigger shooter redesigns. ([[Post-Competition Redesigns]])

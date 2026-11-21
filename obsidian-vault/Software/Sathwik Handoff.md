@@ -27,10 +27,7 @@ Sathwik (gopsmonkey) wrote this on 2026-11-20 to carry his robot-software chat i
 - He sometimes swears. Don't mirror it.
 
 ## Robot (per handoff)
-- Mecanum drivetrain, all 4 drive motors on the **Expansion Hub**. A new drivetrain is being built (only the right module is finished); the chaining is the same.
-- goBILDA 4-bar odometry pods (forward `y_pod`, strafe `x_pod`).
-- **Static launcher: one gecko-wheel flywheel, no turret.** Partly answers [[Open Questions]] #6.
-- Flower intake dropped and lifted by two servos. An older goBILDA 4-stage viper slide with presets still to be measured.
+Moved to [[Robot Overview]], the one note for what the robot is built from: drivetrain, odometry, launcher, flower intake, viper slide, CAD, and what it doesn't have (no camera).
 
 ## Sathwik's local-only files (not in the repo)
 Ask him to attach or push these. Only `ShooterVelocityTuner` and `ShooterPIDFTuner` are in the repo.
@@ -41,8 +38,8 @@ Ask him to attach or push these. Only `ShooterVelocityTuner` and `ShooterPIDFTun
 | `MecanumOdometryRobot.java` | "Retro Reckoning" odometry library: `drive`, `strafe`, `turnTo`, `driveBezier`, pod-offset correction, `resetFieldPose` | Working |
 | `ExampleAuto.java` | Example auto on the library | — |
 | `PurePursuitAuto.java` | Earlier pure-pursuit example | — |
-| `PollenAutoNav.java` | Color-blob vision drive toward POLLEN | Unfinished (HSV placeholders) |
-| `ColorSamplerOpMode.java` | Measures POLLEN HSV | Working |
+| `PollenAutoNav.java` | Color-blob vision drive toward POLLEN | Unfinished (HSV placeholders). **Needs a camera; the robot has none** ([[Open Questions]] #14) |
+| `ColorSamplerOpMode.java` | Measures POLLEN HSV | Working (camera-based; see [[Open Questions]] #14) |
 | `DriverTeleOp.java` | Older TeleOp with the viper slide | Old |
 | `DrivetrainModuleTest.java`, `RightModuleTest.java` | Wheel-chain tests | Test |
 | `retro-reckoning-visualizer.html` | Field path visualizer | Tool |
@@ -107,7 +104,7 @@ Superseded, ignore: `DriveAndShooterTeleOp.java`, `ShooterVelocityTest.java`, ea
     - pivoting rubber-band intake
     - color sorter feeding two launchers
     - lazy-susan turret (≥ 3 in inner diameter) with a REV Through Bore Encoder for angle
-- **Chassis CAD** is in Fusion 360, project "Admin Project": 14-hole U-channel sides, 10-hole back, mecanum aligned to the 3rd/last hole, spacers, low guard channel.
+- **Chassis CAD**: details in [[Robot Overview]] (Fusion 360, "Admin Project").
     - The Fusion connector kept timing out. Retry only when Sathwik confirms Fusion and the desktop app are open.
     - They looked into CNC options in the Frisco area.
 

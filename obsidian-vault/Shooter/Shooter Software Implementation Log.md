@@ -1,7 +1,7 @@
 ---
 tags: [ftc, shooter, software, log]
 branch: shooter-fixes-night-before
-commit: ac9be61
+commit: 53f96f2
 updated: 2026-11-20
 ---
 # Shooter software implementation log
@@ -45,6 +45,20 @@ All software fixes from the fix list are in branch `shooter-fixes-night-before` 
 - 18 logic checks on mock motors all pass: PIDF in init + readback, 80% cap, collect vs gated feed, push-through window, re-gate after window, reverse never gated, voltage-scaled F and its clamp, gate disable.
 - **Not tested on the robot.** Gamepad mapping and motor directions are copied from the existing tuners.
 
+## Changes after the first commit
+| Commit | Who | What | Review (Claude, 2026-11-20) |
+| --- | --- | --- | --- |
+| `2e4aaf8` | Shresht | RB + RT feed override in TeleOp | OK. RB was free. Use only if *At speed* never turns YES. |
+| `2e4aaf8` | Shresht | `FEED_MIN_PUSH_MS` 120 → 300 | OK. Shots are ~0.7–1 s apart, so a 300 ms push can't send two balls at once. Lower toward 150 if two do go in together. |
+| `2e4aaf8` | Shresht | PIDF Tuner: `armed = false` when the shooter stops | **Real bug fix.** Before, the next spin-up after a stop counted as a "shot". |
+| `2e4aaf8` | Shresht | `PreloadShootLeaveAuto` (shoot 4 preloads, LEAVE) | Logic checked, no bugs found. All `TUNE` numbers still need the practice field. No other AUTO will be added by Claude ([[Robot Overview]]). |
+| `53f96f2` | Claude | BioBuzz TeleOp: flower servos on Y (optional via `tryGet`, no motion during INIT for G403) | Closes the "BioBuzz TeleOp has no flower servos" gap in [[To-Do]]. Positions are guesses. |
+| `53f96f2` | Claude | gamepad2 d-pad speed trim ±25 (7759's idea), X resets | Fixes all-short/all-long at the event without a rebuild. |
+| `53f96f2` | Claude | Rumble: blip at speed, buzz when intake current says "full" (23849's idea) | Full warning is off until `INTAKE_FULL_CURRENT_AMPS` is measured. Current is read every 100 ms, only while collecting. |
+| `53f96f2` | Claude | README: OnBot Java upload + controls table | Replaces the Android Studio instructions. |
+
+Checks on `53f96f2`: compiles with 0 errors against the real FTC SDK **12.0.0 and 9.2.0** libraries at Java 8 (`Software/attachments/onbot-compile-check.sh`). Still not run on the robot.
+
 ## Still to do (people)
 Tracked in [[To-Do]].
 
@@ -54,3 +68,4 @@ Tracked in [[To-Do]].
 - 18:50 Added MaxV Test, ShooterLogger; rewrote both tuners on the controller.
 - 19:00 Added BioBuzz TeleOp. Compile + 18 logic checks pass. Committed `ac9be61`.
 - 19:10 Pushed branch, opened PR #1: https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/1
+- 21:00 Reviewed Shresht's `2e4aaf8`. Added flower servos, trim, rumble, intake-full warning, README. Pushed `53f96f2`.

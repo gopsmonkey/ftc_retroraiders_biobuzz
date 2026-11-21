@@ -4,7 +4,7 @@ updated: 2026-11-20
 ---
 # Hardware config names
 
-Back to [[FTC Home]]
+Back to [[FTC Home]] · What the robot is built from: [[Robot Overview]]
 
 The Robot Configuration on the Driver Station must use exactly these names (from `ShooterConfig.java`).
 
@@ -16,7 +16,7 @@ The Robot Configuration on the Driver Station must use exactly these names (from
 | `lbMotor` | Drive, left back | REVERSE | RUN_WITHOUT_ENCODER | BRAKE |
 | `rfMotor` | Drive, right front | FORWARD | RUN_WITHOUT_ENCODER | BRAKE |
 | `rbMotor` | Drive, right back | FORWARD | RUN_WITHOUT_ENCODER | BRAKE |
-| `flowerServo1`, `flowerServo2` | Flower intake drop/lift (in `MainTeleOp`) | servo 2 REVERSED | Servo | Up 0.0 / down 0.5 are guesses, measure |
+| `flowerServo1`, `flowerServo2` | Flower intake drop/lift (in `MainTeleOp`, and in `BioBuzz TeleOp` via Y; optional there) | servo 2 REVERSED | Servo | Up 0.0 / down 0.5 are guesses, measure |
 | `viperMotor` | goBILDA 4-stage viper slide (older `DriverTeleOp`) | – | DC motor | Presets LOW 0 / MID 900 / HIGH 2100 / max 2200 are placeholders |
 | `y_pod`, `x_pod` | goBILDA 4-bar odometry pods (forward / strafe) | see `INVERT_*_ODOMETRY` | encoder | Constants in [[Sathwik Handoff]] |
 
