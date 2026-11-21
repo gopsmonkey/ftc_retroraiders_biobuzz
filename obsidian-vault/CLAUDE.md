@@ -5,8 +5,8 @@ FTC team Retro Raiders (26603), season BIOBUZZ 2026-27. Start at `FTC Home.md`, 
 ## Before writing or running anything (robot constraints)
 - **Read `Robot/Robot Overview.md` first.** It lists what the robot has and doesn't.
 - **No camera.** Don't suggest or write vision, AprilTag, Limelight or color-blob code.
-- **Don't add AUTO or automation code unless the team explicitly asks.** The team writes AUTO themselves. Only Shresht's `PreloadShootLeaveAuto` exists. Pedro Pathing requests go to the `pedro-pathing` subagent (`.claude/agents/pedro-pathing.md`).
-- **Pedro Pathing needs Android Studio, and the team is on OnBot Java.** See `Software/Pedro Pathing Plan.md` before writing any Pedro code.
+- **Don't add AUTO or automation code.** The team has its own AUTO (mostly done by hand, not in the repo yet) and will add it themselves. Shresht's `PreloadShootLeaveAuto` is the only AUTO in the repo.
+- **OnBot Java for the 2026-11-21 competition. Android Studio and Pedro Pathing are ON HOLD until after it.** Don't start either. The plan and a parked Pedro agent are in `Software/Pedro Pathing Plan.md`.
 - **OnBot Java only.** One plain class per file, package `org.firstinspires.ftc.teamcode`, FTC SDK + standard Java only. Re-run `Software/attachments/onbot-compile-check.sh` after code changes.
 - Code lives on branch `shooter-fixes-night-before` (PR #1). The vault lives on `team-obsidian-vault` (PR #2).
 

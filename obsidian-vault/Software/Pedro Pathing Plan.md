@@ -6,11 +6,16 @@ created: 2026-11-20
 
 Back to [[FTC Home]] · Robot: [[Robot Overview]] · Odometry details: [[Sathwik Handoff]] · Rules: [[BIOBUZZ Rules and Scoring]]
 
-**Blocker first: Pedro Pathing needs Android Studio.** Its docs say "you **must** use **Android Studio**. Pedro Pathing does **not** work with OnBot Java or Blocks" ([prerequisites](https://pedropathing.com/docs/pathing/prerequisites)). We use OnBot Java only, so using Pedro means moving the team to Android Studio first.
+> [!info] Status: ON HOLD until after the 2026-11-21 competition (decided by Abi, 2026-11-20)
+> - **This competition:** OnBot Java, and the team's own AUTO (mostly done by hand, not in the repo yet).
+> - **After the competition:** switch to Android Studio, then look at Pedro Pathing.
+> - Nobody (and no Claude) works on Pedro or Android Studio before then.
 
-Claude has a **`pedro-pathing` subagent** for this. Ask Claude Code, e.g. "use the pedro-pathing agent to set up the two-wheel localizer". It reads this note and [[Robot Overview]] first, checks the Pedro docs live, and only writes the AUTO code we ask for.
+**Why Android Studio first: Pedro Pathing needs it.** Its docs say "you **must** use **Android Studio**. Pedro Pathing does **not** work with OnBot Java or Blocks" ([prerequisites](https://pedropathing.com/docs/pathing/prerequisites)). We use OnBot Java only, so using Pedro means moving the team to Android Studio first.
 
-## Decision to make
+A ready-made Claude subagent for this is parked at `Software/attachments/pedro-pathing-agent.md` (not active). **To turn it on later:** copy it to `.claude/agents/pedro-pathing.md` in the repo (or `~/.claude/agents/`), update its platform section now that we're on Android Studio, and start a new Claude Code session. It reads this note and [[Robot Overview]] first, checks the Pedro docs live, and only writes the AUTO code we ask for.
+
+## Options (decided: B for this competition, then A)
 | Option | What it takes | Good | Bad |
 | --- | --- | --- | --- |
 | **A. Android Studio + Pedro Quickstart** | Install Android Studio. Clone [Pedro Quickstart](https://github.com/Pedro-Pathing/Quickstart.git), copy all our `.java` files into `TeamCode`, deploy over USB or Wi-Fi. | What top teams use; AutoTune; smooth curved paths | New toolchain for everyone; not for the night before an event |
@@ -43,3 +48,4 @@ Our shooter code is plain FTC SDK Java, so it works the same under either option
 
 ## Log
 - 2026-11-20: Researched Pedro 3.x; confirmed it does not support OnBot Java. Created the `pedro-pathing` agent and this note. No Pedro code written.
+- 2026-11-20: Put on hold until after the competition. Agent parked in `Software/attachments/`, not active.

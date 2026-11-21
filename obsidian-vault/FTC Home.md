@@ -37,7 +37,7 @@ Start here. Everything about the robot, the code and the competition prep links 
 - [[OnBot Java Check]]: the branch compiles for OnBot Java; how to upload it, and what can still break the build
 - [[Sathwik Handoff]]: Sathwik's old-chat handoff (OnBot Java only, local-only files, odometry, Expansion Hub issue, solved bugs)
 - [[Repo and Branches]]: where the code lives and which branch to run
-- [[Pedro Pathing Plan]]: Pedro needs Android Studio (we're on OnBot Java); our two-wheel localizer values; the `pedro-pathing` Claude agent
+- [[Pedro Pathing Plan]]: **on hold until after the competition.** Then: switch to Android Studio, then Pedro. Has our localizer values and a parked Claude agent.
 
 ## Team
 - [[Sharing This Vault]]: how to get the vault from GitHub and contribute

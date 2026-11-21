@@ -48,8 +48,10 @@ Not started. Pick one and tell Claude to go.
 - [x] Verify the NECTAR size and the rules against the manual. NECTAR is ~3.6 in, and crossing over is a foul only in AUTO. ([[Sathwik Handoff]], Corrections section)
 
 ## After the meet
-- [ ] **Decide: Android Studio + Pedro Pathing, or stay on OnBot Java with `MecanumOdometryRobot`.** ([[Pedro Pathing Plan]]) If Pedro, use the `pedro-pathing` Claude agent for setup.
-- [ ] Note the Control Hub's mounting orientation (logo and USB directions) for the IMU. ([[Pedro Pathing Plan]])
+- [x] **Decided (Abi, 2026-11-20):** OnBot Java for this competition, then switch to Android Studio afterwards.
+- [ ] Switch the team to Android Studio. (after the competition)
+- [ ] Then Pedro Pathing: re-enable the parked agent, note the Control Hub's IMU orientation, re-measure pod offsets. ([[Pedro Pathing Plan]])
+- [ ] Commit the team's own AUTO to the repo. (team)
 - [ ] Re-measure odometry pod offsets for the new drivetrain, spin-test, and check both invert flags. (Sathwik, [[Sathwik Handoff]])
 - [ ] Measure the shooter distance → speed table, using odometry for distance (no camera, so no AprilTags). ([[Top Teams Shooter Reference]])
 - [ ] Measure viper slide presets. ([[Hardware Config Names]])

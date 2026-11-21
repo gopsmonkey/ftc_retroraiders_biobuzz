@@ -12,7 +12,7 @@ Back to [[FTC Home]] · Names in the config: [[Hardware Config Names]] · Source
 | Not on the robot | So… |
 | --- | --- |
 | **No camera** (no webcam, no Limelight) | No vision, no AprilTags, no color-blob tracking. Camera-based ideas from other teams don't apply. Sathwik's `PollenAutoNav` / `ColorSamplerOpMode` can't run on this robot as built (see [[Open Questions]]). |
-| **No autonomous/automation code of our own yet** | The team writes AUTO themselves. Claude must not add AUTO or path-following code. The only AUTO file is Shresht's simple [[Preload Shoot + Leave Auto]] (`PreloadShootLeaveAuto.java`), not yet tuned. |
+| **Our own AUTO isn't in the repo yet** | The team has its AUTO mostly done by hand and will add it themselves. Claude must not add AUTO or path-following code. The only AUTO file in the repo is Shresht's simple [[Preload Shoot + Leave Auto]] (`PreloadShootLeaveAuto.java`), not yet tuned. Pedro Pathing is on hold: [[Pedro Pathing Plan]]. |
 | No turret, no hood adjuster | Aim by turning the robot; distance by preset speed and taped spots. |
 | No separate feeder motor or gate servo | The intake motor also pushes balls into the flywheel, so the at-speed gate pauses the intake. |
 | No intake encoder | `INTAKE_HAS_ENCODER = false`; feed runs at power 1.0. |
