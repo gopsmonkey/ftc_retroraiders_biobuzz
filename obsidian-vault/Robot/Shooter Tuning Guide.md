@@ -45,7 +45,7 @@ The speed-dip brake reacts ~50 ms late (the hub averages velocity), so the next 
 2. Read **Intake ticks fed (this RT hold)** on telemetry and divide by 4.
 3. Set `FEED_TICKS_PER_BALL` to ~70% of that, then build. Telemetry shows `BRAKED (gap between balls)` between shots.
 4. Two balls still go out → lower it. A ball stops short of the wheel → raise it.
-5. Feed speed: `INTAKE_FEED_POWER` is 0.5 since `16d2c68` (was 1.0). Two balls still go → 0.4; balls stall → 0.6.
+5. Feed speed: `INTAKE_FEED_POWER` is 0.3 since `bb88475` (1.0 and 0.5 still sent two together). Balls stall → 0.4.
 
 ## What you see → what to change (from [[Sathwik Handoff]])
 Each round: press A and wait for speed to settle, press Back, fire 4 POLLEN fast, look where they landed, change **one** value, then repeat. A shot counts when speed drops below 93% of target; it is recovered at 98%. Leave I and D at 0 unless a small error remains.
