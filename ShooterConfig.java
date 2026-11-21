@@ -117,11 +117,12 @@ public final class ShooterConfig {
      */
     public static final boolean INTAKE_HAS_ENCODER = true;   // encoder cable added to intakeMotor
     /**
-     * Feed velocity in ticks/s when INTAKE_HAS_ENCODER. Set to ~1.2x the intake ticks/s
-     * that "Shooter MaxV Test" measures at power 0.8 on a fresh battery.
-     * TODO(tonight): measure. 0 means "not measured" and falls back to power feed.
+     * Feed speed in intake encoder ticks/s while shooting (setVelocity, like the launcher).
+     * Used when INTAKE_HAS_ENCODER; 0 falls back to INTAKE_FEED_POWER. Team saw ~2000 ticks/s on
+     * power feed and the 2nd ball still went early, so 600. 2nd ball still early -> 400.
+     * Balls too slow to reach the wheel -> 800.
      */
-    public static final double INTAKE_FEED_VELOCITY = 0;
+    public static final double INTAKE_FEED_VELOCITY = 600;
     /**
      * Feed speed while shooting (fraction of max; with the encoder in, RUN_USING_ENCODER holds it
      * steady as the battery drains). Was 1.0: two stacked balls went up together and the second
