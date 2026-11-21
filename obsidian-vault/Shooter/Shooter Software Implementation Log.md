@@ -64,6 +64,7 @@ The robot runs this now. Full design, settings, tests and on-robot status: [[PR 
 | --- | --- | --- |
 | `997a408` | Claude (for Prajin) | `intakeMotor` braked until the flywheel is at −1375 (`FEED_ONLY_AT_SPEED`). `SHOOTER_SIGN` −1, `PRESET_MID` 1375, `INTAKE_HAS_ENCODER` true, `FEED_MIN_PUSH_MS` 0. RB can't push into a stopped wheel. |
 | `17504b8`, `6fc84c7` | Claude | Removed plugin cache files committed by mistake; restored Abraar's `.gitignore` line. |
+| `5609301` | Claude (for Prajin) | Hold LT = intake at collect power, no gate (precision drive removed). |
 | `cbb8a8a` | Claude (for Prajin) | Tap B = shooter reverse 900 on/off (was hold). |
 | `3a79aba` | Claude (for Prajin) | Telemetry: intake actual/target speed; "ticks fed" renamed "distance fed". |
 | `8038bf2` | Claude (for Prajin) | Intake feed by velocity: `INTAKE_FEED_VELOCITY` 600 ticks/s (was power ~2000 ticks/s). |

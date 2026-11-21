@@ -85,6 +85,9 @@ public class GateTest {
         s.setIntakeRequest(ShooterController.IntakeRequest.OUT); step(s);
         check(intakePower < 0, "LB reverse (unjam) still works with shooter off");
 
+        s.setIntakeRequest(ShooterController.IntakeRequest.COLLECT); step(s);
+        check(intakePower == ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_COLLECT_POWER && intakeMode.equals("collect"), "LT collect with shooter off: runs at collect power, no gate");
+
         s.setIntakeRequest(ShooterController.IntakeRequest.OFF); step(s);
         check(intakePower == 0, "no request: intake stopped");
 

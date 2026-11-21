@@ -3,7 +3,7 @@ tags: [ftc, software, shooter, intake, pr]
 branch: intake-gate-at-speed
 pr: https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/3
 base: shooter-fixes-night-before @ 391d8ed
-latest: cbb8a8a
+latest: 5609301
 updated: 2026-11-21
 ---
 # PR #3: intake brake and one-ball feed
@@ -31,6 +31,7 @@ Back to [[FTC Home]] · Tasks: [[To-Do]] · Tuning: [[Shooter Tuning Guide]] · 
 | RB + RT | Shooter running | Feeds even if not at speed (override, skips the pulse) | `feed pwr` |
 | RB + RT | Shooter off | Braked (can't push into a stopped wheel) | `BRAKED (press A)` |
 | LB | Any | Reverse (unjam), always allowed | `reverse` |
+| **LT** | Any (ignored) | Forward at `INTAKE_COLLECT_POWER`, no gate, pushes balls into the wheel whatever its speed | `collect` |
 
 **Braked** means power 0 + `ZeroPowerBehavior.BRAKE`. With the encoder and `RUN_USING_ENCODER`, power 0 is a velocity-0 command, so the motor actively holds.
 
@@ -61,6 +62,7 @@ Back to [[FTC Home]] · Tasks: [[To-Do]] · Tuning: [[Shooter Tuning Guide]] · 
 | `997a408` | Brake until at speed, `FEED_ONLY_AT_SPEED`, −1375, encoder on, push 0, RB can't push into a stopped wheel, `BRAKED` telemetry, README + TeleOp header |
 | `17504b8` | Removed plugin cache files that `997a408` accidentally included (`.claude-flow/`, `.swarm/`, `ruvector.db`) |
 | `6fc84c7` | Restored Abraar's `.gitignore` line and kept the cache ignores |
+| `5609301` | TeleOp: **hold LT** runs the intake at `INTAKE_COLLECT_POWER` (0.8) with **no at-speed gate** (new `IntakeRequest.COLLECT`). Priority LB > RT > LT. LT used to be precision drive; that is gone. Changed `BioBuzzTeleOp` + `ShooterController`. |
 | `cbb8a8a` | TeleOp: **tap B** toggles shooter reverse at 900 ticks/s (`UNJAM_VELOCITY` −900 × `SHOOTER_SIGN` −1 = +900, opposite the launch). Was hold-B. A or X also ends it. Only `BioBuzzTeleOp.java` changed. |
 | `3a79aba` | Telemetry: **Intake speed (actual / target)** in ticks/s; "Intake ticks fed" renamed **Intake distance fed** (total ticks during the RT hold, not a speed). The team had read 1,200–1,400 as the speed. |
 | `8038bf2` | **Velocity feed:** `INTAKE_FEED_VELOCITY` 0 → 600 ticks/s (`setVelocity`, like the launcher). The team saw ~2000 ticks/s on power feed and the 2nd ball still went early. |
