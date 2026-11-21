@@ -69,6 +69,8 @@ public class BioBuzzTeleOp extends LinearOpMode {
         if (flower2 != null) flower2.setDirection(Servo.Direction.REVERSE);
         // No setPosition() here: nothing may move during INIT / the AUTO-to-TELEOP transition (G403).
 
+        double[] lastDrive = {Double.NaN, Double.NaN, Double.NaN, Double.NaN};
+        ElapsedTime refreshTimer = new ElapsedTime();
         int preset = 1;
         boolean wasUnjamming = false;
         double trim = 0;
@@ -96,6 +98,11 @@ public class BioBuzzTeleOp extends LinearOpMode {
             double loopMs = loopTimer.milliseconds();
             loopTimer.reset();
 
+            if (refreshTimer.milliseconds() > 500) {   // re-send drive powers in case the Expansion Hub reset
+                refreshTimer.reset();
+                java.util.Arrays.fill(lastDrive, Double.NaN);
+            }
+
             // ---- Drive (FIX: precision mode for lining up shots) ----
             boolean precision = gamepad1.left_trigger > 0.5;
             double speedScale = precision ? ShooterConfig.PRECISION_DRIVE_SPEED : ShooterConfig.DRIVE_SPEED;
@@ -108,10 +115,10 @@ public class BioBuzzTeleOp extends LinearOpMode {
             double rbP = drive - strafe + turn;
             double max = Math.max(1.0, Math.max(Math.max(Math.abs(lfP), Math.abs(rfP)),
                     Math.max(Math.abs(lbP), Math.abs(rbP))));
-            lf.setPower(lfP / max * speedScale);
-            rf.setPower(rfP / max * speedScale);
-            lb.setPower(lbP / max * speedScale);
-            rb.setPower(rbP / max * speedScale);
+            setDrive(driveMotors, lastDrive, 0, lfP / max * speedScale);
+            setDrive(driveMotors, lastDrive, 1, lbP / max * speedScale);
+            setDrive(driveMotors, lastDrive, 2, rfP / max * speedScale);
+            setDrive(driveMotors, lastDrive, 3, rbP / max * speedScale);
 
             // ---- Shooter (FIX: presets, capped at 80% of maxV inside setTarget) ----
             if (gamepad1.dpad_left) preset = 0;
@@ -139,16 +146,15 @@ public class BioBuzzTeleOp extends LinearOpMode {
             wasUnjamming = unjam;
 
             // ---- Flower intake servos ----
+            // Servo writes only on a press: a servo holds its position without being re-sent.
             if (gamepad1.y && !lastY) {
                 flowerDown = !flowerDown;
                 flowerCommanded = true;
-            }
-            lastY = gamepad1.y;
-            if (flowerCommanded) {
                 double pos = flowerDown ? ShooterConfig.FLOWER_DOWN : ShooterConfig.FLOWER_UP;
                 if (flower1 != null) flower1.setPosition(pos);
                 if (flower2 != null) flower2.setPosition(pos);
             }
+            lastY = gamepad1.y;
 
             // ---- Intake (FIX: at-speed gate + full-power / velocity feed) ----
             if (gamepad1.left_bumper) {
@@ -182,5 +188,13 @@ public class BioBuzzTeleOp extends LinearOpMode {
 
         for (DcMotor m : driveMotors) m.setPower(0);
         shooter.shutdown();
+    }
+
+    /** Writes a drive power only when it changed (each write is an Expansion Hub round trip). */
+    private static void setDrive(DcMotor[] motors, double[] last, int i, double power) {
+        if (power != last[i]) {
+            motors[i].setPower(power);
+            last[i] = power;
+        }
     }
 }

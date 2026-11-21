@@ -67,11 +67,11 @@ public final class ShooterConfig {
     /** Feed only while |target - actual| is under this fraction of target (0.03 = 3%, ~45 ticks/s at 1450). */
     public static final double AT_SPEED_TOLERANCE = 0.03;
     /**
-     * Once the gate opens, keep feeding at least this long even if speed dips.
-     * The ball's contact dips the wheel immediately, and cutting the push at that
-     * moment would make the "ball stalls in the gap" problem worse. 0 = pure gate.
+     * Keep feeding this long after the wheel was last at speed (or the RB override was last held),
+     * so a ball's own contact dip doesn't cut the push mid-grab. Covers the ~0.2 s grab-to-exit
+     * seen in the 30 fps video. Was 120; Shresht raised it to 300. 0 = pure gate.
      */
-    public static final double FEED_MIN_PUSH_MS = 300;   // was 120; 30 fps video: ball spends 0.27-0.40 s in the hood
+    public static final double FEED_MIN_PUSH_MS = 300;
 
     // ---------------- Presets (ticks/s) ----------------
     // TODO(tonight): calibrate at taped floor spots. All must be <= maxTarget() (1960 at maxV 2450).

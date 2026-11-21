@@ -55,6 +55,15 @@ public class ShooterController {
 
     private IntakeRequest intakeRequest = IntakeRequest.OFF;
     private boolean intakeManaged = true;
+
+    // Last values written to the hub. Each write is a hub round trip, so skip repeats.
+    private double lastShooterVelocity = Double.NaN;
+    private boolean shooterPowerZeroSent = false;
+    private double lastIntakePower = Double.NaN;
+    private double lastIntakeVelocity = Double.NaN;
+    /** Re-send everything this often anyway, in case a hub reset (the Expansion Hub has been dropping out). */
+    private static final double WRITE_REFRESH_MS = 500;
+    private double lastRefreshMs = 0;
     private double velocity = 0;
     private boolean atSpeed = false;
     private boolean feeding = false;
@@ -147,10 +156,25 @@ public class ShooterController {
         }
         wasRunning = running;
 
+        if (now - lastRefreshMs > WRITE_REFRESH_MS) {
+            lastRefreshMs = now;
+            lastShooterVelocity = Double.NaN;
+            shooterPowerZeroSent = false;
+            lastIntakePower = Double.NaN;
+            lastIntakeVelocity = Double.NaN;
+        }
+
         if (running && target != 0) {
-            shooter.setVelocity(ShooterConfig.SHOOTER_SIGN * target);
-        } else {
+            double cmd = ShooterConfig.SHOOTER_SIGN * target;
+            if (cmd != lastShooterVelocity) {
+                shooter.setVelocity(cmd);
+                lastShooterVelocity = cmd;
+                shooterPowerZeroSent = false;
+            }
+        } else if (!shooterPowerZeroSent) {
             shooter.setPower(0);
+            shooterPowerZeroSent = true;
+            lastShooterVelocity = Double.NaN;
         }
 
         velocity = shooter.getVelocity() * ShooterConfig.SHOOTER_SIGN;
@@ -192,7 +216,8 @@ public class ShooterController {
         if (wantFeed) {
             // Hold counts from the last moment the wheel was at speed, so EVERY ball's contact
             // dip gets the full push, not just the first one after the gate opens.
-            if (atSpeed) lastAtSpeedMs = now;
+            // Holding the RB override counts as "at speed" too, so releasing RB mid-ball still gets the push.
+            if (atSpeed || !gateEnabled) lastAtSpeedMs = now;
             boolean inPushWindow = feeding && now - lastAtSpeedMs < ShooterConfig.FEED_MIN_PUSH_MS;
             feeding = !gateEnabled || atSpeed || inPushWindow;
         } else {
@@ -201,7 +226,12 @@ public class ShooterController {
 
         if (feeding) {
             if (ShooterConfig.INTAKE_HAS_ENCODER && ShooterConfig.INTAKE_FEED_VELOCITY > 0) {
-                intake.setVelocity(ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_FEED_VELOCITY);
+                double v = ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_FEED_VELOCITY;
+                if (v != lastIntakeVelocity) {
+                    intake.setVelocity(v);
+                    lastIntakeVelocity = v;
+                    lastIntakePower = Double.NaN;
+                }
                 intakeOutput = ShooterConfig.INTAKE_FEED_VELOCITY;
                 intakeMode = "feed vel";
             } else {
@@ -219,7 +249,11 @@ public class ShooterController {
     }
 
     private void setIntakePower(double power, String mode) {
-        intake.setPower(power);
+        if (power != lastIntakePower) {
+            intake.setPower(power);
+            lastIntakePower = power;
+            lastIntakeVelocity = Double.NaN;
+        }
         intakeOutput = power;
         intakeMode = mode;
     }
@@ -229,6 +263,10 @@ public class ShooterController {
         running = false;
         shooter.setPower(0);
         intake.setPower(0);
+        shooterPowerZeroSent = true;
+        lastShooterVelocity = Double.NaN;
+        lastIntakePower = 0;
+        lastIntakeVelocity = Double.NaN;
     }
 
     // ---------------- PIDF + voltage ----------------
