@@ -13,6 +13,14 @@ Start here. Everything about the robot, the code and the competition prep links 
 - [[Shooter Code Review]]: what's wrong in the repo code, with line refs
 - [[Shooter Software Implementation Log]]: what was changed in code tonight, and why
 
+## Night-before review (added 2026-11-20, 7:30 pm)
+- [[Small Fixes Without Reprinting]]: mechanical fixes with kit metal, washers and tape, no big prints
+- [[Code Check - Night Before]]: compile check against the FTC SDK, risks, 3 small patches (incl. gate override), test steps, backup plan
+- [[Preload Shoot + Leave Auto]]: simplest AUTO worth having (there's none in the repo)
+- [[Second Video Analysis (30 fps)]]: the 30 fps clip, ball spends 0.27–0.40 s in the hood
+- [[Competition Day Tips]]: tonight, pack list, at the event, judging
+- [[Open Questions]]: what we still need answered
+
 ## Game
 - [[BIOBUZZ Rules and Scoring]]: scoring, how a TIP works (3 then ~8 POLLEN), rules that cost points
 - [[Top Teams Shooter Reference]]: what the best teams in the world do, and how our speeds compare
