@@ -31,7 +31,7 @@ PIDF set in a tuner is lost on power cycle. Only `ShooterConfig` sticks.
 | hold RT | Intake runs only while the flywheel is at speed; otherwise `intakeMotor` is braked (press A first). `FEED_ONLY_AT_SPEED = false` in `ShooterConfig` restores collecting with the shooter off. |
 | hold RB + RT | Feed even if not at speed (override) |
 | hold LB | Reverse intake (unjam) |
-| hold B | Reverse shooter (unjam); releasing stops it |
+| tap B | Shooter reverse at 900 ticks/s on/off (A or X also ends it) |
 | Y | Flower intake down / up (if `flowerServo1/2` are in the config) |
 | gamepad2 d-pad up / down, X | Speed trim ±25 on every preset / reset trim |
 | Rumble | 1 blip = shooter at speed; long buzz = intake looks full (needs `INTAKE_FULL_CURRENT_AMPS`) |

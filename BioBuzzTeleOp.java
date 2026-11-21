@@ -19,7 +19,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  *   A = spin up at the selected preset, X = stop shooter
  *   dpad left / up / right = CLOSE / MID / FAR preset (also changes speed live if spinning)
  *   hold RT = intake feeds only while the flywheel is at speed; otherwise intakeMotor is braked (press A first)
- *   hold LB = reverse intake (unjam), hold B = reverse shooter slowly (unjam)
+ *   hold LB = reverse intake (unjam), tap B = shooter reverse at 900 on/off (A or X also ends it)
  *   hold RB + RT = feed even if the flywheel is not at speed (override if "At speed" never turns YES)
  *   Y = flower intake down / up (toggle; only if flowerServo1/2 are in the config)
  *   Rumble: one blip when the shooter reaches speed, a long buzz when the intake looks full (4 balls)
@@ -72,7 +72,7 @@ public class BioBuzzTeleOp extends LinearOpMode {
         double[] lastDrive = {Double.NaN, Double.NaN, Double.NaN, Double.NaN};
         ElapsedTime refreshTimer = new ElapsedTime();
         int preset = 1;
-        boolean wasUnjamming = false;
+        boolean reversing = false, lastB = false;
         double trim = 0;
         boolean flowerDown = false;
         boolean flowerCommanded = false;
@@ -135,15 +135,14 @@ public class BioBuzzTeleOp extends LinearOpMode {
             lastTrimUp = gamepad2.dpad_up;
             lastTrimDown = gamepad2.dpad_down;
 
-            boolean unjam = gamepad1.b;
-            if (unjam) {
-                shooter.setTarget(ShooterConfig.UNJAM_VELOCITY);
-                shooter.spinUp();
-            } else {
-                if (wasUnjamming) shooter.stop();   // releasing B stops; press A to spin up again
-                shooter.setTarget(PRESETS[preset] + trim);
+            // B taps reverse on/off (UNJAM_VELOCITY, opposite the launch direction). A or X leaves reverse.
+            if (gamepad1.b && !lastB) {
+                reversing = !reversing;
+                if (reversing) shooter.spinUp(); else shooter.stop();
             }
-            wasUnjamming = unjam;
+            lastB = gamepad1.b;
+            if (gamepad1.a || gamepad1.x) reversing = false;
+            shooter.setTarget(reversing ? ShooterConfig.UNJAM_VELOCITY : PRESETS[preset] + trim);
 
             // ---- Flower intake servos ----
             // Servo writes only on a press: a servo holds its position without being re-sent.
