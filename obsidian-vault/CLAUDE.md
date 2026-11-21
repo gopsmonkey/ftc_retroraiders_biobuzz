@@ -5,7 +5,8 @@ FTC team Retro Raiders (26603), season BIOBUZZ 2026-27. Start at `FTC Home.md`, 
 ## Before writing or running anything (robot constraints)
 - **Read `Robot/Robot Overview.md` first.** It lists what the robot has and doesn't.
 - **No camera.** Don't suggest or write vision, AprilTag, Limelight or color-blob code.
-- **Don't add AUTO or automation code.** The team writes AUTO themselves. Only Shresht's `PreloadShootLeaveAuto` exists.
+- **Don't add AUTO or automation code unless the team explicitly asks.** The team writes AUTO themselves. Only Shresht's `PreloadShootLeaveAuto` exists. Pedro Pathing requests go to the `pedro-pathing` subagent (`.claude/agents/pedro-pathing.md`).
+- **Pedro Pathing needs Android Studio, and the team is on OnBot Java.** See `Software/Pedro Pathing Plan.md` before writing any Pedro code.
 - **OnBot Java only.** One plain class per file, package `org.firstinspires.ftc.teamcode`, FTC SDK + standard Java only. Re-run `Software/attachments/onbot-compile-check.sh` after code changes.
 - Code lives on branch `shooter-fixes-night-before` (PR #1). The vault lives on `team-obsidian-vault` (PR #2).
 
@@ -29,6 +30,7 @@ FTC team Retro Raiders (26603), season BIOBUZZ 2026-27. Start at `FTC Home.md`, 
 | Match-day checklist | `Shooter/Pre-Match Checklist.md` |
 | Future work | `Shooter/Post-Competition Redesigns.md` |
 | Branches and commits | `Software/Repo and Branches.md` |
+| Pedro Pathing: OnBot blocker, our localizer constants, coordinates, AUTO ideas | `Software/Pedro Pathing Plan.md` |
 | Night-before code check: compile result, risks, patches, backup plan | `Software/Code Check - Night Before.md` (not pushed yet) |
 | Simple AUTO (shoot preloads + LEAVE) | `Software/Preload Shoot + Leave Auto.md` (not pushed yet) |
 | 30 fps video measurements | `Shooter/Second Video Analysis (30 fps).md` (not pushed yet) |
