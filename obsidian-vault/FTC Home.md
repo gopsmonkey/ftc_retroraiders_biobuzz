@@ -33,6 +33,7 @@ Start here. Everything about the robot, the code and the competition prep links 
 - [[Shooter Tuning Guide]]: how to measure maxV, set PIDF, and tune P
 
 ## Software
+- [[OnBot Java Check]]: the branch compiles for OnBot Java; how to upload it, and what can still break the build
 - [[Sathwik Handoff]]: Sathwik's old-chat handoff (OnBot Java only, local-only files, odometry, Expansion Hub issue, solved bugs)
 - [[Repo and Branches]]: where the code lives and which branch to run
 

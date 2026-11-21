@@ -11,7 +11,7 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 
 ## Decide tonight (blocks other tasks)
 - [ ] **Which TeleOp runs tomorrow?** `MainTeleOp` has the flower servos but no fixes and has never run. `BioBuzz TeleOp` has all the shooter fixes but no flower servos. Either copy the `// FIX` lines into `MainTeleOp`, or add the flower servos to `BioBuzz TeleOp`. Then commit it. ([[Sathwik Handoff]], [[Shooter Software Implementation Log]])
-- [ ] **How does code get onto the Control Hub?** The team uses OnBot Java only, so the branch files must be pasted into OnBot Java and compile there. ([[Sathwik Handoff]], [[Code Check - Night Before]])
+- [ ] **Load the branch into OnBot Java.** It compiles cleanly on SDK 9.2–12.0. Upload all 8 files with **Upload Files** (don't paste), overwrite the old tuners, then Build Everything. If the build fails, it's an old file such as `PollenAutoNav`. (Sathwik; steps in [[OnBot Java Check]])
 
 ## Tonight: robot (Sathwik, hands-on)
 - [ ] **Fix the Expansion Hub blinking blue.** All 4 drive motors depend on it, so do this first. ([[Sathwik Handoff]], Expansion Hub section)
@@ -36,7 +36,7 @@ Owners: **Sathwik** (robot, wiring, `MainTeleOp`), **Abraar** (shooter code bran
 
 ## What Claude can do now without touching anyone's files
 Not started. Pick one and tell Claude to go.
-- [ ] **Check that every file on `shooter-fixes-night-before` will compile in OnBot Java.** Read-only; reports problems without editing. Ready now.
+- [x] **Check that every file on `shooter-fixes-night-before` will compile in OnBot Java.** Done 2026-11-20 on commit `2e4aaf8`: 0 errors on SDK 9.2–12.0. ([[OnBot Java Check]])
 - [ ] **Add the handoff answers under [[Open Questions]] #1, #2, #6 and #7**, and fix the pack list ("laptop with Android Studio" → browser). Wait until Shresht's upload (parts 2–3) is pushed, to avoid a merge conflict.
 - [ ] **Port the shooter fixes into `MainTeleOp`.** Needs: Sathwik pushes `MainTeleOp.java`, and Abraar agrees.
 - [ ] **Push Sathwik's local files to the repo** (library, autos, `MainTeleOp`). Needs: the files, attached or pushed.
