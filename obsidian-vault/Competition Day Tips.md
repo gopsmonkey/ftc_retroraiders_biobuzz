@@ -1,0 +1,47 @@
+---
+tags: [ftc, competition, tips]
+created: 2026-11-20
+---
+# Competition day tips (2026-11-21)
+
+Back to [[FTC Home]] · Every match: [[Pre-Match Checklist]] · Questions to answer: [[Open Questions]]
+
+**Goal for a first league meet: a reliable robot that scores one TIP a match plus LEAVE and PARK beats a fast robot that breaks.**
+
+## Tonight
+- [ ] Small mechanical fixes: [[Small Fixes Without Reprinting]].
+- [ ] Code: patches A–D are in; do the test run in [[Code Check - Night Before]]. Add the [[Preload Shoot + Leave Auto]].
+- [ ] **Code freeze.** Deploy one branch, commit it, tag it (`git tag event-2026-11-21`). Tomorrow, change only `ShooterConfig` numbers.
+- [ ] Charge every battery and label them. Use the freshest one for each match.
+- [ ] Driver practice: 10 full cycles with the match TeleOp. Y drops the flower → collect 4 with the shooter **off** → press A while driving → stop on the tape → wait for the rumble blip (at speed) → hold RT → X. Controls: repo `README.md`.
+- [ ] Practice the AUTO start placement until anyone on the team can do it the same way.
+
+## If something goes wrong in a match
+Controls are in the repo `README.md`.
+
+| Problem | Do this |
+| --- | --- |
+| `GATED`, nothing feeds | Hold RB + RT. Between matches: [[Code Check - Night Before]]. |
+| Ball jams in the hood | LB (reverse intake), then B briefly. |
+| All shots short or long | gamepad2 d-pad trim ±25; next match, change the preset. |
+| Shots fall short late in the match | Next preset up; fresh battery next match. |
+| Two balls go in at once | Pit: `FEED_MIN_PUSH_MS` → 150–200. |
+| Shooter or mount looks loose | Pit: [[Small Fixes Without Reprinting]]. |
+| Init says MISMATCH | Stop and init again. Never start a match on MISMATCH. |
+| Drive dead / Expansion Hub blinking blue | XT30 plug and hub-to-hub cable first ([[Sathwik Handoff]]). |
+| AUTO misbehaves | `SHOOT_FIRST = false` (LEAVE only), see [[Preload Shoot + Leave Auto]]. |
+
+## Pack list
+Charged batteries + charger, extension cord, laptop with a browser for OnBot Java (http://192.168.43.1:8080 on the Control Hub's Wi-Fi), the repo files downloaded offline, a USB-C cable, Driver Station phone/controller, spare gamepad, hex keys and screwdrivers, spare screws and nylock nuts, spare printed flywheel bracket and hood, spare small printed parts, washers, aluminium standoffs, VHB tape, CA glue, packing tape, paint pen, zip ties (wires only), measuring tape, floor tape.
+
+## At the event
+- **Inspection first.** The robot must fit the 18 in. sizing box at the start. Battery and wires secure. Robot Controller and Driver Station apps up to date and matching.
+- **Practice field:** check each preset from the taped spots on the real HIVE, for **both** CELL ends (the up CELL swaps after every TIP). Adjust `PRESET_CLOSE/MID/FAR` if needed, or use the gamepad2 d-pad speed trim (±25 per press) during matches. See [[BIOBUZZ Rules and Scoring]].
+- **Every match:** run the [[Pre-Match Checklist]] (partner talk, battery, paint marks, 4-ball limit, PARK timing).
+
+## Match log
+One line per match: shots taken, shots in, what broke.
+
+
+## Judging
+The shooter story is a strong engineering story. You found the problem with frame-by-frame video (stall time, mount movement) and tuner data (speed dip and recovery). Then you fixed it with mechanical changes plus an at-speed gate. Show the video frames and the fix list, and make sure everyone can explain one part.

@@ -1,0 +1,16 @@
+/* Retro Raiders vault: same palette as the graph colour groups */
+.nav-folder-title[data-path="Game"] .nav-folder-title-content,
+.nav-folder-title[data-path="Game/Research"] .nav-folder-title-content { color: #22c55e; font-weight: 600; }
+.nav-folder-title[data-path="Shooter"] .nav-folder-title-content { color: #f97316; font-weight: 600; }
+.nav-folder-title[data-path="Robot"] .nav-folder-title-content { color: #eab308; font-weight: 600; }
+.nav-folder-title[data-path="Software"] .nav-folder-title-content,
+.nav-folder-title[data-path="Software/attachments"] .nav-folder-title-content { color: #14b8a6; font-weight: 600; }
+.nav-file-title[data-path="FTC Home.md"] .nav-file-title-content,
+.nav-file-title[data-path="To-Do.md"] .nav-file-title-content { color: #f59e0b; font-weight: 600; }
+
+.markdown-preview-view h1 {
+  border-bottom: 2px solid var(--interactive-accent);
+  padding-bottom: 4px;
+}
+code { border-radius: 4px; padding: 0.1em 0.4em; }
+.task-list-item-checkbox:checked ~ * { opacity: 0.55; }
