@@ -38,6 +38,11 @@ From the 240 fps video ([[Shooter Video Evidence]]):
 - The ball stalls 54–83 ms before the wheel grabs it.
 - The hood squeeze isn't locked.
 
+From the 30 fps video ([[Second Video Analysis (30 fps)]]):
+- The ball waits 0.5–0.67 s in the purple ring before the wheel grabs it (0.9–1.1 s after a hand adjustment).
+- The flywheel is mounted straight on the motor shaft, with no bearing on the far side. The motor moves ~2 mm per shot.
+- Exit speed is steady (±5%). The launch direction varies by ~14°.
+
 Fixes: [[Shooter Fix List - Night Before Competition]], [[Small Fixes Without Reprinting]].
 
 ## CAD
@@ -45,4 +50,8 @@ Fixes: [[Shooter Fix List - Night Before Competition]], [[Small Fixes Without Re
 - Chassis: 14-hole U-channel sides, 10-hole back. Mecanum wheels aligned to the 3rd/last hole, spacers, low guard channel.
 - Printed parts: flywheel motor bracket, hood (PLA/PETG layer lines on the ball path; tape or polycarbonate strip recommended).
 - Belt/pulley rules and the worked example: [[Sathwik Handoff]], "Belts instead of chains".
-- Still to add here: CAD screenshots or an export of the current robot, flywheel diameter, gear/belt ratios. Paste images into `Robot/attachments/`.
+- Top view of the robot as built (from the 30 fps video):
+
+![[robot-top-view-2026-11-20.jpg]]
+*Left to right: backstop board, flywheel (yellow motor, black wheel on the motor shaft), purple ring hood, orange star transfer wheels, clear roller intake. Brown 3D-printed truss side frames.*
+- Still to add: CAD screenshots or an export from Fusion, flywheel diameter, gear/belt ratios. Paste images into `Robot/attachments/`.
