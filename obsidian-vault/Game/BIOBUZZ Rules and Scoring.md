@@ -67,6 +67,7 @@ Fouls: MINOR 5, MAJOR 20 (to the other alliance).
 - 40 total. Balls that leave the field are put back in by field staff.
 
 ## Field facts for aiming
+- **No launch zone.** We can launch from anywhere on the field.
 - HIVE pivot is 43.95 in up. Top teams aim at **about 60 in high**. The CELL opening is about 20 in wide × 14 in tall.
 - AprilTags (36h11) sit on the **underside** of each CELL and tilt when the HIVE tips.
   - IDs: red far 30–33, red audience 34–37, blue audience 38–41, blue far 42–45.

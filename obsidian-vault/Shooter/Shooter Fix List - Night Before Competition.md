@@ -26,10 +26,10 @@ The **code** adds three more:
 3. Make the feed into the flywheel fast and consistent.
 4. Retune PIDF, hardcode it, and add an at-speed gate.
 5. Set battery and driving rules for matches.
-6. Re-film one 5-ball burst at 240 fps to confirm.
+6. Re-film one 4-ball burst at 240 fps to confirm.
 
 > [!warning] Big gap
-> The repo only has the two tuning OpModes. The match TeleOp and Autonomous aren't in it, so every code fix has to be copied into the code you actually run tomorrow. A reference match TeleOp (`BioBuzzTeleOp`) was added tonight; see [[Shooter Software Implementation Log]].
+> The match TeleOp and Autonomous aren't in the repo. Details and status: [[Shooter Code Review]].
 
 ## Tonight, must do: mechanical (do these FIRST)
 Each one changes how hard the ball is squeezed, and the software tuning only holds if that squeeze stays the same.
@@ -50,33 +50,18 @@ Each one changes how hard the ball is squeezed, and the software tuning only hol
 - [ ] Draw a paint line across the flywheel hub and its set screw, so slipping is visible at a glance.
 
 ## Tonight, must do: software
-These go into the match OpMode. Do them **after** the mechanical fixes, because those change the load the PIDF has to handle. Full procedure: [[Shooter Tuning Guide]].
+Do these **after** the mechanical fixes, which change the load the PIDF handles. The code is already written ([[Shooter Software Implementation Log]]). The steps and numbers are in [[Shooter Tuning Guide]].
 
-- [ ] **Measure the shooter's real top speed (maxV)**
-    - Power 1 in `RUN_WITHOUT_ENCODER` on a fully charged battery, keep the highest `getVelocity()` ([REV PIDF guide](https://docs.revrobotics.com/first-global/fgc-pid)).
-    - 6000 rpm Yellow Jacket (28 CPR, ~5,400 rpm tested no-load per [ServoCity](https://www.servocity.com/5202-series-yellow-jacket-motor-1-1-ratio-24mm-length-6mm-d-shaft-6000-rpm-3-3-5v-encoder)): expect about **2,400–2,500 ticks/s**.
-    - Code: `Shooter MaxV Test` OpMode does this.
-- [ ] **Compute starting PIDF from maxV, then tune P**
-    - F = 32767 ÷ maxV, P = 0.1 × F, I = 0.1 × P, D = 0. For maxV = 2,450: F ≈ 13.4, P ≈ 1.3, I ≈ 0.13.
-    - In Shooter PIDF Tuner, feed balls at match pace. Raise P until the dip recovers fastest without overshoot that keeps ringing.
-- [ ] **Hardcode the final PIDF in the match OpMode's init**
-    - `shooter.setVelocityPIDFCoefficients(P, I, D, F)` right after `setMode(RUN_USING_ENCODER)`. PIDF changes [do not persist after a power cycle](https://ftc-docs.firstinspires.org/programming_resources/shared/pidf_coefficients/pidf-coefficients.html).
-    - **Trap:** the tuner's values stay loaded until the hub powers off. Practice right after tuning looks better than the first match tomorrow.
-    - Code: put the numbers in `ShooterConfig.java` (one place; every OpMode reads it).
-- [ ] **Only feed when the flywheel is at speed**
-    - Feed only while speed error < 3% of target (~45 ticks/s at 1450).
-    - One intake motor and no separate feeder, so the gate pauses the intake too. Fine while shooting.
-- [ ] **Put the intake on velocity control, if its encoder is plugged in**
-    - At `RUN_WITHOUT_ENCODER`, power 0.8 is 0.8 of whatever the battery gives ([gm0](https://gm0-ja.readthedocs.io/ja/latest/docs/software/adv-control-system/sdk-motors.html)), so feed speed drops as the battery drains.
-    - Measure intake ticks/s at 0.8 on a fresh battery, then `setVelocity()` ~20% above that while shooting. No encoder: use power 1.0 while shooting.
+- [ ] Measure maxV (Tuning Guide step 2).
+- [ ] Compute starting PIDF, then tune P under ball load (steps 2 and 4).
+- [ ] Copy the final PIDF into `ShooterConfig.java`, then power-cycle and check `PIDF on hub: OK` (steps 5 and 7).
+- [ ] Measure the intake encoder, or leave it at power 1.0 while shooting (step 2, hold B).
 
 ## Tonight, if time allows (in order of payoff)
-- [ ] **Shooting presets and tape marks**: 2–3 target velocities on the d-pad, tape matching floor spots. Keep every target ≤ 80% of maxV. (Tuners used to allow up to 6,000 ticks/s, which the motor can't reach.)
-- [ ] **Precision drive mode for aiming**: hold a trigger to drop drive speed to ~0.35.
-- [ ] **Re-film one 5-ball burst at 240 fps**: tripod, side view, goal in frame. Compare before/after.
-- [ ] **Battery-scaled feedforward**: hub F is a fraction of battery voltage. On spin-up, re-send PIDF with F × (12.5 ÷ measured voltage). Lower priority.
-- [ ] **Bulk caching + loop time on telemetry**: `LynxModule` bulk caching AUTO cuts hub round trips. Low risk; test first.
-- [ ] **Log flywheel speed to a file during a burst**: hub averages velocity over ~50 ms, so tuner dip numbers read smoother than reality. Compare runs to each other.
+Presets, precision drive, scaled F, bulk caching and CSV logging are already in code. Only the people steps are left:
+- [ ] **Calibrate presets at tape marks** (Tuning Guide step 6).
+- [ ] **Re-film one 4-ball burst at 240 fps**: tripod, side view, goal in frame. Compare before/after. Use 4 balls, not 5, since a match allows 4 at most (G407).
+- [ ] **Try `VOLTAGE_COMPENSATE_F = true`** only if late-match shots fall short.
 
 ## At the event
 See [[Pre-Match Checklist]].

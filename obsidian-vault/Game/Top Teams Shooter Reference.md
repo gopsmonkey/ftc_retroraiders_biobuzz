@@ -18,11 +18,15 @@ As of 2026-11-20: 6,595 active teams, 6,610 matches played.
 | --- | --- | --- | --- | --- |
 | 1 | 19666 Forever Knight (CN) | 163 | 7.2 | not public |
 | 2 | 16010 Astra Machina (NE) | 157 | 7.2 | not public, best AUTO (45) |
+| 3 | 36596 Horizon (OR) | 155 | 7.0 | not public (they publish tools: zenith, simloop) |
+| 4 | 21229 Quality Control (WA) | 151 | 6.6 | not public, AUTO 42 |
 | 5 | 19564 ITKAN Solar (TX) | 136 | 6.3 | not public (TX, likely at state) |
 | 6 | 19705 WXYZ (CN) | 135 | 5.8 | **no turret**, fixed spot, 2 motors |
 | 10 | 16750 Technototes (WA) | 123 | 5.6 | turret + hood + Limelight |
 | 13 | 23849 Droid Force (WA) | 120 | 5.3 | 2 launchers (POLLEN + NECTAR), each with turret + hood |
 | 16 | 7759 Autonomous Prime (WA) | 113 | 4.8 | turret + hood, shoots while driving |
+
+Full top-193 list: `Game/Research/ftcscout-top-opr-2026-11-20.tsv`. Per-team code details: [[Top Teams Code Deep Dive]].
 
 ## What they all do
 - **Two flywheel motors**, not one. More inertia means a smaller speed drop per ball and faster recovery.
@@ -58,9 +62,9 @@ Not hub units. These are custom loops where power = kV·target + kP·error.
 
 ## Lessons for us
 1. **A #6-in-the-world robot has no turret.** WXYZ turns the drivetrain to aim and shoots from a fixed zone at one speed. Our presets + tape marks plan is the right one for now.
-2. **Two shooting spots, one per CELL.** The up CELL swaps ends after every TIP (see [[BIOBUZZ Rules and Scoring]]).
+2. **Two shooting spots, one per CELL** (why: [[BIOBUZZ Rules and Scoring]]).
 3. **The easiest AUTO is worth ~28.** The 4 preloads TIP the HIVE (the first TIP needs only 3), then LEAVE and PARK. Top teams get a 2nd TIP by collecting from the bottom of a FLOWER or from the GARDEN.
-4. **A second flywheel motor plus a heavier wheel** is the biggest hardware gap compared to the top teams, so it goes on the after-competition list.
+4. **Biggest hardware gap: one flywheel motor vs. their two.** It is on [[Post-Competition Redesigns]].
 5. **Shooting while moving** (7759, Technototes, 23849) needs a turret and odometry. That's a season-long project, not a next-week one.
 
 ## Public code worth reading

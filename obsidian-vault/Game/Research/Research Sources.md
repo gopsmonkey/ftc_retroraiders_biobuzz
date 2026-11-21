@@ -4,7 +4,7 @@ created: 2026-11-20
 ---
 # Research sources
 
-Back to [[BIOBUZZ Full Research Context]] · [[FTC Home]]
+Back to [[FTC Home]] · [[Top Teams Code Deep Dive]] · [[Top Teams Shooter Reference]]
 
 ## Data files (this folder)
 - `ftcscout-top-opr-2026-11-20.tsv`: top 193 teams worldwide by OPR, as rank, number, name, OPR.

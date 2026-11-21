@@ -16,7 +16,7 @@ Start here. Everything about the robot, the code and the competition prep links 
 ## Game
 - [[BIOBUZZ Rules and Scoring]]: scoring, how a TIP works (3 then ~8 POLLEN), rules that cost points
 - [[Top Teams Shooter Reference]]: what the best teams in the world do, and how our speeds compare
-- [[BIOBUZZ Full Research Context]]: the full research write-up behind both, plus [[Research Sources]] (FTCScout data, repo links)
+- [[Top Teams Code Deep Dive]]: per-team code details (file paths, math, constants), plus [[Research Sources]] (FTCScout data, repo links)
 
 ## Robot
 - [[Hardware Config Names]]: motor names and directions the code expects
