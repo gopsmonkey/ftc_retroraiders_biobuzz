@@ -78,6 +78,7 @@ public class ShooterController {
     private int lastIntakePos = 0;
     private int pulseStartTicks = 0;
     private double gapUntilMs = -1e9;
+    private double backoffUntilMs = -1e9;
     private int ticksFedThisHold = 0;
     private boolean wantedFeed = false;
 
@@ -249,9 +250,17 @@ public class ShooterController {
                     gapUntilMs = now + ShooterConfig.FEED_GAP_MS;
                 }
             }
+            // Back-off: when feeding stops mid-shooting (shot dip or end of a pulse), reverse briefly
+            // so the next ball is pulled off the wheel instead of resting on it while it recovers.
+            boolean backingOff = gateEnabled && now < backoffUntilMs;
+            if (backingOff) open = false;
+            if (feeding && !open && gateEnabled && ShooterConfig.FEED_BACKOFF_MS > 0) {
+                backoffUntilMs = now + ShooterConfig.FEED_BACKOFF_MS;
+            }
             feeding = open;
         } else {
             feeding = false;
+            backoffUntilMs = -1e9;
         }
 
         if (feeding) {
@@ -267,6 +276,8 @@ public class ShooterController {
             } else {
                 setIntakePower(ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.INTAKE_FEED_POWER, "feed pwr");
             }
+        } else if (wantFeed && gateEnabled && now < backoffUntilMs) {
+            setIntakePower(-ShooterConfig.INTAKE_FEED_SIGN * ShooterConfig.FEED_BACKOFF_POWER, "BACKOFF (next ball off the wheel)");
         } else if (wantFeed) {
             // Power 0 + BRAKE (+ RUN_USING_ENCODER when the encoder is in) holds every roller still.
             setIntakePower(0, inGap ? "BRAKED (gap between balls)"

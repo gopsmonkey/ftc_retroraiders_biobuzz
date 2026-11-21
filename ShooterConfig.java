@@ -100,6 +100,15 @@ public final class ShooterConfig {
     public static final int FEED_TICKS_PER_BALL = 0;
     /** Brake time between balls (ms), so the shot clears and the wheel recovers. Try 150-300. */
     public static final double FEED_GAP_MS = 200;
+    /**
+     * Back-off: whenever the intake stops while shooting (a shot slowed the wheel, or a pulse
+     * ended), it reverses at FEED_BACKOFF_POWER for FEED_BACKOFF_MS, pulling the next ball off the
+     * flywheel so the recovering wheel can't grab it and shoot it short. Then it brakes until the
+     * wheel is back at speed. 0 ms = off. Next ball still goes early -> 180 ms or power 0.4.
+     * Balls get pulled too far back (slow shots) -> 80 ms.
+     */
+    public static final double FEED_BACKOFF_MS = 120;
+    public static final double FEED_BACKOFF_POWER = 0.3;
     /** Power while collecting balls (shooter off, only when FEED_ONLY_AT_SPEED = false). */
     public static final double INTAKE_COLLECT_POWER = 0.8;
     /**
