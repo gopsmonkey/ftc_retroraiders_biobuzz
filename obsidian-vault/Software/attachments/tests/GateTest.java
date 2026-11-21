@@ -61,13 +61,16 @@ public class GateTest {
         check(intakePower != 0 && !Double.isNaN(intakePower) && intakePower > 0 == (ShooterConfig.INTAKE_FEED_SIGN > 0), "at -1375: intake feeds");
 
         shooterVel = -1300; step(s);
-        check(intakePower == 0 && intakeMode.startsWith("BRAKED"), "ball dips wheel to -1300 (5.5% off): intake braked immediately");
+        check(intakePower < 0 && intakeMode.startsWith("BACKOFF"), "ball dips wheel to -1300 (5.5% off): intake backs off at once (pulls next ball off the wheel)");
+        long t0 = System.currentTimeMillis();
+        while (System.currentTimeMillis() - t0 < ShooterConfig.FEED_BACKOFF_MS + 30) { step(s); try { Thread.sleep(5); } catch (InterruptedException e) {} }
+        check(intakePower == 0 && intakeMode.startsWith("BRAKED"), "after FEED_BACKOFF_MS: braked until the wheel recovers");
 
         shooterVel = -1360; step(s);
         check(intakePower != 0, "back within 3% (-1360): intake feeds again");
 
         shooterVel = 1375; step(s);
-        check(intakePower == 0, "wheel spinning the wrong way (+1375): intake braked");
+        check(intakePower <= 0, "wheel spinning the wrong way (+1375): intake never pushes forward");
 
         shooterVel = -1375;
         s.setGateEnabled(false); s.stop(); step(s);

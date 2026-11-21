@@ -56,13 +56,13 @@ public class PulseTest {
             Thread.sleep(5);
         }
         check(posAtFirstStop == 100, "first pulse stops after 100 ticks (stopped at " + posAtFirstStop + ")");
-        check(firstStopMode.contains("gap"), "telemetry says gap while waiting (" + firstStopMode + ")");
+        check(firstStopMode.contains("gap") || firstStopMode.startsWith("BACKOFF"), "telemetry shows backoff/gap while waiting (" + firstStopMode + ")");
         check(resumeAt > 0, "second pulse starts after the gap");
         long gap = resumeAt - stopAt;
         check(gap >= ShooterConfig.FEED_GAP_MS - 10 && gap < ShooterConfig.FEED_GAP_MS + 100, "gap ~FEED_GAP_MS=" + ShooterConfig.FEED_GAP_MS + " (measured " + gap + " ms)");
 
         shooterVel = -1000; s.update();
-        check(intakePower == 0, "wheel dips mid-pulse: braked at once");
+        check(intakePower <= 0, "wheel dips mid-pulse: no forward push");
 
         System.out.println(failures == 0 ? "ALL PASS" : failures + " FAILED");
         System.exit(failures == 0 ? 0 : 1);
