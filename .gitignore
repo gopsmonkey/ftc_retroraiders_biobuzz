@@ -1,2 +1,8 @@
 # Personal Obsidian layout files (the vault lives in obsidian-vault/ on team-obsidian-vault)
 obsidian-vault/.obsidian/workspace*.json
+# Local Claude/plugin caches
+.claude-flow/
+.swarm/
+ruvector.db
+agentdb.rvf*
+.claude/

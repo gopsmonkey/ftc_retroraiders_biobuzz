@@ -28,7 +28,7 @@ PIDF set in a tuner is lost on power cycle. Only `ShooterConfig` sticks.
 | hold LT | Precision drive (0.35) |
 | A / X | Spin up at preset / stop shooter |
 | d-pad left / up / right | CLOSE / MID / FAR preset |
-| hold RT | Intake: collects when shooter is off, gated feed when it's on |
+| hold RT | Intake runs only while the flywheel is at speed; otherwise `intakeMotor` is braked (press A first). `FEED_ONLY_AT_SPEED = false` in `ShooterConfig` restores collecting with the shooter off. |
 | hold RB + RT | Feed even if not at speed (override) |
 | hold LB | Reverse intake (unjam) |
 | hold B | Reverse shooter (unjam); releasing stops it |

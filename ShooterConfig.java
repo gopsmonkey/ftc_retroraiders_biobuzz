@@ -26,7 +26,7 @@ public final class ShooterConfig {
     public static final String RB_MOTOR_NAME = "rbMotor";
 
     /** +1 if a positive velocity shoots the ball out. Flip to -1 if the wheel spins backward. */
-    public static final double SHOOTER_SIGN = 1;
+    public static final double SHOOTER_SIGN = -1;   // team: launch velocity is -1375
     /** +1 if positive intake power moves balls toward the flywheel. */
     public static final double INTAKE_FEED_SIGN = 1;
 
@@ -71,32 +71,55 @@ public final class ShooterConfig {
      * so a ball's own contact dip doesn't cut the push mid-grab. Covers the ~0.2 s grab-to-exit
      * seen in the 30 fps video. Was 120; Shresht raised it to 300. 0 = pure gate.
      */
-    public static final double FEED_MIN_PUSH_MS = 300;
+    public static final double FEED_MIN_PUSH_MS = 0;   // team: brake the intake the moment the wheel is off target (was 300)
 
     // ---------------- Presets (ticks/s) ----------------
     // TODO(tonight): calibrate at taped floor spots. All must be <= maxTarget() (1960 at maxV 2450).
     public static final double PRESET_CLOSE = 1300;
-    public static final double PRESET_MID = 1450;   // the speed used in the video
+    public static final double PRESET_MID = 1375;   // commanded as -1375 (SHOOTER_SIGN = -1)
     public static final double PRESET_FAR = 1600;
     /** Reverse speed for clearing a jam (Velocity Tuner "A"). */
     public static final double UNJAM_VELOCITY = -900;
 
     // ---------------- Intake / feed ----------------
-    /** Power while collecting balls (shooter off). */
+    /**
+     * true = the intake (which also drives the two mini wheels under the flywheel) never pushes
+     * balls up until the flywheel is at launch speed, even with the shooter off. So RT does nothing
+     * until A has spun the wheel up. false = old behavior: RT collects at INTAKE_COLLECT_POWER
+     * while the shooter is off (balls get pushed into the stopped wheel).
+     */
+    public static final boolean FEED_ONLY_AT_SPEED = true;
+    /**
+     * One ball per shot: once the wheel is at speed, the intake moves only this many encoder
+     * ticks, then brakes for FEED_GAP_MS. Stops the next ball BEFORE it reaches the wheel,
+     * instead of waiting for the speed dip (which the hub reports ~50 ms late). 0 = off.
+     * To set it: leave it 0, spin up, hold RT and shoot 4 balls, read "Intake ticks fed" on
+     * telemetry, divide by 4, and start at about 70% of that. Raise it if a ball doesn't reach
+     * the wheel; lower it if two balls still go out together.
+     */
+    public static final int FEED_TICKS_PER_BALL = 0;
+    /** Brake time between balls (ms), so the shot clears and the wheel recovers. Try 150-300. */
+    public static final double FEED_GAP_MS = 200;
+    /** Power while collecting balls (shooter off, only when FEED_ONLY_AT_SPEED = false). */
     public static final double INTAKE_COLLECT_POWER = 0.8;
     /**
      * True only if the intake motor's encoder cable is plugged into the hub.
      * Then feeding uses closed-loop velocity, so feed speed doesn't sag with the battery.
      */
-    public static final boolean INTAKE_HAS_ENCODER = false;
+    public static final boolean INTAKE_HAS_ENCODER = true;   // encoder cable added to intakeMotor
     /**
      * Feed velocity in ticks/s when INTAKE_HAS_ENCODER. Set to ~1.2x the intake ticks/s
      * that "Shooter MaxV Test" measures at power 0.8 on a fresh battery.
      * TODO(tonight): measure. 0 means "not measured" and falls back to power feed.
      */
     public static final double INTAKE_FEED_VELOCITY = 0;
-    /** Feed power when there is no encoder (or no measured velocity): full power so it's as consistent as possible. */
-    public static final double INTAKE_FEED_POWER = 1.0;
+    /**
+     * Feed speed while shooting (fraction of max; with the encoder in, RUN_USING_ENCODER holds it
+     * steady as the battery drains). Was 1.0: two stacked balls went up together and the second
+     * fell short. Slower feed spaces them so the at-speed brake catches the second one.
+     * Two still go together -> 0.4. Balls stall before the wheel or shots are too slow -> 0.6.
+     */
+    public static final double INTAKE_FEED_POWER = 0.5;
 
     /**
      * Intake current (amps) that means "intake stalled = full", so the driver gets a rumble
