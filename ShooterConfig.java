@@ -113,8 +113,13 @@ public final class ShooterConfig {
      * TODO(tonight): measure. 0 means "not measured" and falls back to power feed.
      */
     public static final double INTAKE_FEED_VELOCITY = 0;
-    /** Feed power when there is no encoder (or no measured velocity): full power so it's as consistent as possible. */
-    public static final double INTAKE_FEED_POWER = 1.0;
+    /**
+     * Feed speed while shooting (fraction of max; with the encoder in, RUN_USING_ENCODER holds it
+     * steady as the battery drains). Was 1.0: two stacked balls went up together and the second
+     * fell short. Slower feed spaces them so the at-speed brake catches the second one.
+     * Two still go together -> 0.4. Balls stall before the wheel or shots are too slow -> 0.6.
+     */
+    public static final double INTAKE_FEED_POWER = 0.5;
 
     /**
      * Intake current (amps) that means "intake stalled = full", so the driver gets a rumble
