@@ -11,7 +11,7 @@ Back to [[FTC Home]]
 | Branch | What's on it | Latest | PR |
 | --- | --- | --- | --- |
 | `main` | Sathwik's two original tuners | `1af7759` | — |
-| `shooter-fixes-night-before` | All robot code: `ShooterConfig`, `ShooterController`, `ShooterLogger`, `BioBuzzTeleOp`, `PreloadShootLeaveAuto`, `ShooterMaxVelocityTest`, both tuners, README | `53f96f2` | [#1](https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/1), open |
+| `shooter-fixes-night-before` | All robot code: `ShooterConfig`, `ShooterController`, `ShooterLogger`, `BioBuzzTeleOp`, `PreloadShootLeaveAuto`, `ShooterMaxVelocityTest`, both tuners, README | `4479479` | [#1](https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/1), open |
 | `team-obsidian-vault` | This vault (`obsidian-vault/`) | see git log | [#2](https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/2), open |
 
 - The two branches don't touch the same files, so both PRs can merge into `main` with no conflicts. Then everyone works on `main`.

@@ -1,7 +1,7 @@
 ---
 tags: [ftc, shooter, software, log]
 branch: shooter-fixes-night-before
-commit: 53f96f2
+commit: 4479479
 updated: 2026-11-20
 ---
 # Shooter software implementation log
@@ -56,8 +56,9 @@ All software fixes from the fix list are in branch `shooter-fixes-night-before` 
 | `53f96f2` | Claude | gamepad2 d-pad speed trim ±25 (7759's idea), X resets | Fixes all-short/all-long at the event without a rebuild. |
 | `53f96f2` | Claude | Rumble: blip at speed, buzz when intake current says "full" (23849's idea) | Full warning is off until `INTAKE_FULL_CURRENT_AMPS` is measured. Current is read every 100 ms, only while collecting. |
 | `53f96f2` | Claude | README: OnBot Java upload + controls table | Replaces the Android Studio instructions. |
+| `4479479` | Claude | **Push-hold bug fix**: the hold now counts from the last moment the wheel was at speed, so every ball gets the push, not just the first after the gate opens. Same fix in the Velocity Tuner. | Bug found by the code review in the [fix-list doc](https://claude.ai/artifact/2TijvqY1ftJomPvE1RqhEn). The original 18 tests missed it; there are now 21 checks, including a second-ball regression. |
 
-Checks on `53f96f2`: compiles with 0 errors against the real FTC SDK **12.0.0 and 9.2.0** libraries at Java 8 (`Software/attachments/onbot-compile-check.sh`). Still not run on the robot.
+Checks on `4479479`: 21 mock-motor logic checks pass; compiles with 0 errors against the real FTC SDK **12.0.0 and 9.2.0** libraries at Java 8 (`Software/attachments/onbot-compile-check.sh`). Still not run on the robot.
 
 ## Still to do (people)
 Tracked in [[To-Do]].
@@ -69,3 +70,4 @@ Tracked in [[To-Do]].
 - 19:00 Added BioBuzz TeleOp. Compile + 18 logic checks pass. Committed `ac9be61`.
 - 19:10 Pushed branch, opened PR #1: https://github.com/gopsmonkey/ftc_retroraiders_biobuzz/pull/1
 - 21:00 Reviewed Shresht's `2e4aaf8`. Added flower servos, trim, rumble, intake-full warning, README. Pushed `53f96f2`.
+- 21:30 Fixed push-hold bug (`4479479`), doc status table and review updated to match.

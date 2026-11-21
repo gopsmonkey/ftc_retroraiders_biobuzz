@@ -1,14 +1,14 @@
 ---
 tags: [ftc, software, onbot-java, check]
 branch: shooter-fixes-night-before
-commit: 53f96f2
+commit: 4479479
 created: 2026-11-20
 ---
 # OnBot Java check (branch `shooter-fixes-night-before`)
 
 Back to [[FTC Home]] · Tasks: [[To-Do]] · Why it matters: [[Sathwik Handoff]] (the team uses OnBot Java only)
 
-**Result: all 8 Java files compile for OnBot Java. No code changes needed.** Re-checked on `53f96f2` (flower servos, trim, rumble) against SDK 12.0.0 and 9.2.0: 0 errors.
+**Result: all 8 Java files compile for OnBot Java. No code changes needed.** Re-checked on `4479479` (flower servos, trim, rumble, push-hold fix) against SDK 12.0.0 and 9.2.0: 0 errors.
 - Compiled against the real FTC SDK libraries at Java 8 on SDK **9.2.0, 10.1.1, 11.2.1 and 12.0.0**: 0 errors, 0 warnings.
 - The check can fail: with the SDK libraries removed, the same files give 344 errors.
 - Script: `Software/attachments/onbot-compile-check.sh`. Re-run it after any code change.
